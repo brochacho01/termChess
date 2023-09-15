@@ -5,23 +5,31 @@
 using namespace std;
 
 
-void pawn::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
-    cout << "Called move from pawn!" << endl;
+bool pawn::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
     piece *curPiece = board[ySource][xSource];
     piece *destPiece = board[yDest][xDest];
     
     if(!validateMove(xSource, ySource, xDest, yDest, ownKing)){
         cout << "Invalid Move!" << endl;
-        return;
+        return false;
     }
 
     placePiece(xSource, ySource, xDest, yDest);
+    return true;
 }
 
 bool pawn::validateMove(int xSource, int ySource, int xDest, int yDest, piece ownKing){
     // Check to see if we're not moving straight
-    if(xSource != xDest){
-        cout << "Trying to move a pawn illegally! ";
+    if(abs(xSource - xDest) > 1){
+        // This means we're allegedly trying to take a piece
+        // Check if we're still only moving one and if dest is opp piece
+        if(abs(xSource - xDest) != 1){
+            cout << "Trying to move pawn illegally!" << endl;
+            return false;
+        }
+        if(this->myColor == board[yDest][xDest]->myColor){
+            cout << "Trying to take your own piece with a pawn!" << endl;
+        }
         return false;
     }
     else if((this->hasMoved == true) && abs((ySource - yDest) > 1)){

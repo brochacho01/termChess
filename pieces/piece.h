@@ -47,7 +47,7 @@ class pawn : public piece {
             lastMoveTwo = false;
         }
 
-        void move(int xSource,
+        bool move(int xSource,
                 int ySource,
                 int xDest,
                 int yDest,
@@ -73,7 +73,7 @@ class rook : public piece {
             myType = ROOK;
         }
 
-        void move(int xSource,
+        bool move(int xSource,
                     int ySource,
                     int xDest,
                     int yDest,
