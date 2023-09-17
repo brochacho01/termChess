@@ -6,12 +6,12 @@ OBJS = networkUtilities.o driver.o board.o ./pieces/piece.o ./pieces/pawn.o ./pi
 all: build
 
 build: $(OBJS)
-	$(CC) $(CFLAGS) -o networkTest $(OBJS)
+	$(CC) $(CFLAGS) -o termChess $(OBJS)
 
 clean:
-	rm -f networkTest $(OBJS)
+	rm -f termChess $(OBJS)
 
 run: build
-	./networkTest
+	./termChess
 
 $(OBJS) : networkUtilities.h board.h ./pieces/piece.h

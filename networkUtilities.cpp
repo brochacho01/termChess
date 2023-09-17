@@ -125,8 +125,10 @@ int sendBoard(int fd){
       } else {
         pieceType = curPiece->myType;
       }
-      write(fd, &pieceType, sizeof(char));
+      cout << "Sending piece type: " << pieceType << endl;
+      int written = write(fd, &pieceType, sizeof(char));
       receiveAck(fd);
+      cout << "Bytes written when sending piecetype: " << written << endl;
       switch(pieceType) {
         case PAWN:
           sendPawn(fd, curPiece);
@@ -154,6 +156,7 @@ int sendBoard(int fd){
       }
     }
   }
+  cout << "Done sending board" << endl;
   return 0;
 }
 
@@ -220,8 +223,9 @@ int receiveBoard(int fd, char myColor, king *&myKing, king *&oppKing){
           board[i][j] = nullptr;
           break;
         default:
-          cout << "Unknown piece identified when receiving board: " << pieceType << "i: " << i << "j " << j << endl;
-          return -1;
+          cout << "Unknown piece identified when receiving board: " << pieceType << " i: " << i << " j " << j << endl;
+          sendAck(fd);
+          break;
       }
     }
   }
@@ -230,73 +234,77 @@ int receiveBoard(int fd, char myColor, king *&myKing, king *&oppKing){
 
 /* Heplers for sending and receiving individual pieces */
 int sendPawn(int fd, piece *myPawn){
-  write(fd, myPawn, PAWNSIZE);
+  cout << "Size of pawn is: " << sizeof(pawn) << " Size of piece is: " << sizeof(piece) << endl;
+  int written = write(fd, myPawn, PAWNSIZE);
+  cout << "Bytes written when sending pawn: " << written << endl;
   receiveAck(fd);
   return 0;
 }
 
 int sendRook(int fd, piece *myRook){
-  write(fd, myRook, ROOKSIZE);
+  write(fd, (myRook), ROOKSIZE);
   receiveAck(fd);
   return 0;
 }
 
 int sendKnight(int fd, piece *myKnight){
-  write(fd, myKnight, KNIGHTSIZE);
+  write(fd, (myKnight), KNIGHTSIZE);
   receiveAck(fd);
   return 0;
 }
 
 int sendBishop(int fd, piece *myBishop){
-  write(fd, myBishop, BISHOPSIZE);
+  write(fd, (myBishop), BISHOPSIZE);
   receiveAck(fd);
   return 0;
 }
 
 int sendQueen(int fd, piece *myQueen){
-  write(fd, myQueen, QUEENSIZE);
+  write(fd, (myQueen), QUEENSIZE);
   receiveAck(fd);
   return 0;
 }
 
 int sendKing(int fd, piece *myKing){
-  write(fd, myKing, KINGSIZE);
+  cout << "Size of king is: "<< sizeof(king) << " Size of piece is: " << sizeof(piece) << endl;
+  int written = write(fd, (myKing), KINGSIZE);
   receiveAck(fd);
+  cout << "Bytes written when sending king: " << written << endl;
   return 0;
 }
 
 int receivePawn(int fd, piece *newPawn){
-  read(fd, newPawn, sizeof(PAWNSIZE));
+  read(fd, (newPawn), sizeof(PAWNSIZE));
   sendAck(fd);
   return 0;
 }
 
 int receiveRook(int fd, piece *newRook){
-  read(fd, newRook, sizeof(ROOKSIZE));
+  read(fd, (newRook), sizeof(ROOKSIZE));
   sendAck(fd);
   return 0;
 }
 
 int receiveKnight(int fd, piece *newKnight){
-  read(fd, newKnight, KNIGHTSIZE);
+  read(fd, (newKnight), KNIGHTSIZE);
   sendAck(fd);
   return 0;
 }
 
 int receiveBishop(int fd, piece *newBishop){
-  read(fd, newBishop, BISHOPSIZE);
+  read(fd, (newBishop), BISHOPSIZE);
   sendAck(fd);
   return 0;
 }
 
 int receiveQueen(int fd, piece *newQueen){
-  read(fd, newQueen, QUEENSIZE);
+  read(fd, (newQueen), QUEENSIZE);
   sendAck(fd);
   return 0;
 }
 
 int receiveKing(int fd, piece *newKing){
-  read(fd, newKing, KINGSIZE);
+  read(fd, (newKing), KINGSIZE);
   sendAck(fd);
   return 0;
 }

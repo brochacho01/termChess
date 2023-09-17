@@ -3,8 +3,8 @@
 
 using namespace std;
 
-void king::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
-
+bool king::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
+    return true;
 }
 
 void king::printSelf(void){

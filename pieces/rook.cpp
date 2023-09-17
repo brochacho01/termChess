@@ -4,10 +4,10 @@
 
 using namespace std;
 
-// TODO for rook moving, currently code doesn't check if piece is going from positive to negative, only works if going positive to positive
 bool rook::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
     int xChange = 0;
-    int yChange = 0;
+    int lowPos;
+    int highPos;
     
     // Check to see if we're moving horizontally/vertically
     if(((xSource != xDest) && (ySource != yDest)) || ((xSource == xDest) && (ySource == yDest))){
@@ -20,12 +20,18 @@ bool rook::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
         return false;
     }
     // Check to see that we're not trying to jump any pieces or take our own piece
-    
+    // Set up trackers for going low-high or high-low
     if(xSource != xDest){
         xChange = 1;
+        lowPos = min(xSource, xDest);
+        highPos = max(xSource, xDest);
+    } else {
+        lowPos = min(ySource, yDest);
+        highPos = max(ySource, yDest);
     }
+
     if(xChange){
-        for(int i = xSource; i <= xDest; i++){
+        for(int i = lowPos; i <= highPos; i++){
             if((board[yDest][i] != nullptr) && (i != xDest)){
                 cout << "Trying to move rook over a piece!" << endl;
                 return false;
@@ -36,7 +42,7 @@ bool rook::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
             }
         }
     } else {
-        for(int i = ySource; i <= ySource; i++){
+        for(int i = lowPos; i <= highPos; i++){
             if((board[i][xDest] != nullptr) && (i != yDest)){
                 cout << "Trying to move rook over a piece!" << endl;
                 return false;

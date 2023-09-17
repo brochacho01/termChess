@@ -28,11 +28,13 @@ class piece {
 
         piece(){}
 
-        void move(int xSource, 
+        bool move(int xSource, 
                 int ySource, 
                 int xDest, 
                 int yDest, 
                 piece ownKing);
+
+        void printSelf(void);
 };
 
 class pawn : public piece {
@@ -87,7 +89,7 @@ class knight : public piece {
             myType = KNIGHT;
         }
 
-        void move(int xSource,
+        bool move(int xSource,
                 int ySource,
                 int xDest,
                 int yDest,
@@ -101,7 +103,7 @@ class bishop : public piece {
             myType = BISHOP;
         }
 
-        void move(int xSource,
+        bool move(int xSource,
                 int ySource,
                 int xDest,
                 int yDest,
@@ -115,7 +117,7 @@ class queen : public piece {
             myType = QUEEN;
         }
 
-        void move(int xSource,
+        bool move(int xSource,
                 int ySource,
                 int xDest,
                 int yDest,
@@ -141,7 +143,7 @@ class king : public piece {
             }
         }
 
-        void move(int xSource,
+        bool move(int xSource,
                 int ySource,
                 int xDest,
                 int yDest,
