@@ -22,7 +22,6 @@ bool pawn::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
 }
 
 // TODO take logic for en-passant
-// TODO need to make sure that pawns don't move backwards
 bool pawn::validateMove(int xSource, int ySource, int xDest, int yDest, piece ownKing){
     int lowPos;
     int highPos;
