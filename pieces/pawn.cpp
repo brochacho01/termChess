@@ -1,4 +1,5 @@
 #include <iostream>
+
 #include "piece.h"
 #include "../board.h"
 
@@ -84,13 +85,61 @@ bool pawn::validateMove(int xSource, int ySource, int xDest, int yDest, piece ow
 // TODO if pawn reaches far side need the upgrade logic
 void pawn::placePiece(int xSource, int ySource, int xDest, int yDest){
     pawn *curPiece = (pawn*)board[xSource][ySource];
-    delete board[xDest][yDest];
-    board[xSource][ySource] = nullptr;
-    board[xDest][yDest] = curPiece;
     curPiece->hasMoved = true;
     if(abs(xSource - xDest) == 2){
         curPiece->lastMoveTwo = true;
     } else {
         curPiece->lastMoveTwo = false;
+    }
+    delete board[xDest][yDest];
+    board[xSource][ySource] = nullptr;
+    board[xDest][yDest] = curPiece;
+    
+    // Check to see if the pawn has made it to the far side of the board
+    if(((curPiece->myColor == 'r') && (xDest == 0)) || ((curPiece->myColor == 'w') && (xDest == 7))){
+        char upgradePiece;
+        char curColor = curPiece->myColor;
+        bool validChoice = false;
+        delete board[xDest][yDest];
+        while(!validChoice){
+            cout << "What piece would you like to upgrade the pawn to? (r/n/b/q) ";
+            
+            cin >> upgradePiece;
+            switch(upgradePiece){
+                case ROOK:
+                {
+                    rook *newRook = new rook(curColor);
+                    board[xDest][yDest] = newRook;
+                    validChoice = true;
+                    break;
+                }
+                case KNIGHT:
+                {
+                    knight *newKnight = new knight(curColor);
+                    board[xDest][yDest] = newKnight;
+                    validChoice = true;
+                    break;
+                }
+                case BISHOP:
+                {
+                    bishop *newBishop = new bishop(curColor);
+                    board[xDest][yDest] = newBishop;
+                    validChoice = true;
+                    break;
+                }
+                case QUEEN:
+                {
+                    queen *newQueen = new queen(curColor);
+                    board[xDest][yDest] = newQueen;
+                    validChoice = true;
+                    break;
+                }
+                default:
+                    cout << "Unrecognized piece name, please try again!" << endl;
+                    break;
+            }
+        }
+        while(getchar() != '\n');
+        
     }
 }
