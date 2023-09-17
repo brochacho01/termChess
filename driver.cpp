@@ -11,6 +11,7 @@ using namespace std;
 void setup(char *connectType, char *color, int *fd, king *myKing, king *oppKing);
 void gameLoop(int fd, char color, char connectType);
 int getCoordInput(char *userBuf, int type, char color);
+bool validateCoords(int xSource, int ySource, int xDest, int yDest);
 
 inline int ctoi(char c) { return c - '0'; }
 
@@ -69,24 +70,30 @@ void gameLoop(int fd, char color, char connectType){
     if(color == 'r'){
         char userBuf[3];
         int xSource, xDest, ySource, yDest;
+        bool validCoords = false;
         while(true){    
-            userBuf[0] = 'h';
-            getCoordInput(userBuf, 1, color);
-            xSource = ctoi(userBuf[0]);
-            ySource = ctoi(userBuf[1]);
+            while(!validCoords){
+                userBuf[0] = 'h';
+                getCoordInput(userBuf, 1, color);
+                xSource = ctoi(userBuf[0]);
+                ySource = ctoi(userBuf[1]);
+                userBuf[0] = 'h';
+                getCoordInput(userBuf, 2, color);
+                xDest = ctoi(userBuf[0]);
+                yDest = ctoi(userBuf[1]);
+                validCoords = validateCoords(xSource, ySource, xDest, yDest);
+            }
             piece *curPiece = board[xSource][ySource];
             curPiece->printSelf();
-            userBuf[0] = 'h';
-            getCoordInput(userBuf, 2, color);
-            xDest = ctoi(userBuf[0]);
-            yDest = ctoi(userBuf[1]);
             switch(curPiece->myType){
                 case 'p':
-                    // dynamic_cast<pawn*>(curPiece)->move(xSource, ySource, xDest, yDest, *curPiece);
+                    ((pawn*)curPiece)->move(xSource, ySource, xDest, yDest, *curPiece);
                     break;
                 default:
                     break;
             }
+            printMyBoard(color);
+            validCoords = false;
         }
         return;
     }
@@ -125,5 +132,17 @@ int getCoordInput(char *userBuf, int type, char color){
 		while(getchar() != '\n');
 	}
 	return 1;
+}
+
+bool validateCoords(int xSource, int ySource, int xDest, int yDest){
+    if((xSource < 0) || (ySource < 0) || (xDest < 0) || yDest < 0){
+        cout << "Can't use negative coordinates!" << endl;
+        return false;
+    }
+    else if((xSource > 7) || (ySource > 7) || (xDest > 7) || (yDest > 7)){
+        cout << "Can't use coordinates greater than 7!" << endl;
+        return false;
+    }
+    return true;
 }
 

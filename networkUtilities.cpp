@@ -125,10 +125,8 @@ int sendBoard(int fd){
       } else {
         pieceType = curPiece->myType;
       }
-      cout << "Sending piece type: " << pieceType << endl;
       int written = write(fd, &pieceType, sizeof(char));
       receiveAck(fd);
-      cout << "Bytes written when sending piecetype: " << written << endl;
       switch(pieceType) {
         case PAWN:
           sendPawn(fd, curPiece);
@@ -156,7 +154,6 @@ int sendBoard(int fd){
       }
     }
   }
-  cout << "Done sending board" << endl;
   return 0;
 }
 
@@ -224,19 +221,16 @@ int receiveBoard(int fd, char myColor, king *&myKing, king *&oppKing){
           break;
         default:
           cout << "Unknown piece identified when receiving board: " << pieceType << " i: " << i << " j " << j << endl;
-          sendAck(fd);
-          break;
+          return -1;
       }
     }
   }
-  return -1;
+  return 0;
 }
 
 /* Heplers for sending and receiving individual pieces */
 int sendPawn(int fd, piece *myPawn){
-  cout << "Size of pawn is: " << sizeof(pawn) << " Size of piece is: " << sizeof(piece) << endl;
   int written = write(fd, myPawn, PAWNSIZE);
-  cout << "Bytes written when sending pawn: " << written << endl;
   receiveAck(fd);
   return 0;
 }
@@ -266,10 +260,8 @@ int sendQueen(int fd, piece *myQueen){
 }
 
 int sendKing(int fd, piece *myKing){
-  cout << "Size of king is: "<< sizeof(king) << " Size of piece is: " << sizeof(piece) << endl;
   int written = write(fd, (myKing), KINGSIZE);
   receiveAck(fd);
-  cout << "Bytes written when sending king: " << written << endl;
   return 0;
 }
 
