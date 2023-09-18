@@ -109,6 +109,17 @@ class knight : public piece {
                 int xDest,
                 int yDest,
                 piece ownKing);
+
+        bool validateMove(int xSource,
+                        int ySource,
+                        int xDest,
+                        int yDest,
+                        piece ownKing);
+        
+        void placePiece(int xSource,
+                        int ySource,
+                        int xDest,
+                        int yDest);
 };
 
 class bishop : public piece {

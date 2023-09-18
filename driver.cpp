@@ -88,11 +88,13 @@ void gameLoop(int fd, char color, char connectType){
             piece *curPiece = board[xSource][ySource];
             curPiece->printSelf();
             switch(curPiece->myType){
-                case 'p':
+                case PAWN:
                     ((pawn*)curPiece)->move(xSource, ySource, xDest, yDest, *curPiece);
                     break;
-                case 'r':
+                case ROOK:
                     ((rook*)curPiece)->move(xSource, ySource, xDest, yDest, *curPiece);
+                case KNIGHT:
+                    ((knight*)curPiece)->move(xSource, ySource, xDest, yDest, *curPiece);
                 default:
                     break;
             }

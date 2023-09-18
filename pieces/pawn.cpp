@@ -9,8 +9,6 @@ using namespace std;
 bool pawn::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
     cout << "Called pawn move!" << endl;
     cout << "xSource: " << xSource << " ySource: " << ySource << " xDest: " << xDest << " yDest: " << yDest << endl;
-    // piece *curPiece = board[xSource][ySource];
-    // piece *destPiece = board[xDest][yDest];
     
     if(!this->validateMove(xSource, ySource, xDest, yDest, ownKing)){
         cout << "Invalid Move!" << endl;
