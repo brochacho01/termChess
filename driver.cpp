@@ -58,7 +58,6 @@ void setup(char *connectType, char *color, int *fd, king *myKing, king *oppKing)
         createBoard(color, myKing, oppKing);
         piece *tmp = board[0][0];
         tmp->printSelf();
-        printMyBoard(*color);
         sendBoard(*fd);
     } else {
         receiveBoard(*fd, *color, myKing, oppKing);
@@ -67,6 +66,8 @@ void setup(char *connectType, char *color, int *fd, king *myKing, king *oppKing)
     while(getchar() != '\n');
 }
 
+
+// TODO actually pass in ownKing to move methods
 void gameLoop(int fd, char color, char connectType){
     if(color == 'r'){
         char userBuf[3];
@@ -90,6 +91,8 @@ void gameLoop(int fd, char color, char connectType){
                 case 'p':
                     ((pawn*)curPiece)->move(xSource, ySource, xDest, yDest, *curPiece);
                     break;
+                case 'r':
+                    ((rook*)curPiece)->move(xSource, ySource, xDest, yDest, *curPiece);
                 default:
                     break;
             }

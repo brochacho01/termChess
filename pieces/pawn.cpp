@@ -9,15 +9,15 @@ using namespace std;
 bool pawn::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
     cout << "Called pawn move!" << endl;
     cout << "xSource: " << xSource << " ySource: " << ySource << " xDest: " << xDest << " yDest: " << yDest << endl;
-    piece *curPiece = board[xSource][ySource];
-    piece *destPiece = board[xDest][yDest];
+    // piece *curPiece = board[xSource][ySource];
+    // piece *destPiece = board[xDest][yDest];
     
-    if(!validateMove(xSource, ySource, xDest, yDest, ownKing)){
+    if(!this->validateMove(xSource, ySource, xDest, yDest, ownKing)){
         cout << "Invalid Move!" << endl;
         return false;
     }
 
-    placePiece(xSource, ySource, xDest, yDest);
+    this->placePiece(xSource, ySource, xDest, yDest);
     return true;
 }
 

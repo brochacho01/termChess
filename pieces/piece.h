@@ -70,9 +70,13 @@ class pawn : public piece {
 
 class rook : public piece {
     public:
+
+        bool hasMoved;
+
         rook(char color){
             myColor = color;
             myType = ROOK;
+            hasMoved = false;
         }
 
         bool move(int xSource,
@@ -80,6 +84,17 @@ class rook : public piece {
                     int xDest,
                     int yDest,
                     piece ownKing);
+
+        bool validateMove(int xSource,
+                        int ySource,
+                        int xDest,
+                        int yDest,
+                        piece ownKing);
+
+        void placePiece(int xSource,
+                        int ySource,
+                        int xDest,
+                        int yDest);
 };
 
 class knight : public piece {

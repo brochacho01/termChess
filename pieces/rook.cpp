@@ -4,22 +4,34 @@
 
 using namespace std;
 
+
+// TODO
+// See if moving rook will place own king in check
+// See if we are putting opposing king in check
+
 bool rook::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
+    cout << "Called rook move!" << endl;
+
+    if(!this->validateMove(xSource, ySource, xDest, yDest, ownKing)){
+        cout << "Invalid Move!" << endl;
+        return false;
+    }
+    
+    this->placePiece(xSource, ySource, xDest, yDest);
+    return true;
+}
+
+bool rook::validateMove(int xSource, int ySource, int xDest, int yDest, piece ownKing){
     int xChange = 0;
     int lowPos;
     int highPos;
-    
+
     // Check to see if we're moving horizontally/vertically
     if(((xSource != xDest) && (ySource != yDest)) || ((xSource == xDest) && (ySource == yDest))){
         cout << "Trying to move rook illegally!" << endl;
         return false;
     }
-    // Check to see if we're staying on the board
-    if((xDest < 0) || (xDest > 7) || (yDest < 0) || (yDest > 7)){
-        cout << "Trying to move rook off the board!" << endl;
-        return false;
-    }
-    // Check to see that we're not trying to jump any pieces or take our own piece
+    
     // Set up trackers for going low-high or high-low
     if(xSource != xDest){
         xChange = 1;
@@ -30,30 +42,42 @@ bool rook::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
         highPos = max(ySource, yDest);
     }
 
+    // If we're moving along x
     if(xChange){
         for(int i = lowPos; i <= highPos; i++){
-            if((board[yDest][i] != nullptr) && (i != xDest)){
+            // Check to see if we're trying to move over a piece
+            if((board[i][yDest] != nullptr) && (i != xDest) && (board[i][yDest] != board[xSource][ySource])){
                 cout << "Trying to move rook over a piece!" << endl;
                 return false;
             }
-            else if((i == xDest) && (this->myColor == board[yDest][xDest]->myColor)){
+            // Check to see if we're trying to take our own piece
+            else if((i == xDest) && (board[xDest][yDest] != nullptr) && (this->myColor == board[xDest][yDest]->myColor)){
                 cout << "Trying to take your own piece with a rook!" << endl;
                 return false;
             }
         }
+    // If we're moving along y
     } else {
         for(int i = lowPos; i <= highPos; i++){
-            if((board[i][xDest] != nullptr) && (i != yDest)){
+            // Check to see if we're trying to move over a piece
+            if((board[xDest][yDest] != nullptr) && (i != yDest) && (board[xDest][i] != board[xSource][ySource])){
                 cout << "Trying to move rook over a piece!" << endl;
                 return false;
             }
-            else if((i == yDest) && (this->myColor == board[yDest][xDest]->myColor)){
+            // Check to see if we're trying to take our own piece
+            else if((i == yDest) && (board[xDest][yDest] != nullptr) && (this->myColor == board[xDest][yDest]->myColor)){
                 cout << "Trying to take your own piece with a rook!" << endl;
                 return false;
             }
         }
     }
-    // See if moving rook will place own king in check
-    // See if we are putting opposing king in check
     return true;
+}
+
+void rook::placePiece(int xSource, int ySource, int xDest, int yDest){
+    rook *curPiece = (rook*)board[xSource][ySource];
+    curPiece->hasMoved = true;
+    delete board[xDest][yDest];
+    board[xSource][ySource] = nullptr;
+    board[xDest][yDest] = curPiece;
 }
