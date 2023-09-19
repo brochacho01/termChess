@@ -21,7 +21,6 @@ bool rook::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
     return true;
 }
 
-// TODO modify loop so we dont check source and dest square in loop
 bool rook::validateMove(int xSource, int ySource, int xDest, int yDest, piece ownKing){
     int xChange = 0;
     int lowPos;
@@ -43,35 +42,31 @@ bool rook::validateMove(int xSource, int ySource, int xDest, int yDest, piece ow
         highPos = max(ySource, yDest);
     }
 
+    // Check to see if we're trying to move over a piece
     // If we're moving along x
     if(xChange){
-        for(int i = lowPos; i <= highPos; i++){
-            // Check to see if we're trying to move over a piece
-            if((board[i][yDest] != nullptr) && (i != xDest) && (board[i][yDest] != board[xSource][ySource])){
+        for(int i = lowPos + 1; i < highPos; i++){
+            if(board[i][yDest] != nullptr){
                 cout << "Trying to move rook over a piece!" << endl;
-                return false;
-            }
-            // Check to see if we're trying to take our own piece
-            else if((i == xDest) && (board[xDest][yDest] != nullptr) && (this->myColor == board[xDest][yDest]->myColor)){
-                cout << "Trying to take your own piece with a rook!" << endl;
                 return false;
             }
         }
     // If we're moving along y
     } else {
-        for(int i = lowPos; i <= highPos; i++){
-            // Check to see if we're trying to move over a piece
-            if((board[xDest][yDest] != nullptr) && (i != yDest) && (board[xDest][i] != board[xSource][ySource])){
+        for(int i = lowPos + 1; i < highPos; i++){
+            if(board[xDest][yDest] != nullptr){
                 cout << "Trying to move rook over a piece!" << endl;
-                return false;
-            }
-            // Check to see if we're trying to take our own piece
-            else if((i == yDest) && (board[xDest][yDest] != nullptr) && (this->myColor == board[xDest][yDest]->myColor)){
-                cout << "Trying to take your own piece with a rook!" << endl;
                 return false;
             }
         }
     }
+
+    // Check to make sure we're not trying to take our own piece
+    if((board[xDest][yDest] != nullptr) && this->myColor == board[xDest][yDest]->myColor){
+        cout << "Trying to take your own piece with a rook!" << endl;
+        return false;
+    }
+
     return true;
 }
 

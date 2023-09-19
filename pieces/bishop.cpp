@@ -5,6 +5,8 @@
 
 using namespace std;
 
+// TODO check for checks
+
 bool bishop::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
     cout << "Called bishop move!" << endl;
     
