@@ -95,6 +95,8 @@ void gameLoop(int fd, char color, char connectType){
                     ((rook*)curPiece)->move(xSource, ySource, xDest, yDest, *curPiece);
                 case KNIGHT:
                     ((knight*)curPiece)->move(xSource, ySource, xDest, yDest, *curPiece);
+                case BISHOP:
+                    ((bishop*)curPiece)->move(xSource, ySource, xDest, yDest, *curPiece);
                 default:
                     break;
             }

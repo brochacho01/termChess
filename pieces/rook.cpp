@@ -21,6 +21,7 @@ bool rook::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
     return true;
 }
 
+// TODO modify loop so we dont check source and dest square in loop
 bool rook::validateMove(int xSource, int ySource, int xDest, int yDest, piece ownKing){
     int xChange = 0;
     int lowPos;
