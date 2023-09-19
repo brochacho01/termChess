@@ -16,6 +16,11 @@ bool validateCoords(int xSource, int ySource, int xDest, int yDest);
 
 inline int ctoi(char c) { return c - '0'; }
 
+// TODO
+// Add way to preview players moves, i.e. they enter something, they get a preview of the board, and then get asked to confirm the move, if they do, then that move goes through, otherwise it doesn't and they enter a different move. Also make this something they can set up at the beginning of the game
+
+// Add way for players to say if they want detailed output on move validation or not at the beginning of the game
+
 int main() {
     char connectType;
     char color;

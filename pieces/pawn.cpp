@@ -10,7 +10,7 @@ bool pawn::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
     cout << "Called pawn move!" << endl;
     cout << "xSource: " << xSource << " ySource: " << ySource << " xDest: " << xDest << " yDest: " << yDest << endl;
     
-    if(!this->validateMove(xSource, ySource, xDest, yDest, ownKing)){
+    if(!this->validateMove(xSource, ySource, xDest, yDest, true)){
         cout << "Invalid Move!" << endl;
         return false;
     }
@@ -20,22 +20,28 @@ bool pawn::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
 }
 
 // TODO take logic for en-passant
-bool pawn::validateMove(int xSource, int ySource, int xDest, int yDest, piece ownKing){
+bool pawn::validateMove(int xSource, int ySource, int xDest, int yDest, bool output){
     int lowPos;
     int highPos;
 
     // Make sure we're not moving horizontally
     if(xSource == xDest){
-        cout << "Trying to move a pawn horizontally!" << endl;
+        if(output){
+            cout << "Trying to move a pawn horizontally!" << endl;
+        }
         return false;
     }
 
     // Make sure we're not moving backwards
     if((this->myColor == 'r') && (xDest > xSource)){
-        cout << "Trying to move pawn backwards!" << endl;
+        if(output){
+            cout << "Trying to move pawn backwards!" << endl;
+        }
         return false;
     } else if((this->myColor == 'w') && (xSource > xDest)){
-        cout << "Trying to move pawn backwards!" << endl;
+        if(output){
+            cout << "Trying to move pawn backwards!" << endl;
+        }
         return false;
     }
 
@@ -44,15 +50,21 @@ bool pawn::validateMove(int xSource, int ySource, int xDest, int yDest, piece ow
         // This means we're allegedly trying to take a piece
         // Check if we're still only moving one and if dest is opp piece
         if(abs(ySource - yDest) != 1){
-            cout << "Trying to move pawn illegally!" << endl;
+            if(output){
+                cout << "Trying to move pawn illegally!" << endl;
+            }
             return false;
         }
         if(board[xDest][yDest] == nullptr){
-            cout << "Trying to take nonexistent piece!" << endl;
+            if(output){
+                cout << "Trying to take nonexistent piece!" << endl;
+            }
             return false;
         }
         if(this->myColor == board[xDest][yDest]->myColor){
-            cout << "Trying to take your own piece with a pawn!" << endl;
+            if(output){
+                cout << "Trying to take your own piece with a pawn!" << endl;
+            }
             return false;
         }
         // We have confirmed this is a valid take
@@ -62,7 +74,9 @@ bool pawn::validateMove(int xSource, int ySource, int xDest, int yDest, piece ow
     // If we are moving straight
     // If we're trying to move forward to spaces make sure we're allowed to
     if((this->hasMoved == true) && abs((xSource - xDest) > 1)){
-        cout << "Selected pawn cannot move two spaces" << endl;
+        if(output){
+            cout << "Selected pawn cannot move two spaces" << endl;
+        }
         return false;
     }
 
@@ -71,7 +85,9 @@ bool pawn::validateMove(int xSource, int ySource, int xDest, int yDest, piece ow
     highPos = max(xSource, xDest);
     for(int i = lowPos; i <= highPos; i++){
         if((board[i][ySource] != nullptr) && (board[i][ySource] != board[xSource][ySource])){
-            cout << "Trying to move pawn over another piece!" << endl;
+            if(output){
+                cout << "Trying to move pawn over another piece!" << endl;
+            }
             return false;
         }
     }

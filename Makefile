@@ -1,7 +1,7 @@
 CC = g++
 CFLAGS = -g -Wall -Wextra
 
-OBJS = networkUtilities.o driver.o board.o ./pieces/piece.o ./pieces/pawn.o ./pieces/rook.o ./pieces/knight.o ./pieces/bishop.o ./pieces/queen.o ./pieces/king.o
+OBJS = networkUtilities.o driver.o board.o ./pieces/piece.o ./pieces/pawn.o ./pieces/rook.o ./pieces/knight.o ./pieces/bishop.o ./pieces/queen.o ./pieces/king.o ./pieces/checkLogic.o
 
 all: build
 

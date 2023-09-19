@@ -55,12 +55,11 @@ class pawn : public piece {
                 int yDest,
                 piece ownKing);
 
-    private:
         bool validateMove(int xSource,
                         int ySource,
                         int xDest,
                         int yDest,
-                        piece ownKing);
+                        bool output);
 
         void placePiece(int xSource,
                         int ySource,
@@ -187,6 +186,7 @@ class queen : public piece {
 class king : public piece {
     public:
         int position [2];
+        bool hasMoved;
         bool isCheck;
         bool isCheckmate;
 
@@ -194,12 +194,12 @@ class king : public piece {
             myColor = color;
             myType = KING;
 
-            position[0] = 5;
+            position[1] = 5;
             
             if(myColor == 'r'){
-                position[1] = 1;
+                position[0] = 0;
             } else {
-                position[1] = 8;
+                position[0] = 7;
             }
         }
 
@@ -208,8 +208,25 @@ class king : public piece {
                 int xDest,
                 int yDest,
                 piece ownKing);
+
+        bool validateMove(int xSource,
+                        int ySource,
+                        int xDest,
+                        int yDest);
+
+        bool validateCastle(int xSource,
+                            int ySource,
+                            int xDest,
+                            int yDest);
+
+        void placePiece(int xSource,
+                        int ySource,
+                        int xDest,
+                        int yDest);
         
         void printSelf(void);
 };
+
+bool isChecking(int xSource, int ySource, int xDest, int yDest, king* theKing);
 
 #endif
