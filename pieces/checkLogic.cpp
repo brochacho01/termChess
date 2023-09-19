@@ -7,6 +7,9 @@ using namespace std;
 
 void copyBoard(piece* (&boardCopy)[8][8]);
 
+
+// TODO VERIFY THIS ALL WORKS
+
 // Make a deep copy of the array
 // Simulate the move the player is trying to make
 // Then go over the entire board and see if a piece can take the king
@@ -35,6 +38,7 @@ bool isChecking(int xSource, int ySource, int xDest, int yDest, king* theKing){
                 continue;
             }
 
+            // For any piece we find see if we can move it onto the square that theKing is occupying, if so, that means the king is in check and we return true
             switch(curPiece->myType){
                 case PAWN:
                     if(((pawn*)curPiece)->validateMove(xSource, ySource, xDest, yDest, false)){
@@ -42,14 +46,29 @@ bool isChecking(int xSource, int ySource, int xDest, int yDest, king* theKing){
                     }
                     break;
                 case ROOK:
+                    if(((rook*)curPiece)->validateMove(xSource, ySource, xDest, yDest, false)){
+                        return true;
+                    }
                     break;
                 case KNIGHT:
+                    if(((knight*)curPiece)->validateMove(xSource, ySource, xDest, yDest, false)){
+                        return true;
+                    }
                     break;
                 case BISHOP:
+                    if(((bishop*)curPiece)->validateMove(xSource, ySource, xDest, yDest, false)){
+                        return true;
+                    }
                     break;
                 case QUEEN:
+                    if(((queen*)curPiece)->validateMove(xSource, ySource, xDest, yDest, false)){
+                        return true;
+                    }
                     break;
                 case KING:
+                    if(((king*)curPiece)->validateMove(xSource, ySource, xDest, yDest, false)){
+                        return true;
+                    }
                     break;
                 default:
                     break;

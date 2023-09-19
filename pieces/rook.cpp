@@ -12,7 +12,7 @@ using namespace std;
 bool rook::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
     cout << "Called rook move!" << endl;
 
-    if(!this->validateMove(xSource, ySource, xDest, yDest, ownKing)){
+    if(!this->validateMove(xSource, ySource, xDest, yDest, true)){
         cout << "Invalid Move!" << endl;
         return false;
     }
@@ -21,14 +21,16 @@ bool rook::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
     return true;
 }
 
-bool rook::validateMove(int xSource, int ySource, int xDest, int yDest, piece ownKing){
+bool rook::validateMove(int xSource, int ySource, int xDest, int yDest, bool output){
     int xChange = 0;
     int lowPos;
     int highPos;
 
     // Check to see if we're moving horizontally/vertically
     if(((xSource != xDest) && (ySource != yDest)) || ((xSource == xDest) && (ySource == yDest))){
-        cout << "Trying to move rook illegally!" << endl;
+        if(output){
+            cout << "Trying to move rook illegally!" << endl;
+        }
         return false;
     }
     
@@ -47,7 +49,9 @@ bool rook::validateMove(int xSource, int ySource, int xDest, int yDest, piece ow
     if(xChange){
         for(int i = lowPos + 1; i < highPos; i++){
             if(board[i][yDest] != nullptr){
-                cout << "Trying to move rook over a piece!" << endl;
+                if(output){
+                    cout << "Trying to move rook over a piece!" << endl;
+                }
                 return false;
             }
         }
@@ -55,7 +59,9 @@ bool rook::validateMove(int xSource, int ySource, int xDest, int yDest, piece ow
     } else {
         for(int i = lowPos + 1; i < highPos; i++){
             if(board[xDest][i] != nullptr){
-                cout << "Trying to move rook over a piece!" << endl;
+                if(output){
+                    cout << "Trying to move rook over a piece!" << endl;
+                }
                 return false;
             }
         }
@@ -63,7 +69,9 @@ bool rook::validateMove(int xSource, int ySource, int xDest, int yDest, piece ow
 
     // Check to make sure we're not trying to take our own piece
     if((board[xDest][yDest] != nullptr) && this->myColor == board[xDest][yDest]->myColor){
-        cout << "Trying to take your own piece with a rook!" << endl;
+        if(output){
+            cout << "Trying to take your own piece with a rook!" << endl;
+        }
         return false;
     }
 

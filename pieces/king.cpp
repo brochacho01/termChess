@@ -14,7 +14,7 @@ using namespace std;
 bool king::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
     cout << "Called king move!" << endl;
 
-    if(!this->validateMove(xSource, ySource, xDest, yDest)){
+    if(!this->validateMove(xSource, ySource, xDest, yDest, true)){
         cout << "Invalid Move!" << endl;
         return false;
     }
@@ -23,12 +23,14 @@ bool king::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
     return true;
 }
 
-bool king::validateMove(int xSource, int ySource, int xDest, int yDest){
+bool king::validateMove(int xSource, int ySource, int xDest, int yDest, bool output){
     // Check to see if we're trying to castle
     if((board[xDest][yDest] != nullptr) && (this->myColor == board[xDest][yDest]->myColor) && (board[xDest][yDest]->myType == ROOK)){
         // Validate the attempted castle
-        if(!validateCastle(xSource, ySource, xDest, yDest)){
-            cout << "Invalid Castle!" << endl;
+        if(!validateCastle(xSource, ySource, xDest, yDest, output)){
+            if(output){
+                cout << "Invalid Castle!" << endl;
+            }
             return false;
         } else {
         // We have a valid castle and we have verified the move so we can early return true here
@@ -41,13 +43,17 @@ bool king::validateMove(int xSource, int ySource, int xDest, int yDest){
 
     // Just make sure we're staying within the king square
     if((xChange + yChange > 2) || (xChange + yChange == 0)){
-        cout << "Can't move a king that way!" << endl;
+        if(output){
+            cout << "Can't move a king that way!" << endl;
+        }
         return false;
     }
 
     // Make sure we're not trying to take our own piece
     if((board[xDest][yDest]) && (this->myColor == board[xDest][yDest]->myColor)){
-        cout << "Trying to take your own piece with a king!" << endl;
+        if(output){
+            cout << "Trying to take your own piece with a king!" << endl;
+        }
         return false;
     }
 
@@ -55,18 +61,22 @@ bool king::validateMove(int xSource, int ySource, int xDest, int yDest){
 }
 
 // TODO check for moving through check
-bool king::validateCastle(int xSource, int ySource, int xDest, int yDest){
+bool king::validateCastle(int xSource, int ySource, int xDest, int yDest, bool output){
     king *myKing = (king*)board[xSource][ySource];
     rook *myRook = (rook*)board[xSource][ySource];
 
     // Make sure neither king or rook have moved
     if(myKing->hasMoved){
-        cout << "Cannot castle because your King has moved!" << endl;
+        if(output){
+            cout << "Cannot castle because your King has moved!" << endl;
+        }
         return false;
     }
 
     if(myRook->hasMoved){
-        cout << "Cannot castle because your Rook has moved!" << endl;
+        if(output){
+            cout << "Cannot castle because your Rook has moved!" << endl;
+        }
         return false;
     }
 
@@ -74,7 +84,9 @@ bool king::validateCastle(int xSource, int ySource, int xDest, int yDest){
     // Because neither piece can have moved we just need to check along one axis
     for(int i = ySource + 1; i < yDest; i++){
         if(board[xSource][i] != nullptr){
-            cout << "Cannot castle through a piece!" << endl;
+            if(output){
+                cout << "Cannot castle through a piece!" << endl;
+            }
             return false;
         }
     }

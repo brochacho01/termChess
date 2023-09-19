@@ -9,7 +9,7 @@ using namespace std;
 // TODO check logic
 bool knight::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
     cout << "Called knight move!" << endl;
-    if(!this->validateMove(xSource, ySource, xDest, yDest, ownKing)){
+    if(!this->validateMove(xSource, ySource, xDest, yDest, true)){
         cout << "Invalid Move!" << endl;
         return false;
     }
@@ -18,19 +18,23 @@ bool knight::move(int xSource, int ySource, int xDest, int yDest, piece ownKing)
     return true;
 }
 
-bool knight::validateMove(int xSource, int ySource, int xDest, int yDest, piece ownKing){
+bool knight::validateMove(int xSource, int ySource, int xDest, int yDest, bool output){
     // First check that the coordinates are for a valid knight move
     int xChange = abs(xSource - xDest);
     int yChange = abs(ySource - yDest);
 
-    if(((xChange != 2) || (yChange != 1)) && ((xChange != 1) || (yChange != 2))) {
-        cout << "Trying to move knight illegally!" << endl;
+    if(((xChange != 2) || (yChange != 1)) && ((xChange != 1) || (yChange != 2))){
+        if(output){
+            cout << "Trying to move knight illegally!" << endl;
+        }
         return false;
     }
 
     // Check to make sure we're not trying to take our own piece
     if((board[xDest][yDest] != nullptr) && (this->myColor == board[xDest][yDest]->myColor)){
-        cout << "Trying to take your own piece with a knight!" << endl;
+        if(output){
+            cout << "Trying to take your own piece with a knight!" << endl;
+        }
         return false;
     }
 

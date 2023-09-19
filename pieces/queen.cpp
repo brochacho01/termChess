@@ -10,7 +10,7 @@ using namespace std;
 bool queen::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
     cout << "Called queen move!" << endl;
 
-    if(!this->validateMove(xSource, ySource, xDest, yDest, ownKing)){
+    if(!this->validateMove(xSource, ySource, xDest, yDest, true)){
         cout << "Invalid Move!" << endl;
         return false;
     }
@@ -19,14 +19,16 @@ bool queen::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
     return true;
 }
 
-bool queen::validateMove(int xSource, int ySource, int xDest, int yDest, piece ownKing){
+bool queen::validateMove(int xSource, int ySource, int xDest, int yDest, bool output){
     // Need to check if we're moving diagonally or horizontally/vertically
     int slope;
     int xChange = abs(xDest - xSource);
     int yChange = abs(yDest - ySource);
 
     if((xChange == 0) && (yChange == 0)){
-        cout << "Trying to move queen to space that it is currently on!" << endl;
+        if(output){
+            cout << "Trying to move queen to space that it is currently on!" << endl;
+        }
         return false;
     }
 
@@ -37,26 +39,28 @@ bool queen::validateMove(int xSource, int ySource, int xDest, int yDest, piece o
 
     // If slope is 0 we are not moving diagonally
     if(!slope){
-        if(!validateStraight(xSource, ySource, xDest, yDest)){
+        if(!validateStraight(xSource, ySource, xDest, yDest, output)){
             return false;
         }
     // Else, we are moving diagonally 
     } else {
-        if(!validateDiagonal(xSource, ySource, xDest, yDest, xChange, yChange)){
+        if(!validateDiagonal(xSource, ySource, xDest, yDest, xChange, yChange, output)){
             return false;
         }
     }
 
     // Make sure we're not trying to take our own piece
     if((board[xDest][yDest] != nullptr) && (this->myColor == board[xDest][yDest]->myColor)){
-        cout << "Trying to take your own piece with a queen!" << endl;
+        if(output){
+            cout << "Trying to take your own piece with a queen!" << endl;
+        }
         return false;
     }
 
     return true;
 }
 
-bool queen::validateStraight(int xSource, int ySource, int xDest, int yDest){
+bool queen::validateStraight(int xSource, int ySource, int xDest, int yDest, bool output){
     int xChange = 0;
     int lowPos;
     int highPos;
@@ -76,7 +80,9 @@ bool queen::validateStraight(int xSource, int ySource, int xDest, int yDest){
     if(xChange){
         for(int i = lowPos + 1; i < highPos; i++){
             if(board[i][yDest] != nullptr){
-                cout << "Trying to move queen over a piece!" << endl;
+                if(output){
+                    cout << "Trying to move queen over a piece!" << endl;
+                }
                 return false;
             }
         }
@@ -84,7 +90,9 @@ bool queen::validateStraight(int xSource, int ySource, int xDest, int yDest){
     } else {
         for(int i = lowPos + 1; i < highPos; i++){
             if(board[xDest][i] != nullptr){
-                cout << "Trying to move queen over a piece!" << endl;
+                if(output){
+                    cout << "Trying to move queen over a piece!" << endl;
+                }
                 return false;
             }
         }
@@ -93,11 +101,13 @@ bool queen::validateStraight(int xSource, int ySource, int xDest, int yDest){
     return true;
 }
 
-bool queen::validateDiagonal(int xSource, int ySource, int xDest, int yDest, int xChange, int yChange){
+bool queen::validateDiagonal(int xSource, int ySource, int xDest, int yDest, int xChange, int yChange, bool output){
     int slope = yChange / xChange;
 
     if(slope != 1){
-        cout << "Trying to move queen diagonally with an illegal slope!" << endl;
+        if(output){
+            cout << "Trying to move queen diagonally with an illegal slope!" << endl;
+        }
         return false;
     }
 
@@ -111,7 +121,9 @@ bool queen::validateDiagonal(int xSource, int ySource, int xDest, int yDest, int
     // Make sure we're not trying to move through a piece
     for(i,j; i != xDest; i += iIncrementMask, j += jIncrementMask){
         if(board[i][j] != nullptr){
-            cout << "Trying to move queen over another piece!" << endl;
+            if(output){
+                cout << "Trying to move queen over another piece!" << endl;
+            }
             return false;
         }
     }

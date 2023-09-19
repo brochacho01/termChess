@@ -88,7 +88,7 @@ class rook : public piece {
                         int ySource,
                         int xDest,
                         int yDest,
-                        piece ownKing);
+                        bool output);
 
         void placePiece(int xSource,
                         int ySource,
@@ -113,7 +113,7 @@ class knight : public piece {
                         int ySource,
                         int xDest,
                         int yDest,
-                        piece ownKing);
+                        bool output);
         
         void placePiece(int xSource,
                         int ySource,
@@ -138,7 +138,7 @@ class bishop : public piece {
                         int ySource,
                         int xDest,
                         int yDest,
-                        piece ownKing);
+                        bool output);
 
         void placePiece(int xSource,
                         int ySource,
@@ -163,19 +163,21 @@ class queen : public piece {
                         int ySource,
                         int xDest,
                         int yDest,
-                        piece ownKing);
+                        bool output);
 
         bool validateStraight(int xSource,
                             int ySource,
                             int xDest,
-                            int yDest);
+                            int yDest,
+                            bool output);
 
         bool validateDiagonal(int xSource,
                             int ySource,
                             int xDest,
                             int yDest,
                             int xChange,
-                            int yChange);
+                            int yChange,
+                            bool output);
         
         void placePiece(int xSource,
                         int ySource,
@@ -212,12 +214,14 @@ class king : public piece {
         bool validateMove(int xSource,
                         int ySource,
                         int xDest,
-                        int yDest);
+                        int yDest,
+                        bool output);
 
         bool validateCastle(int xSource,
                             int ySource,
                             int xDest,
-                            int yDest);
+                            int yDest,
+                            bool output);
 
         void placePiece(int xSource,
                         int ySource,
