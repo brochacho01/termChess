@@ -43,7 +43,8 @@ bool bishop::validateMove(int xSource, int ySource, int xDest, int yDest, piece 
     int i = xSource + iIncrementMask;
     int j = ySource + jIncrementMask;
 
-    for(i,j; i != xDest + iIncrementMask; i+= iIncrementMask, j+= jIncrementMask){
+    // Make sure we're not trying to move through a piece
+    for(i,j; i != xDest; i+= iIncrementMask, j+= jIncrementMask){
         if(board[i][j] != nullptr){
             cout << "Trying to move bishop over another piece!" << endl;
             return false;

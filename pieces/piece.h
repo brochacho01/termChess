@@ -159,6 +159,29 @@ class queen : public piece {
                 int xDest,
                 int yDest,
                 piece ownKing);
+
+        bool validateMove(int xSource,
+                        int ySource,
+                        int xDest,
+                        int yDest,
+                        piece ownKing);
+
+        bool validateStraight(int xSource,
+                            int ySource,
+                            int xDest,
+                            int yDest);
+
+        bool validateDiagonal(int xSource,
+                            int ySource,
+                            int xDest,
+                            int yDest,
+                            int xChange,
+                            int yChange);
+        
+        void placePiece(int xSource,
+                        int ySource,
+                        int xDest,
+                        int yDest);
 };
 
 class king : public piece {

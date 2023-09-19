@@ -54,7 +54,7 @@ bool rook::validateMove(int xSource, int ySource, int xDest, int yDest, piece ow
     // If we're moving along y
     } else {
         for(int i = lowPos + 1; i < highPos; i++){
-            if(board[xDest][yDest] != nullptr){
+            if(board[xDest][i] != nullptr){
                 cout << "Trying to move rook over a piece!" << endl;
                 return false;
             }

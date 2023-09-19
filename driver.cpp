@@ -100,6 +100,8 @@ void gameLoop(int fd, char color, char connectType){
                 case BISHOP:
                     ((bishop*)curPiece)->move(xSource, ySource, xDest, yDest, *curPiece);
                     break;
+                case QUEEN:
+                    ((queen*)curPiece)->move(xSource, ySource, xDest, yDest, *curPiece);
                 default:
                     break;
             }
