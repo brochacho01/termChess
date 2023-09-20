@@ -62,8 +62,7 @@ bool king::validateMove(int xSource, int ySource, int xDest, int yDest, bool out
 // TODO check for moving through check
 bool king::validateCastle(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
     king *myKing = (king*)board[xSource][ySource];
-    rook *myRook = (rook*)board[xSource][ySource];
-
+    rook *myRook = (rook*)board[xDest][yDest];
     // Make sure neither king or rook have moved
     if(myKing->hasMoved){
         if(output){
@@ -79,9 +78,20 @@ bool king::validateCastle(int xSource, int ySource, int xDest, int yDest, bool o
         return false;
     }
 
+    // Can't be in check and castle
+    if(myKing->isCheck){
+        if(output){
+            cout << "Can't castle while in check!" << endl;
+        }
+        return false;
+    }
+
+    // Because we can go + or - need a mask
+    int yIncrementMask = ((yDest - ySource) >> 31) | 1;
+
     // Check to see if there's any pieces between king and rook
     // Because neither piece can have moved we just need to check along one axis
-    for(int i = ySource + 1; i < yDest; i++){
+    for(int i = ySource + yIncrementMask; i != yDest; i+= yIncrementMask){
         if(board[xSource][i] != nullptr){
             if(output){
                 cout << "Cannot castle through a piece!" << endl;
@@ -90,6 +100,24 @@ bool king::validateCastle(int xSource, int ySource, int xDest, int yDest, bool o
         }
     }
 
+    // Must also validate we're not castling through check
+    int trueYDest;
+    if(yIncrementMask > 0){
+        trueYDest = 6;
+    } else {
+        trueYDest = 2;
+    }
+    // Want to validate we're not in check from our starting position to our destination position
+
+    for(int i = ySource; i != trueYDest + yIncrementMask; i += yIncrementMask){
+        cout << "i: " << i << endl;
+        if(isChecking(xSource, ySource, xSource, i, this)){
+            cout << "Cannot castle through check!" << endl;
+            return false;
+        }
+    }
+
+    cout << "Valid castle!" << endl;
     return true;
 }
 
@@ -97,10 +125,24 @@ bool king::validateCastle(int xSource, int ySource, int xDest, int yDest, bool o
 // Or always delete the piece but check distances to see if it was a castle move and just create a new rook in the proper place
 void king::placePiece(int xSource, int ySource, int xDest, int yDest, piece* (&board)[8][8]){
     king *curPiece = (king*)board[xSource][ySource];
-    curPiece->hasMoved = true;
-    delete board[xDest][yDest];
     board[xSource][ySource] = nullptr;
-    board[xDest][yDest] = curPiece;
+
+    // Check to see if we're placing for a castle, keep in mind we would have already validated this move
+    if((board[xDest][yDest] != nullptr) && (board[xDest][yDest]->myType == ROOK) && (this->myColor == board[xDest][yDest]->myColor)){
+        rook *tmp = (rook*)board[xDest][yDest];
+        board[xDest][yDest] = nullptr;
+        if(yDest - ySource > 0){
+            board[xDest][6] = curPiece;
+            board[xDest][5] = tmp;
+        } else {
+            board[xDest][2] = curPiece;
+            board[xDest][3] = tmp;
+        }
+    } else {
+        curPiece->hasMoved = true;
+        delete board[xDest][yDest];
+        board[xDest][yDest] = curPiece;
+    }
 }
 
 void king::printMySelf(void){

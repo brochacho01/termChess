@@ -72,13 +72,14 @@ void setup(char *connectType, char *color, int *fd, king *&myKing, king *&oppKin
 }
 
 
-// TODO actually pass in ownKing to move methods
 void gameLoop(int fd, char color, char connectType, king *&myKing, king *&oppKing){
     if(color == 'r'){
         char userBuf[3];
         int xSource, xDest, ySource, yDest;
         bool validCoords = false;
+        bool isMoveIntoCheck = false;
         while(true){    
+            // Get user coords and perform basic validation
             while(!validCoords){
                 userBuf[0] = 'h';
                 getCoordInput(userBuf, 1, color);
@@ -90,14 +91,36 @@ void gameLoop(int fd, char color, char connectType, king *&myKing, king *&oppKin
                 yDest = ctoi(userBuf[1]);
                 validCoords = validateCoords(xSource, ySource, xDest, yDest);
             }
+
+            // Get the specified piece and see if it puts own player in check
             piece *curPiece = board[xSource][ySource];
-            curPiece->printSelf();
-            bool isCheck = isChecking(xSource, ySource, xDest, yDest, myKing);
-            cout << "isCheck: " << isCheck << endl;
-            if(isCheck && (curPiece->myColor == color)){
-                cout << "Check has been detected on my king!" << endl;
-                cout << "Can't perform that move!" << endl;
+
+            cout << "My king position is: " << myKing->position[0] << " " << myKing->position[1] << endl;
+
+            // Need to do some fiddly business for castling because the destination the user puts in to let us know they want to castle is not the actual destination of the king
+            if((curPiece->myType == KING) && (board[xDest][yDest] != nullptr) && (board[xDest][yDest]->myType == ROOK) && (curPiece->myColor == board[xDest][yDest]->myColor)){
+                int trueYDest;
+                if(yDest - ySource > 0) {
+                    cout << "yDest6" << endl; 
+                    isMoveIntoCheck = isChecking(xSource, ySource, xDest, 6, (king*)curPiece);
+                } else {
+                    cout << "yDest2" << endl;
+                    isMoveIntoCheck = isChecking(xSource, ySource, xDest, 2, (king*)curPiece);
+                }
             } else {
+                cout << "nonKing isChecking" << endl;
+                isMoveIntoCheck = isChecking(xSource, ySource, xDest, yDest, myKing);
+            }
+
+            curPiece->printSelf();
+
+            if(isMoveIntoCheck && (curPiece->myColor == color)){
+                cout << "Can't move yourself into check!" << endl;
+                cout << "Can't perform that move!" << endl;
+            }
+
+            // If not, try to perform the move
+            else {
                 switch(curPiece->myType){
                     case PAWN:
                         ((pawn*)curPiece)->move(xSource, ySource, xDest, yDest, board);
@@ -124,6 +147,7 @@ void gameLoop(int fd, char color, char connectType, king *&myKing, king *&oppKin
 
             
             printMyBoard(color);
+            isMoveIntoCheck = false;
             validCoords = false;
         }
         return;
