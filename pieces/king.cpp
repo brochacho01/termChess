@@ -1,7 +1,6 @@
 #include <iostream>
 
 #include "piece.h"
-#include "../board.h"
 
 using namespace std;
 
@@ -11,23 +10,23 @@ using namespace std;
 // Can't be any pieces between king or rook
 // King can't move through check when castling
 
-bool king::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
+bool king::move(int xSource, int ySource, int xDest, int yDest, piece* (&board)[8][8]){
     cout << "Called king move!" << endl;
 
-    if(!this->validateMove(xSource, ySource, xDest, yDest, true)){
+    if(!this->validateMove(xSource, ySource, xDest, yDest, true, board)){
         cout << "Invalid Move!" << endl;
         return false;
     }
 
-    this->placePiece(xSource, ySource, xDest, yDest);
+    this->placePiece(xSource, ySource, xDest, yDest, board);
     return true;
 }
 
-bool king::validateMove(int xSource, int ySource, int xDest, int yDest, bool output){
+bool king::validateMove(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
     // Check to see if we're trying to castle
     if((board[xDest][yDest] != nullptr) && (this->myColor == board[xDest][yDest]->myColor) && (board[xDest][yDest]->myType == ROOK)){
         // Validate the attempted castle
-        if(!validateCastle(xSource, ySource, xDest, yDest, output)){
+        if(!validateCastle(xSource, ySource, xDest, yDest, output, board)){
             if(output){
                 cout << "Invalid Castle!" << endl;
             }
@@ -61,7 +60,7 @@ bool king::validateMove(int xSource, int ySource, int xDest, int yDest, bool out
 }
 
 // TODO check for moving through check
-bool king::validateCastle(int xSource, int ySource, int xDest, int yDest, bool output){
+bool king::validateCastle(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
     king *myKing = (king*)board[xSource][ySource];
     rook *myRook = (rook*)board[xSource][ySource];
 
@@ -96,7 +95,7 @@ bool king::validateCastle(int xSource, int ySource, int xDest, int yDest, bool o
 
 // TODO don't delete rook when castling?
 // Or always delete the piece but check distances to see if it was a castle move and just create a new rook in the proper place
-void king::placePiece(int xSource, int ySource, int xDest, int yDest){
+void king::placePiece(int xSource, int ySource, int xDest, int yDest, piece* (&board)[8][8]){
     king *curPiece = (king*)board[xSource][ySource];
     curPiece->hasMoved = true;
     delete board[xDest][yDest];
@@ -104,7 +103,7 @@ void king::placePiece(int xSource, int ySource, int xDest, int yDest){
     board[xDest][yDest] = curPiece;
 }
 
-void king::printSelf(void){
+void king::printMySelf(void){
     cout << "Position[0] is: " << this->position[0] << endl;
     cout << "Position[1] is: " << this->position[1] << endl;
     cout << "isCheck is: " << this->isCheck << endl;

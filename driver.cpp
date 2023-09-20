@@ -9,8 +9,8 @@
 
 using namespace std;
 
-void setup(char *connectType, char *color, int *fd, king *myKing, king *oppKing);
-void gameLoop(int fd, char color, char connectType);
+void setup(char *connectType, char *color, int *fd, king *&myKing, king *&oppKing);
+void gameLoop(int fd, char color, char connectType, king *&myKing, king *&oppKing);
 int getCoordInput(char *userBuf, int type, char color);
 bool validateCoords(int xSource, int ySource, int xDest, int yDest);
 
@@ -29,10 +29,10 @@ int main() {
     king *oppKing;
     setup(&connectType, &color, &fd, myKing, oppKing);
     printMyBoard(color);
-    gameLoop(fd, color, connectType);
+    gameLoop(fd, color, connectType, myKing, oppKing);
 }
 
-void setup(char *connectType, char *color, int *fd, king *myKing, king *oppKing){
+void setup(char *connectType, char *color, int *fd, king *&myKing, king *&oppKing){
     cout << "Would you like to host or connect? (h/c) ";
     cin >> *connectType;
     tolower(*connectType);
@@ -73,7 +73,7 @@ void setup(char *connectType, char *color, int *fd, king *myKing, king *oppKing)
 
 
 // TODO actually pass in ownKing to move methods
-void gameLoop(int fd, char color, char connectType){
+void gameLoop(int fd, char color, char connectType, king *&myKing, king *&oppKing){
     if(color == 'r'){
         char userBuf[3];
         int xSource, xDest, ySource, yDest;
@@ -92,24 +92,37 @@ void gameLoop(int fd, char color, char connectType){
             }
             piece *curPiece = board[xSource][ySource];
             curPiece->printSelf();
-            switch(curPiece->myType){
-                case PAWN:
-                    ((pawn*)curPiece)->move(xSource, ySource, xDest, yDest, *curPiece);
-                    break;
-                case ROOK:
-                    ((rook*)curPiece)->move(xSource, ySource, xDest, yDest, *curPiece);
-                    break;
-                case KNIGHT:
-                    ((knight*)curPiece)->move(xSource, ySource, xDest, yDest, *curPiece);
-                    break;
-                case BISHOP:
-                    ((bishop*)curPiece)->move(xSource, ySource, xDest, yDest, *curPiece);
-                    break;
-                case QUEEN:
-                    ((queen*)curPiece)->move(xSource, ySource, xDest, yDest, *curPiece);
-                default:
-                    break;
+            bool isCheck = isChecking(xSource, ySource, xDest, yDest, myKing);
+            cout << "isCheck: " << isCheck << endl;
+            if(isCheck && (curPiece->myColor == color)){
+                cout << "Check has been detected on my king!" << endl;
+                cout << "Can't perform that move!" << endl;
+            } else {
+                switch(curPiece->myType){
+                    case PAWN:
+                        ((pawn*)curPiece)->move(xSource, ySource, xDest, yDest, board);
+                        break;
+                    case ROOK:
+                        ((rook*)curPiece)->move(xSource, ySource, xDest, yDest, board);
+                        break;
+                    case KNIGHT:
+                        ((knight*)curPiece)->move(xSource, ySource, xDest, yDest, board);
+                        break;
+                    case BISHOP:
+                        ((bishop*)curPiece)->move(xSource, ySource, xDest, yDest, board);
+                        break;
+                    case QUEEN:
+                        ((queen*)curPiece)->move(xSource, ySource, xDest, yDest, board);
+                        break;
+                    case KING:
+                        ((king*)curPiece)->move(xSource, ySource, xDest, yDest, board);
+                        break;
+                    default:
+                        break;
+                }
             }
+
+            
             printMyBoard(color);
             validCoords = false;
         }
@@ -159,6 +172,10 @@ bool validateCoords(int xSource, int ySource, int xDest, int yDest){
     }
     else if((xSource > 7) || (ySource > 7) || (xDest > 7) || (yDest > 7)){
         cout << "Can't use coordinates greater than 7!" << endl;
+        return false;
+    }
+    else if(board[xSource][ySource] == nullptr){
+        cout << "Can't move a non-existent piece!" << endl;
         return false;
     }
     return true;

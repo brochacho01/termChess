@@ -53,18 +53,20 @@ class pawn : public piece {
                 int ySource,
                 int xDest,
                 int yDest,
-                piece ownKing);
+                piece* (&board)[8][8]);
 
         bool validateMove(int xSource,
                         int ySource,
                         int xDest,
                         int yDest,
-                        bool output);
+                        bool output,
+                        piece* (&board)[8][8]);
 
         void placePiece(int xSource,
                         int ySource,
                         int xDest,
-                        int yDest);
+                        int yDest,
+                        piece* (&board)[8][8]);
 };
 
 class rook : public piece {
@@ -82,18 +84,20 @@ class rook : public piece {
                     int ySource,
                     int xDest,
                     int yDest,
-                    piece ownKing);
+                    piece* (&board)[8][8]);
 
         bool validateMove(int xSource,
                         int ySource,
                         int xDest,
                         int yDest,
-                        bool output);
+                        bool output,
+                        piece* (&board)[8][8]);
 
         void placePiece(int xSource,
                         int ySource,
                         int xDest,
-                        int yDest);
+                        int yDest,
+                        piece* (&board)[8][8]);
 };
 
 class knight : public piece {
@@ -107,18 +111,20 @@ class knight : public piece {
                 int ySource,
                 int xDest,
                 int yDest,
-                piece ownKing);
+                piece* (&board)[8][8]);
 
         bool validateMove(int xSource,
                         int ySource,
                         int xDest,
                         int yDest,
-                        bool output);
+                        bool output,
+                        piece* (&board)[8][8]);
         
         void placePiece(int xSource,
                         int ySource,
                         int xDest,
-                        int yDest);
+                        int yDest,
+                        piece* (&board)[8][8]);
 };
 
 class bishop : public piece {
@@ -132,18 +138,20 @@ class bishop : public piece {
                 int ySource,
                 int xDest,
                 int yDest,
-                piece ownKing);
+                piece* (&board)[8][8]);
 
         bool validateMove(int xSource,
                         int ySource,
                         int xDest,
                         int yDest,
-                        bool output);
+                        bool output,
+                        piece* (&board)[8][8]);
 
         void placePiece(int xSource,
                         int ySource,
                         int xDest,
-                        int yDest);
+                        int yDest,
+                        piece* (&board)[8][8]);
 };
 
 class queen : public piece {
@@ -157,19 +165,21 @@ class queen : public piece {
                 int ySource,
                 int xDest,
                 int yDest,
-                piece ownKing);
+                piece* (&board)[8][8]);
 
         bool validateMove(int xSource,
                         int ySource,
                         int xDest,
                         int yDest,
-                        bool output);
+                        bool output, 
+                        piece* (&board)[8][8]);
 
         bool validateStraight(int xSource,
                             int ySource,
                             int xDest,
                             int yDest,
-                            bool output);
+                            bool output,
+                            piece* (&board)[8][8]);
 
         bool validateDiagonal(int xSource,
                             int ySource,
@@ -177,12 +187,14 @@ class queen : public piece {
                             int yDest,
                             int xChange,
                             int yChange,
-                            bool output);
+                            bool output,
+                            piece* (&board)[8][8]);
         
         void placePiece(int xSource,
                         int ySource,
                         int xDest,
-                        int yDest);
+                        int yDest,
+                        piece* (&board)[8][8]);
 };
 
 class king : public piece {
@@ -196,12 +208,12 @@ class king : public piece {
             myColor = color;
             myType = KING;
 
-            position[1] = 5;
+            position[1] = 4;
             
             if(myColor == 'r'){
-                position[0] = 0;
-            } else {
                 position[0] = 7;
+            } else {
+                position[0] = 0;
             }
         }
 
@@ -209,26 +221,29 @@ class king : public piece {
                 int ySource,
                 int xDest,
                 int yDest,
-                piece ownKing);
+                piece* (&board)[8][8]);
 
         bool validateMove(int xSource,
                         int ySource,
                         int xDest,
                         int yDest,
-                        bool output);
+                        bool output,
+                        piece* (&board)[8][8]);
 
         bool validateCastle(int xSource,
                             int ySource,
                             int xDest,
                             int yDest,
-                            bool output);
+                            bool output,
+                            piece* (&board)[8][8]);
 
         void placePiece(int xSource,
                         int ySource,
                         int xDest,
-                        int yDest);
+                        int yDest,
+                        piece* (&board)[8][8]);
         
-        void printSelf(void);
+        void printMySelf(void);
 };
 
 bool isChecking(int xSource, int ySource, int xDest, int yDest, king* theKing);

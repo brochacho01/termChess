@@ -18,6 +18,7 @@ void copyBoard(piece* (&boardCopy)[8][8]);
 // Because entries in these arrays are objects with allocated space I want to be very careful to not free any memory during this check as that would mess with the original board
 bool isChecking(int xSource, int ySource, int xDest, int yDest, king* theKing){
     piece *boardCopy[8][8];
+    piece *boardRevert[8][8];
     copyBoard(boardCopy);
 
     piece *movePiece = boardCopy[xSource][ySource];
@@ -25,10 +26,15 @@ bool isChecking(int xSource, int ySource, int xDest, int yDest, king* theKing){
     boardCopy[xDest][yDest] = nullptr;
     boardCopy[xDest][yDest] = movePiece;
 
+    cout << "Testing the move, printing temp board after moving piece" << endl;
+    printTestBoard(boardCopy);
+
+
     // Now we check to see if any piece can put the king in check
     int kingX = theKing->position[0];
     int kingY = theKing->position[1];
 
+    cout << "Kingx: " << kingX << " kingY: " << kingY << endl;
     for(int i = 0; i < 8; i++){
         for(int j = 0; j < 8; j++){
             piece *curPiece = boardCopy[i][j];
@@ -41,32 +47,38 @@ bool isChecking(int xSource, int ySource, int xDest, int yDest, king* theKing){
             // For any piece we find see if we can move it onto the square that theKing is occupying, if so, that means the king is in check and we return true
             switch(curPiece->myType){
                 case PAWN:
-                    if(((pawn*)curPiece)->validateMove(xSource, ySource, xDest, yDest, false)){
+                    if(((pawn*)curPiece)->validateMove(i, j, kingX, kingY, false, boardCopy)){
+                        cout << "Check from pawn" << endl;
                         return true;
                     }
                     break;
                 case ROOK:
-                    if(((rook*)curPiece)->validateMove(xSource, ySource, xDest, yDest, false)){
+                    if(((rook*)curPiece)->validateMove(i, j, kingX, kingY, false, boardCopy)){
+                        cout << "Check from rook" << endl;
                         return true;
                     }
                     break;
                 case KNIGHT:
-                    if(((knight*)curPiece)->validateMove(xSource, ySource, xDest, yDest, false)){
+                    if(((knight*)curPiece)->validateMove(i, j, kingX, kingY, false, boardCopy)){
+                        cout << "Check from knight" << endl;
                         return true;
                     }
                     break;
                 case BISHOP:
-                    if(((bishop*)curPiece)->validateMove(xSource, ySource, xDest, yDest, false)){
+                    if(((bishop*)curPiece)->validateMove(i, j, kingX, kingY, false, boardCopy)){
+                        cout << "Check from bishop" << endl;
                         return true;
                     }
                     break;
                 case QUEEN:
-                    if(((queen*)curPiece)->validateMove(xSource, ySource, xDest, yDest, false)){
+                    if(((queen*)curPiece)->validateMove(i, j, kingX, kingY, false, boardCopy)){
+                        cout << "Check from queen" << endl;
                         return true;
                     }
                     break;
                 case KING:
-                    if(((king*)curPiece)->validateMove(xSource, ySource, xDest, yDest, false)){
+                    if(((king*)curPiece)->validateMove(i, j, kingX, kingY, false, board)){
+                        cout << "Check from king" << endl;
                         return true;
                     }
                     break;

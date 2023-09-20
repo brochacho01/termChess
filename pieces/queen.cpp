@@ -1,25 +1,24 @@
 #include <iostream>
 
 #include "piece.h"
-#include "../board.h"
 
 using namespace std;
 
 // TODO check for checks
 
-bool queen::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
+bool queen::move(int xSource, int ySource, int xDest, int yDest, piece* (&board)[8][8]){
     cout << "Called queen move!" << endl;
 
-    if(!this->validateMove(xSource, ySource, xDest, yDest, true)){
+    if(!this->validateMove(xSource, ySource, xDest, yDest, true, board)){
         cout << "Invalid Move!" << endl;
         return false;
     }
 
-    this->placePiece(xSource, ySource, xDest, yDest);
+    this->placePiece(xSource, ySource, xDest, yDest, board);
     return true;
 }
 
-bool queen::validateMove(int xSource, int ySource, int xDest, int yDest, bool output){
+bool queen::validateMove(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
     // Need to check if we're moving diagonally or horizontally/vertically
     int slope;
     int xChange = abs(xDest - xSource);
@@ -39,12 +38,12 @@ bool queen::validateMove(int xSource, int ySource, int xDest, int yDest, bool ou
 
     // If slope is 0 we are not moving diagonally
     if(!slope){
-        if(!validateStraight(xSource, ySource, xDest, yDest, output)){
+        if(!validateStraight(xSource, ySource, xDest, yDest, output, board)){
             return false;
         }
     // Else, we are moving diagonally 
     } else {
-        if(!validateDiagonal(xSource, ySource, xDest, yDest, xChange, yChange, output)){
+        if(!validateDiagonal(xSource, ySource, xDest, yDest, xChange, yChange, output, board)){
             return false;
         }
     }
@@ -60,7 +59,7 @@ bool queen::validateMove(int xSource, int ySource, int xDest, int yDest, bool ou
     return true;
 }
 
-bool queen::validateStraight(int xSource, int ySource, int xDest, int yDest, bool output){
+bool queen::validateStraight(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
     int xChange = 0;
     int lowPos;
     int highPos;
@@ -101,7 +100,7 @@ bool queen::validateStraight(int xSource, int ySource, int xDest, int yDest, boo
     return true;
 }
 
-bool queen::validateDiagonal(int xSource, int ySource, int xDest, int yDest, int xChange, int yChange, bool output){
+bool queen::validateDiagonal(int xSource, int ySource, int xDest, int yDest, int xChange, int yChange, bool output, piece* (&board)[8][8]){
     int slope = yChange / xChange;
 
     if(slope != 1){
@@ -131,7 +130,7 @@ bool queen::validateDiagonal(int xSource, int ySource, int xDest, int yDest, int
     return true;
 }
 
-void queen::placePiece(int xSource, int ySource, int xDest, int yDest){
+void queen::placePiece(int xSource, int ySource, int xDest, int yDest, piece* (&board)[8][8]){
     queen *curPiece = (queen*)board[xSource][ySource];
 
     delete board[xDest][yDest];

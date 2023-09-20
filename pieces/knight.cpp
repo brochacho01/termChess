@@ -1,24 +1,23 @@
 #include <iostream>
 
 #include "piece.h"
-#include "../board.h"
 
 
 using namespace std;
 
 // TODO check logic
-bool knight::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
+bool knight::move(int xSource, int ySource, int xDest, int yDest, piece* (&board)[8][8]){
     cout << "Called knight move!" << endl;
-    if(!this->validateMove(xSource, ySource, xDest, yDest, true)){
+    if(!this->validateMove(xSource, ySource, xDest, yDest, true, board)){
         cout << "Invalid Move!" << endl;
         return false;
     }
 
-    this->placePiece(xSource, ySource, xDest, yDest);
+    this->placePiece(xSource, ySource, xDest, yDest, board);
     return true;
 }
 
-bool knight::validateMove(int xSource, int ySource, int xDest, int yDest, bool output){
+bool knight::validateMove(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
     // First check that the coordinates are for a valid knight move
     int xChange = abs(xSource - xDest);
     int yChange = abs(ySource - yDest);
@@ -41,7 +40,7 @@ bool knight::validateMove(int xSource, int ySource, int xDest, int yDest, bool o
     return true;
 }
 
-void knight::placePiece(int xSource, int ySource, int xDest, int yDest){
+void knight::placePiece(int xSource, int ySource, int xDest, int yDest, piece* (&board)[8][8]){
     knight *curPiece = (knight*)board[xSource][ySource];
 
     delete board[xDest][yDest];

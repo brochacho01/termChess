@@ -1,25 +1,24 @@
 #include <iostream>
 
 #include "piece.h"
-#include "../board.h"
 
 using namespace std;
 
 // TODO check for checks
 
-bool bishop::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
+bool bishop::move(int xSource, int ySource, int xDest, int yDest, piece* (&board)[8][8]){
     cout << "Called bishop move!" << endl;
     
-    if(!this->validateMove(xSource, ySource, xDest, yDest, true)){
+    if(!this->validateMove(xSource, ySource, xDest, yDest, true, board)){
         cout << "Invalid Move!" << endl;
         return false;
     }
 
-    this->placePiece(xSource, ySource, xDest, yDest);
+    this->placePiece(xSource, ySource, xDest, yDest, board);
     return true;
 }
 
-bool bishop::validateMove(int xSource, int ySource, int xDest, int yDest, bool output){
+bool bishop::validateMove(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
     // Check to see if we're moving diagonally
     int xChange = abs(xDest - xSource);
     int yChange = abs(yDest - ySource);
@@ -68,7 +67,7 @@ bool bishop::validateMove(int xSource, int ySource, int xDest, int yDest, bool o
     return true;
 }
 
-void bishop::placePiece(int xSource, int ySource, int xDest, int yDest){
+void bishop::placePiece(int xSource, int ySource, int xDest, int yDest, piece* (&board)[8][8]){
     bishop *curPiece = (bishop*)board[xSource][ySource];
 
     delete board[xDest][yDest];

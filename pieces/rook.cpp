@@ -1,6 +1,6 @@
 #include <iostream>
+
 #include "piece.h"
-#include "../board.h"
 
 using namespace std;
 
@@ -9,19 +9,19 @@ using namespace std;
 // See if moving rook will place own king in check
 // See if we are putting opposing king in check
 
-bool rook::move(int xSource, int ySource, int xDest, int yDest, piece ownKing){
+bool rook::move(int xSource, int ySource, int xDest, int yDest, piece* (&board)[8][8]){
     cout << "Called rook move!" << endl;
 
-    if(!this->validateMove(xSource, ySource, xDest, yDest, true)){
+    if(!this->validateMove(xSource, ySource, xDest, yDest, true, board)){
         cout << "Invalid Move!" << endl;
         return false;
     }
     
-    this->placePiece(xSource, ySource, xDest, yDest);
+    this->placePiece(xSource, ySource, xDest, yDest, board);
     return true;
 }
 
-bool rook::validateMove(int xSource, int ySource, int xDest, int yDest, bool output){
+bool rook::validateMove(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
     int xChange = 0;
     int lowPos;
     int highPos;
@@ -78,7 +78,7 @@ bool rook::validateMove(int xSource, int ySource, int xDest, int yDest, bool out
     return true;
 }
 
-void rook::placePiece(int xSource, int ySource, int xDest, int yDest){
+void rook::placePiece(int xSource, int ySource, int xDest, int yDest, piece* (&board)[8][8]){
     rook *curPiece = (rook*)board[xSource][ySource];
     curPiece->hasMoved = true;
     delete board[xDest][yDest];

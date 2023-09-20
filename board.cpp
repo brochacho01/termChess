@@ -11,9 +11,6 @@ void printBound(void);
 void printRowBound(void);
 void colorRed(void);
 void colorWhite(void);
-void createPieces(char color);
-void createSpaces(void);
-void createBoard(void);
 
 piece* board[8][8];
 
@@ -25,6 +22,19 @@ void printMyBoard(char myColor){
         printBoardForWhite();
     }
     cout << endl;
+}
+
+void printTestBoard(piece* (&boardCopy)[8][8]){
+    for(int i = 0; i < 8; i++){
+        printBound();
+        printRowBound();
+        for(int j = 0; j < 8; j++){
+            printCell(boardCopy[i][j]);
+        }
+        printf(" %d\n", i);
+    }
+    printBound();
+    cout << "  0   1   2   3   4   5   6   7" << endl;
 }
 
 void printBoardForRed(void){
