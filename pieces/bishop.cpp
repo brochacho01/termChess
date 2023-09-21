@@ -30,7 +30,7 @@ bool bishop::validateMove(int xSource, int ySource, int xDest, int yDest, bool o
         return false;
     }
 
-    int slope = yChange / xChange;
+    float slope = (float)xChange / (float)yChange;
 
     if(slope != 1){
         if(output){

@@ -108,9 +108,7 @@ bool king::validateCastle(int xSource, int ySource, int xDest, int yDest, bool o
         trueYDest = 2;
     }
     // Want to validate we're not in check from our starting position to our destination position
-
     for(int i = ySource; i != trueYDest + yIncrementMask; i += yIncrementMask){
-        cout << "i: " << i << endl;
         if(isChecking(xSource, ySource, xSource, i, this)){
             cout << "Cannot castle through check!" << endl;
             return false;
@@ -121,8 +119,6 @@ bool king::validateCastle(int xSource, int ySource, int xDest, int yDest, bool o
     return true;
 }
 
-// TODO don't delete rook when castling?
-// Or always delete the piece but check distances to see if it was a castle move and just create a new rook in the proper place
 void king::placePiece(int xSource, int ySource, int xDest, int yDest, piece* (&board)[8][8]){
     king *curPiece = (king*)board[xSource][ySource];
     board[xSource][ySource] = nullptr;
@@ -138,6 +134,8 @@ void king::placePiece(int xSource, int ySource, int xDest, int yDest, piece* (&b
             board[xDest][2] = curPiece;
             board[xDest][3] = tmp;
         }
+        tmp->hasMoved = true;
+        curPiece->hasMoved = true;
     } else {
         curPiece->hasMoved = true;
         delete board[xDest][yDest];

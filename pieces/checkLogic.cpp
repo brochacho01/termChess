@@ -8,12 +8,10 @@ using namespace std;
 void copyBoard(piece* (&boardCopy)[8][8]);
 
 
-// TODO VERIFY THIS ALL WORKS
 
 // Make a deep copy of the array
 // Simulate the move the player is trying to make
 // Then go over the entire board and see if a piece can take the king
-// We need the deep copy because move validation requires checking the board for existence of pieces in the path
 
 // Because entries in these arrays are objects with allocated space I want to be very careful to not free any memory during this check as that would mess with the original board
 
@@ -46,7 +44,6 @@ bool isChecking(int xSource, int ySource, int xDest, int yDest, king* theKing){
     int kingX = theKing->position[0];
     int kingY = theKing->position[1];
 
-    // cout << "Kingx: " << kingX << " kingY: " << kingY << endl;
     for(int i = 0; i < 8; i++){
         for(int j = 0; j < 8; j++){
             piece *curPiece = boardCopy[i][j];
@@ -89,12 +86,13 @@ bool isChecking(int xSource, int ySource, int xDest, int yDest, king* theKing){
                     break;
                 case QUEEN:
                     if(((queen*)curPiece)->validateMove(i, j, kingX, kingY, false, boardCopy)){
+                        cout << kingX << kingY << endl;
                         cout << "Check from queen" << endl;
                         isCheck = true;
                     }
                     break;
                 case KING:
-                    if(((king*)curPiece)->validateMove(i, j, kingX, kingY, false, board)){
+                    if(((king*)curPiece)->validateMove(i, j, kingX, kingY, false, boardCopy)){
                         cout << "Check from king" << endl;
                         isCheck = true;
                     }
@@ -109,7 +107,6 @@ bool isChecking(int xSource, int ySource, int xDest, int yDest, king* theKing){
                     theKing->position[0] = oldKingX;
                     theKing->position[1] = oldKingY;
                 }
-                cout << "Check from piece at i: " << i << " j: " << j << endl;
                 return true;
             }
         }

@@ -95,24 +95,22 @@ void gameLoop(int fd, char color, char connectType, king *&myKing, king *&oppKin
             // Get the specified piece and see if it puts own player in check
             piece *curPiece = board[xSource][ySource];
 
-            cout << "My king position is: " << myKing->position[0] << " " << myKing->position[1] << endl;
+            // cout << "My king position is: " << myKing->position[0] << " " << myKing->position[1] << endl;
 
             // Need to do some fiddly business for castling because the destination the user puts in to let us know they want to castle is not the actual destination of the king
+            int check = 0;
             if((curPiece->myType == KING) && (board[xDest][yDest] != nullptr) && (board[xDest][yDest]->myType == ROOK) && (curPiece->myColor == board[xDest][yDest]->myColor)){
                 int trueYDest;
                 if(yDest - ySource > 0) {
-                    cout << "yDest6" << endl; 
                     isMoveIntoCheck = isChecking(xSource, ySource, xDest, 6, (king*)curPiece);
                 } else {
-                    cout << "yDest2" << endl;
                     isMoveIntoCheck = isChecking(xSource, ySource, xDest, 2, (king*)curPiece);
                 }
             } else {
-                cout << "nonKing isChecking" << endl;
                 isMoveIntoCheck = isChecking(xSource, ySource, xDest, yDest, myKing);
             }
 
-            curPiece->printSelf();
+            // curPiece->printSelf();
 
             if(isMoveIntoCheck && (curPiece->myColor == color)){
                 cout << "Can't move yourself into check!" << endl;

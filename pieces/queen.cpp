@@ -20,7 +20,7 @@ bool queen::move(int xSource, int ySource, int xDest, int yDest, piece* (&board)
 
 bool queen::validateMove(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
     // Need to check if we're moving diagonally or horizontally/vertically
-    int slope;
+    float slope;
     int xChange = abs(xDest - xSource);
     int yChange = abs(yDest - ySource);
 
@@ -33,6 +33,8 @@ bool queen::validateMove(int xSource, int ySource, int xDest, int yDest, bool ou
 
     if((xChange == 0) || (yChange == 0)){
         slope = 0;
+    } else {
+        slope = (float)xChange / (float)yChange;
     }
 
 
