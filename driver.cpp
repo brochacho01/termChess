@@ -9,30 +9,31 @@
 
 using namespace std;
 
-void setup(char *connectType, char *color, int *fd, king *&myKing, king *&oppKing);
-void gameLoop(int fd, char color, char connectType, king *&myKing, king *&oppKing);
+void setup(char *connectType, char *color, bool *output, int *fd, king *&myKing, king *&oppKing);
+void gameLoop(int fd, char color, char connectType, bool output, king *&myKing, king *&oppKing);
 int getCoordInput(char *userBuf, int type, char color);
 bool validateCoords(int xSource, int ySource, int xDest, int yDest);
 
 inline int ctoi(char c) { return c - '0'; }
 
 // TODO
-// Add way to preview players moves, i.e. they enter something, they get a preview of the board, and then get asked to confirm the move, if they do, then that move goes through, otherwise it doesn't and they enter a different move. Also make this something they can set up at the beginning of the game
+// Add way to preview players moves, i.e. they enter something, they get a preview of the board, and then get asked to confirm ttruehe move, if they do, then that move goes through, otherwise it doesn't and they enter a different move. Also make this something they can set up at the beginning of the game
 
 // Add way for players to say if they want detailed output on move validation or not at the beginning of the game
 
 int main() {
     char connectType;
     char color;
+    bool output;
     int fd;
     king *myKing;
     king *oppKing;
-    setup(&connectType, &color, &fd, myKing, oppKing);
+    setup(&connectType, &color, &output, &fd, myKing, oppKing);
     printMyBoard(color);
-    gameLoop(fd, color, connectType, myKing, oppKing);
+    gameLoop(fd, color, connectType, output, myKing, oppKing);
 }
 
-void setup(char *connectType, char *color, int *fd, king *&myKing, king *&oppKing){
+void setup(char *connectType, char *color, bool *output, int *fd, king *&myKing, king *&oppKing){
     cout << "Would you like to host or connect? (h/c) ";
     cin >> *connectType;
     tolower(*connectType);
@@ -67,12 +68,25 @@ void setup(char *connectType, char *color, int *fd, king *&myKing, king *&oppKin
     } else {
         receiveBoard(*fd, *color, myKing, oppKing);
     }
+
+    char outputDecision;
+    cout << "Would you like detailed output of move validation? (y/n) ";
+    cin >> outputDecision;
+    // Erring on the side of caution to make sure users really don't want extra output
+    if(outputDecision == 'n'){
+        *output = false;
+    } else {
+        *output = true;
+    }
+
     // Clear stdin for game loop
     while(getchar() != '\n');
+
 }
 
 
-void gameLoop(int fd, char color, char connectType, king *&myKing, king *&oppKing){
+void gameLoop(int fd, char color, char connectType, bool output, king *&myKing, king *&oppKing){
+    cout << "Output is: " << output << endl;
     if(color == 'r'){
         char userBuf[3];
         int xSource, xDest, ySource, yDest;
@@ -121,22 +135,22 @@ void gameLoop(int fd, char color, char connectType, king *&myKing, king *&oppKin
             else {
                 switch(curPiece->myType){
                     case PAWN:
-                        ((pawn*)curPiece)->move(xSource, ySource, xDest, yDest, board);
+                        ((pawn*)curPiece)->move(xSource, ySource, xDest, yDest, output, board);
                         break;
                     case ROOK:
-                        ((rook*)curPiece)->move(xSource, ySource, xDest, yDest, board);
+                        ((rook*)curPiece)->move(xSource, ySource, xDest, yDest, output, board);
                         break;
                     case KNIGHT:
-                        ((knight*)curPiece)->move(xSource, ySource, xDest, yDest, board);
+                        ((knight*)curPiece)->move(xSource, ySource, xDest, yDest, output, board);
                         break;
                     case BISHOP:
-                        ((bishop*)curPiece)->move(xSource, ySource, xDest, yDest, board);
+                        ((bishop*)curPiece)->move(xSource, ySource, xDest, yDest, output, board);
                         break;
                     case QUEEN:
-                        ((queen*)curPiece)->move(xSource, ySource, xDest, yDest, board);
+                        ((queen*)curPiece)->move(xSource, ySource, xDest, yDest, output, board);
                         break;
                     case KING:
-                        ((king*)curPiece)->move(xSource, ySource, xDest, yDest, board);
+                        ((king*)curPiece)->move(xSource, ySource, xDest, yDest, output, board);
                         break;
                     default:
                         break;

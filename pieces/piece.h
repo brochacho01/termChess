@@ -53,6 +53,7 @@ class pawn : public piece {
                 int ySource,
                 int xDest,
                 int yDest,
+                bool output,
                 piece* (&board)[8][8]);
 
         bool validateMove(int xSource,
@@ -84,6 +85,7 @@ class rook : public piece {
                     int ySource,
                     int xDest,
                     int yDest,
+                    bool output,
                     piece* (&board)[8][8]);
 
         bool validateMove(int xSource,
@@ -111,6 +113,7 @@ class knight : public piece {
                 int ySource,
                 int xDest,
                 int yDest,
+                bool output,
                 piece* (&board)[8][8]);
 
         bool validateMove(int xSource,
@@ -138,6 +141,7 @@ class bishop : public piece {
                 int ySource,
                 int xDest,
                 int yDest,
+                bool output,
                 piece* (&board)[8][8]);
 
         bool validateMove(int xSource,
@@ -165,6 +169,7 @@ class queen : public piece {
                 int ySource,
                 int xDest,
                 int yDest,
+                bool output,
                 piece* (&board)[8][8]);
 
         bool validateMove(int xSource,
@@ -221,6 +226,7 @@ class king : public piece {
                 int ySource,
                 int xDest,
                 int yDest,
+                bool output,
                 piece* (&board)[8][8]);
 
         bool validateMove(int xSource,

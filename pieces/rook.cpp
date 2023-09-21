@@ -9,10 +9,10 @@ using namespace std;
 // See if moving rook will place own king in check
 // See if we are putting opposing king in check
 
-bool rook::move(int xSource, int ySource, int xDest, int yDest, piece* (&board)[8][8]){
+bool rook::move(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
     cout << "Called rook move!" << endl;
 
-    if(!this->validateMove(xSource, ySource, xDest, yDest, true, board)){
+    if(!this->validateMove(xSource, ySource, xDest, yDest, output, board)){
         cout << "Invalid Move!" << endl;
         return false;
     }

@@ -6,9 +6,9 @@
 using namespace std;
 
 // TODO check logic
-bool knight::move(int xSource, int ySource, int xDest, int yDest, piece* (&board)[8][8]){
+bool knight::move(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
     cout << "Called knight move!" << endl;
-    if(!this->validateMove(xSource, ySource, xDest, yDest, true, board)){
+    if(!this->validateMove(xSource, ySource, xDest, yDest, output, board)){
         cout << "Invalid Move!" << endl;
         return false;
     }

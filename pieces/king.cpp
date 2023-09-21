@@ -10,10 +10,10 @@ using namespace std;
 // Can't be any pieces between king or rook
 // King can't move through check when castling
 
-bool king::move(int xSource, int ySource, int xDest, int yDest, piece* (&board)[8][8]){
+bool king::move(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
     cout << "Called king move!" << endl;
 
-    if(!this->validateMove(xSource, ySource, xDest, yDest, true, board)){
+    if(!this->validateMove(xSource, ySource, xDest, yDest, output, board)){
         cout << "Invalid Move!" << endl;
         return false;
     }
