@@ -5,7 +5,7 @@
 
 using namespace std;
 
-// Make a deep copy of the array
+// Make a deep copy* of the array
 // Simulate the move the player is trying to make
 // Then go over the entire board and see if a piece can take the king
 

@@ -5,10 +5,6 @@
 using namespace std;
 
 
-// TODO
-// See if moving rook will place own king in check
-// See if we are putting opposing king in check
-
 bool rook::move(int xSource, int ySource, int xDest, int yDest, bool output, bool simulation, piece* (&board)[8][8]){
     cout << "Called rook move!" << endl;
 

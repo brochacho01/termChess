@@ -103,7 +103,6 @@ bool pawn::validateMove(int xSource, int ySource, int xDest, int yDest, bool out
     return true;
 }
 
-// TODO if pawn reaches far side need the upgrade logic
 void pawn::placePiece(int xSource, int ySource, int xDest, int yDest, bool simulation, piece* (&board)[8][8]){
     pawn *curPiece = (pawn*)board[xSource][ySource];
 
@@ -115,7 +114,7 @@ void pawn::placePiece(int xSource, int ySource, int xDest, int yDest, bool simul
             curPiece->lastMoveTwo = false;
         }
     }
-    
+
     delete board[xDest][yDest];
     board[xSource][ySource] = nullptr;
     board[xDest][yDest] = curPiece;
@@ -164,7 +163,7 @@ void pawn::placePiece(int xSource, int ySource, int xDest, int yDest, bool simul
                     break;
             }
         }
+
         while(getchar() != '\n');
-        
     }
 }

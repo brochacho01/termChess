@@ -9,6 +9,8 @@
 
 using namespace std;
 
+inline int ctoi(char c) { return c - '0'; }
+
 void setup(char *connectType, char *color, bool *output, bool *preview, int *fd, king *&myKing, king *&oppKing){
     cout << "Would you like to host or connect? (h/c) ";
     cin >> *connectType;
@@ -109,7 +111,20 @@ bool previewMove(int xSource, int ySource, int xDest, int yDest, bool output, ki
 
 }
 
-
+void getTurnCoords(char *userBuf, char color, int *xSource, int *ySource, int *xDest, int *yDest, bool output){
+    bool validCoords = false;
+    while(!validCoords){
+        userBuf[0] = 'h';
+        getCoordInput(userBuf, 1, color);
+        *xSource = ctoi(userBuf[0]);
+        *ySource = ctoi(userBuf[1]);
+        userBuf[0] = 'h';
+        getCoordInput(userBuf, 2, color);
+        *xDest = ctoi(userBuf[0]);
+        *yDest = ctoi(userBuf[1]);
+        validCoords = validateCoords(*xSource, *ySource, *xDest, *yDest, output);
+    }
+}
 
 // TODO fill in these functions
 // TODO maybe try to convert this to using cin because stdin is funky

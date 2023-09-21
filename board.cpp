@@ -1,5 +1,7 @@
 #include <iostream>
+
 #include <cstdio>
+
 #include "board.h"
 
 using namespace std;

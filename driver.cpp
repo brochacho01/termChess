@@ -13,14 +13,8 @@ using namespace std;
 
 void gameLoop(int fd, char color, char connectType, bool output, bool preview, king *&myKing, king *&oppKing);
 
-inline int ctoi(char c) { return c - '0'; }
-
-// TODO Refactor the switch case of moving a piece into a helper method
-
-// TODO
-// Add way to preview players moves, i.e. they enter something, they get a preview of the board, and then get asked to confirm ttruehe move, if they do, then that move goes through, otherwise it doesn't and they enter a different move. Also make this something they can set up at the beginning of the game
-
-// Add way for players to say if they want detailed output on move validation or not at the beginning of the game
+// TODO allow users to alter their settings
+// TODO allow users to propose a draw
 
 int main() {
     char connectType;
@@ -40,23 +34,12 @@ void gameLoop(int fd, char color, char connectType, bool output, bool preview, k
     if(color == 'r'){
         char userBuf[3];
         int xSource, xDest, ySource, yDest;
-        bool validCoords = false;
         bool validMove = false;
         bool inCheck = false;
         bool isMoveIntoCheck = false;
         while(true){
             // Get user coords and perform basic validation
-            while(!validCoords){
-                userBuf[0] = 'h';
-                getCoordInput(userBuf, 1, color);
-                xSource = ctoi(userBuf[0]);
-                ySource = ctoi(userBuf[1]);
-                userBuf[0] = 'h';
-                getCoordInput(userBuf, 2, color);
-                xDest = ctoi(userBuf[0]);
-                yDest = ctoi(userBuf[1]);
-                validCoords = validateCoords(xSource, ySource, xDest, yDest, output);
-            }
+            getTurnCoords(userBuf, color, &xSource, &ySource, &xDest, &yDest, output);
 
             // Get the specified piece and see if it puts own player in check
             piece *curPiece = board[xSource][ySource];
@@ -98,13 +81,11 @@ void gameLoop(int fd, char color, char connectType, bool output, bool preview, k
             } else if(validMove && !inCheck){
                 oppKing->isCheck = false;
             }
-
             
             printMyBoard(color);
             isMoveIntoCheck = false;
             validMove = false;
             inCheck = false;
-            validCoords = false;
         }
         return;
     }
