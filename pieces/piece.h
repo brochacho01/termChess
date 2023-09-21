@@ -54,6 +54,7 @@ class pawn : public piece {
                 int xDest,
                 int yDest,
                 bool output,
+                bool simulation,
                 piece* (&board)[8][8]);
 
         bool validateMove(int xSource,
@@ -67,6 +68,7 @@ class pawn : public piece {
                         int ySource,
                         int xDest,
                         int yDest,
+                        bool simulation,
                         piece* (&board)[8][8]);
 };
 
@@ -86,6 +88,7 @@ class rook : public piece {
                     int xDest,
                     int yDest,
                     bool output,
+                    bool simulation,
                     piece* (&board)[8][8]);
 
         bool validateMove(int xSource,
@@ -99,6 +102,7 @@ class rook : public piece {
                         int ySource,
                         int xDest,
                         int yDest,
+                        bool simulation,
                         piece* (&board)[8][8]);
 };
 
@@ -227,6 +231,7 @@ class king : public piece {
                 int xDest,
                 int yDest,
                 bool output,
+                bool simulation,
                 piece* (&board)[8][8]);
 
         bool validateMove(int xSource,
@@ -247,6 +252,7 @@ class king : public piece {
                         int ySource,
                         int xDest,
                         int yDest,
+                        bool simulation,
                         piece* (&board)[8][8]);
         
         void printMySelf(void);

@@ -5,10 +5,6 @@
 
 using namespace std;
 
-void copyBoard(piece* (&boardCopy)[8][8]);
-
-
-
 // Make a deep copy of the array
 // Simulate the move the player is trying to make
 // Then go over the entire board and see if a piece can take the king
@@ -86,7 +82,6 @@ bool isChecking(int xSource, int ySource, int xDest, int yDest, king* theKing){
                     break;
                 case QUEEN:
                     if(((queen*)curPiece)->validateMove(i, j, kingX, kingY, false, boardCopy)){
-                        cout << kingX << kingY << endl;
                         cout << "Check from queen" << endl;
                         isCheck = true;
                     }
@@ -119,12 +114,4 @@ bool isChecking(int xSource, int ySource, int xDest, int yDest, king* theKing){
     }
 
     return false;
-}
-
-void copyBoard(piece* (&boardCopy)[8][8]){
-    for(int i = 0; i < 8; i++){
-        for(int j = 0; j < 8; j++){
-           boardCopy[i][j] = board[i][j]; 
-        }
-    }
 }

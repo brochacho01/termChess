@@ -5,7 +5,7 @@
 using namespace std;
 
 
-bool pawn::move(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
+bool pawn::move(int xSource, int ySource, int xDest, int yDest, bool output, bool simulation, piece* (&board)[8][8]){
     cout << "Called pawn move!" << endl;
     
     if(!this->validateMove(xSource, ySource, xDest, yDest, output, board)){
@@ -13,7 +13,7 @@ bool pawn::move(int xSource, int ySource, int xDest, int yDest, bool output, pie
         return false;
     }
 
-    this->placePiece(xSource, ySource, xDest, yDest, board);
+    this->placePiece(xSource, ySource, xDest, yDest, simulation, board);
     return true;
 }
 
@@ -104,14 +104,18 @@ bool pawn::validateMove(int xSource, int ySource, int xDest, int yDest, bool out
 }
 
 // TODO if pawn reaches far side need the upgrade logic
-void pawn::placePiece(int xSource, int ySource, int xDest, int yDest, piece* (&board)[8][8]){
+void pawn::placePiece(int xSource, int ySource, int xDest, int yDest, bool simulation, piece* (&board)[8][8]){
     pawn *curPiece = (pawn*)board[xSource][ySource];
-    curPiece->hasMoved = true;
-    if(abs(xSource - xDest) == 2){
-        curPiece->lastMoveTwo = true;
-    } else {
-        curPiece->lastMoveTwo = false;
+
+    if(!simulation){
+        curPiece->hasMoved = true;
+        if(abs(xSource - xDest) == 2){
+            curPiece->lastMoveTwo = true;
+        } else {
+            curPiece->lastMoveTwo = false;
+        }
     }
+    
     delete board[xDest][yDest];
     board[xSource][ySource] = nullptr;
     board[xDest][yDest] = curPiece;

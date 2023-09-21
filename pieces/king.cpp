@@ -10,7 +10,7 @@ using namespace std;
 // Can't be any pieces between king or rook
 // King can't move through check when castling
 
-bool king::move(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
+bool king::move(int xSource, int ySource, int xDest, int yDest, bool output, bool simulation, piece* (&board)[8][8]){
     cout << "Called king move!" << endl;
 
     if(!this->validateMove(xSource, ySource, xDest, yDest, output, board)){
@@ -18,7 +18,7 @@ bool king::move(int xSource, int ySource, int xDest, int yDest, bool output, pie
         return false;
     }
 
-    this->placePiece(xSource, ySource, xDest, yDest, board);
+    this->placePiece(xSource, ySource, xDest, yDest, simulation, board);
     return true;
 }
 
@@ -119,7 +119,7 @@ bool king::validateCastle(int xSource, int ySource, int xDest, int yDest, bool o
     return true;
 }
 
-void king::placePiece(int xSource, int ySource, int xDest, int yDest, piece* (&board)[8][8]){
+void king::placePiece(int xSource, int ySource, int xDest, int yDest, bool simulation, piece* (&board)[8][8]){
     king *curPiece = (king*)board[xSource][ySource];
     board[xSource][ySource] = nullptr;
 
@@ -134,10 +134,16 @@ void king::placePiece(int xSource, int ySource, int xDest, int yDest, piece* (&b
             board[xDest][2] = curPiece;
             board[xDest][3] = tmp;
         }
-        tmp->hasMoved = true;
-        curPiece->hasMoved = true;
+        
+        // If we are merely simulating a move we don't want to update these statuses
+        if(!simulation){
+            tmp->hasMoved = true;
+            curPiece->hasMoved = true;
+        }
     } else {
-        curPiece->hasMoved = true;
+        if(!simulation){
+            curPiece->hasMoved = true;
+        }
         delete board[xDest][yDest];
         board[xDest][yDest] = curPiece;
     }

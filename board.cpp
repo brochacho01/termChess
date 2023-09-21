@@ -101,22 +101,22 @@ void createPieces(king *&playerKing, char color){
         pawnRow = 6;
         otherRow = 7;
     }
-    for(int i = 0; i < 8; i++){
-        pawn* newPawn = new pawn(color);
-        board[pawnRow][i] = newPawn;
-    }
+    // for(int i = 0; i < 8; i++){
+    //     pawn* newPawn = new pawn(color);
+    //     board[pawnRow][i] = newPawn;
+    // }
     for(int i = 0; i < 8; i += 7){
         rook *newRook = new rook(color);
         board[otherRow][i] = newRook;
     }
-    for(int i = 1; i < 8; i += 5){
-        knight *newKnight = new knight(color);
-        board[otherRow][i] = newKnight;
-    }
-    for(int i = 2; i < 8; i += 3){
-        bishop *newBishop = new bishop(color);
-        board[otherRow][i] = newBishop;
-    }
+    // for(int i = 1; i < 8; i += 5){
+    //     knight *newKnight = new knight(color);
+    //     board[otherRow][i] = newKnight;
+    // }
+    // for(int i = 2; i < 8; i += 3){
+    //     bishop *newBishop = new bishop(color);
+    //     board[otherRow][i] = newBishop;
+    // }
     queen *newQueen = new queen(color);
     board[otherRow][3] = newQueen;
 
@@ -150,5 +150,13 @@ void createBoard(char *myColor, king *&myKing, king *&oppKing){
         createPieces(oppKing, 'r');
     }
     createSpaces();
+}
+
+void copyBoard(piece* (&boardCopy)[8][8]){
+    for(int i = 0; i < 8; i++){
+        for(int j = 0; j < 8; j++){
+           boardCopy[i][j] = board[i][j]; 
+        }
+    }
 }
 
