@@ -54,8 +54,8 @@ void setup(char *connectType, char *color, bool *output, bool *preview, int *fd,
 
 }
 
+// TODO MAKE THIS PRINT COLOR SPECIFIC
 // Copies the board, simulates the move, asks the user for confirmation, if so, performs the move on the real board
-
 // Need to make sure we're not updating statuses when previewing
 bool previewMove(int xSource, int ySource, int xDest, int yDest, bool output, king *&myKing){
     piece *boardCopy[8][8];
@@ -93,26 +93,24 @@ bool previewMove(int xSource, int ySource, int xDest, int yDest, bool output, ki
 
 }
 
-void getTurnCoords(char *userBuf, char color, int *xSource, int *ySource, int *xDest, int *yDest, bool *output, bool *preview){
+void getTurnCoords(int fd, char *userBuf, char color, int *xSource, int *ySource, int *xDest, int *yDest, bool *output, bool *preview){
     bool validCoords = false;
     while(!validCoords){
         userBuf[0] = 'h';
-        getCoordInput(userBuf, 1, color, output, preview);
+        getCoordInput(fd, userBuf, 1, color, output, preview);
         *xSource = ctoi(userBuf[0]);
         *ySource = ctoi(userBuf[1]);
         userBuf[0] = 'h';
-        getCoordInput(userBuf, 2, color, output, preview);
+        getCoordInput(fd, userBuf, 2, color, output, preview);
         *xDest = ctoi(userBuf[0]);
         *yDest = ctoi(userBuf[1]);
         validCoords = validateCoords(*xSource, *ySource, *xDest, *yDest, *output);
     }
 }
 
-// TODO add ability to change output/preview settings
-// TODO add ability to propose a draw
 
 // Type will either be 1 or 2, 1 represents entering source coord, 2 represents dest
-int getCoordInput(char *userBuf, int type, char color, bool *output, bool *preview){
+int getCoordInput(int fd, char *userBuf, int type, char color, bool *output, bool *preview){
 	while((userBuf[0] == 'h') || (userBuf[0] == 'p')|| (userBuf[0] == 'c') || (userBuf[0] == 's' || (userBuf[0] == 'd'))){
 		int inFD = fileno(stdin);
 		tcflush(inFD, TCIFLUSH);
@@ -144,15 +142,13 @@ int getCoordInput(char *userBuf, int type, char color, bool *output, bool *previ
                 printMyBoard(color);
                 break;
             case 'c':
-                // if(concede){
-                    // return 0;
-                // }
+                concede(fd, color, true);
                 break;
             case 's':
                 settings(output, preview);
                 break;
             case 'd':
-                // draw();
+                draw(fd, color, true);
                 break;
             default:
                 break;
@@ -256,4 +252,71 @@ void help(char color){
     cout << "If you are in checkmate you must concede and if you are in a stalemate you must draw" << endl << endl;
     cout << "Note that Ctrl + C is disbled. Upon mis-input, enter invalid second input to nullify move" << endl;
     cout << "If you truly desire to close the program, either concede or enter Ctrl + \\" << endl << endl;
+}
+
+void draw(int fd, char myColor, bool offering){
+    char decision;
+    if(offering){
+        cout << "Are you sure you want to offer to draw with your opponent? (y/n) ";
+        cin >> decision;
+        // Err towards no offer
+        if(decision == 'y'){
+            decision = 'd';
+            sendAction(fd, &decision);
+            receiveAction(fd, &decision);
+            // Check what player responded with
+            if(decision == 'n'){
+                return;
+            }
+        } else {
+            if(myColor == 'r'){
+                cout << "White declined the offer to draw!" << endl;
+            } else {
+                cout << "Red declined the offer to draw!" << endl;
+            }
+            return;
+        }
+    } else {
+        if(myColor == 'r'){
+            cout << "White is offering a draw, would you like to accept? (y/n) ";
+        } else {
+            cout << "Red is offering a draw, would you like to accept? (y/n) ";
+        }
+        cin >> decision;
+        if(decision == 'y'){
+            sendAction(fd, &decision);
+        } else {
+            decision = 'n';
+            sendAction(fd, &decision);
+            return;
+        }
+    }
+    cout << "It is a draw, nobody wins!" << endl;
+    exit(0);
+}
+
+void concede(int fd, char myColor, bool offering){
+    char decision;
+    if(offering){
+        cout << "Are you sure you want to concede? (y/n) ";
+        cin >> decision;
+        if(decision == 'y'){
+            decision = 'c';
+            sendAction(fd, &decision);
+        } else {
+            return;
+        }
+        if(myColor == 'r'){
+            cout << "You conceded, White wins!" << endl;
+        } else {
+            cout << "You conceded, Red wins!" << endl;
+        }
+    } else {
+        if(myColor == 'r'){
+            cout << "White conceded, you win!" << endl;
+        } else {
+            cout << "Red conceded, you win!" << endl;
+        }
+    }
+    exit(0);
 }

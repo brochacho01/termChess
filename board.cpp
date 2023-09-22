@@ -111,14 +111,14 @@ void createPieces(king *&playerKing, char color){
         rook *newRook = new rook(color);
         board[otherRow][i] = newRook;
     }
-    // for(int i = 1; i < 8; i += 5){
-    //     knight *newKnight = new knight(color);
-    //     board[otherRow][i] = newKnight;
-    // }
-    // for(int i = 2; i < 8; i += 3){
-    //     bishop *newBishop = new bishop(color);
-    //     board[otherRow][i] = newBishop;
-    // }
+    for(int i = 1; i < 8; i += 5){
+        knight *newKnight = new knight(color);
+        board[otherRow][i] = newKnight;
+    }
+    for(int i = 2; i < 8; i += 3){
+        bishop *newBishop = new bishop(color);
+        board[otherRow][i] = newBishop;
+    }
     queen *newQueen = new queen(color);
     board[otherRow][3] = newQueen;
 

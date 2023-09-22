@@ -300,3 +300,13 @@ int receiveKing(int fd, piece *newKing){
   sendAck(fd);
   return 0;
 }
+
+void sendAction(int fd, char *action){
+  write(fd, action, sizeof(char));
+  receiveAck(fd);
+}
+
+void receiveAction(int fd, char *action){
+  read(fd, action, sizeof(char));
+  sendAck(fd);
+}

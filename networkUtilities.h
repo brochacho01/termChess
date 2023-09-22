@@ -27,6 +27,11 @@ int receiveAck(int fd);
 int sendColor(int fd, char color);
 int receiveColor(int fd, char *color);
 
+void sendAction(int fd, char *action);
+void receiveAction(int fd, char *action);
+
+void waitForTurn(int fd, char myColor, king *&myKing, king *&oppKing);
+
 void init_sock_addr_in(struct sockaddr_in* sock_addr, sa_family_t sa_family, const char * ip_addr, in_port_t port);
 
 
