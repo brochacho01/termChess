@@ -250,7 +250,7 @@ void help(char color){
     cout << "If you would like to castle, enter the coordinates of your king as the source " << endl;
     cout << "coordinates and the coordinates of your rook as the destination coordinates" << endl << endl;
     cout << "If you are in checkmate you must concede and if you are in a stalemate you must draw" << endl << endl;
-    cout << "Note that Ctrl + C is disbled. Upon mis-input, enter invalid second input to nullify move" << endl;
+    cout << "Note that Ctrl + C is disbled. If you mis-input, just enter invalid second input to nullify move" << endl;
     cout << "If you truly desire to close the program, either concede or enter Ctrl + \\" << endl << endl;
 }
 

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <csignal>
 
 #include <termios.h>
 #include <stdio.h>
@@ -15,6 +16,7 @@ void gameLoop(int fd, char color, char connectType, bool output, bool preview, k
 void doTurn(int fd, char color, bool output, bool preview, king *&myKing, king *&oppKing, int (&passantCoords)[2]);
 void waitForTurn(int fd, char myColor, king *&myKing, king *&oppKing);
 void welcome(void);
+void sigHandler(int sigNum);
 
 
 int main() {
@@ -25,6 +27,11 @@ int main() {
     int fd;
     king *myKing;
     king *oppKing;
+
+    // Create an action handler as users tend to panic Ctrl + C upon poor input, want to make sure to recover
+	// Properly if it happens during input
+    signal(SIGINT, sigHandler);
+
     welcome();
     setup(&connectType, &color, &output, &preview, &fd, myKing, oppKing);
     printMyBoard(color, board);
@@ -159,4 +166,11 @@ cout << "| ||  __/ |  | | | | | | \\__/\\| | | |  __/\\__ \\__ \\" << endl;
 cout << " \\__\\___|_|  |_| |_| |_|\\____/\\_| |_/\\___||___/___/" << endl;
 
 cout << endl << endl;
+}
+
+// Make sure that users don't panic Ctrl + C.
+void sigHandler(int sigNum){
+	if(sigNum){
+		return;
+	}
 }
