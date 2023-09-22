@@ -1,17 +1,3 @@
-
-
- _                      _____  _   _               
-| |                    /  __ \| | | |              
-| |_ ___ _ __ _ __ ___ | /  \/| |_| | ___  ___ ___ 
-| __/ _ \ '__| '_ ` _ \| |    |  _  |/ _ \/ __/ __|
-| ||  __/ |  | | | | | | \__/\| | | |  __/\__ \__ \
- \__\___|_|  |_| |_| |_|\____/\_| |_/\___||___/___/
-                                                   
-                                                   
-
-
-
-
 termChess is a project by Lachlan Imel and is a successor to his termCheckers project.
 
 This project has the WWU CS network filesystem in mind.
