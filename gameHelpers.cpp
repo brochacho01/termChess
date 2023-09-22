@@ -75,7 +75,6 @@ bool previewMove(char myColor, int xSource, int ySource, int xDest, int yDest, b
     cout << "---------PREVIEW OF MOVE---------" << endl;
 
     // Display the board to the user
-    // printTestBoard(boardCopy);
     printMyBoard(myColor, boardCopy);
 
     cout << "Would you like to perform this move? (y/n) ";
@@ -210,7 +209,6 @@ bool movePiece(int xSource, int ySource, int xDest, int yDest, bool output, bool
     return validMove;
 }
 
-// Code is same from setup
 void settings(bool *output, bool *preview){
     char outputDecision;
     cout << "Would you like detailed output of move validation? (y/n) ";
@@ -242,11 +240,11 @@ void help(char color){
         cout << "I would enter 74 as the source coordinates, and 64 as the destination coordinates" << endl << endl;
     }
     cout << "If you would like to change your output or preview settings:" << endl;
-    cout << "Enter s when prompted for coordinates" << endl << endl;;
+    cout << "Enter s when prompted for coordinates" << endl << endl;
     cout << "If you would like to propose a draw to your opponent:" << endl;
     cout << "Enter d when prompted for coordiates" << endl << endl;
     cout << "If you would like to concede:" << endl; 
-    cout << "Enter c when prompted for coordinates" << endl << endl;;
+    cout << "Enter c when prompted for coordinates" << endl << endl;
     cout << "If you would like to castle, enter the coordinates of your king as the source " << endl;
     cout << "coordinates and the coordinates of your rook as the destination coordinates" << endl << endl;
     cout << "If you are in checkmate you must concede and if you are in a stalemate you must draw" << endl << endl;
@@ -264,16 +262,17 @@ void draw(int fd, char myColor, bool offering){
             decision = 'd';
             sendAction(fd, &decision);
             receiveAction(fd, &decision);
-            // Check what player responded with
+            // Check what receiving player responded with
             if(decision == 'n'){
+                if(myColor == 'r'){
+                    cout << "White declined the offer to draw!" << endl;
+                } else {
+                    cout << "Red declined the offer to draw!" << endl;
+                }
                 return;
             }
         } else {
-            if(myColor == 'r'){
-                cout << "White declined the offer to draw!" << endl;
-            } else {
-                cout << "Red declined the offer to draw!" << endl;
-            }
+            // Offering user decided not to offer draw
             return;
         }
     } else {

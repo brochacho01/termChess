@@ -15,9 +15,6 @@
 #define CONNECT_IP_ADDRESS "127.0.0.1"
 #define SERVER_PORT 1234
 
-//TCP
-int create_server_socket(struct sockaddr_in* sock_addr, sa_family_t sa_family, const char * ip_addr, in_port_t port, int type);
-int connect_server(struct sockaddr_in* sock_addr, sa_family_t sa_family, const char * ip_addr, in_port_t port, int type);
 
 int sendBoard(int fd);
 int receiveBoard(int fd, char myColor, king *&myKing, king *&oppKing);
@@ -31,9 +28,6 @@ void sendAction(int fd, char *action);
 void receiveAction(int fd, char *action);
 
 void waitForTurn(int fd, char myColor, king *&myKing, king *&oppKing);
-
-void init_sock_addr_in(struct sockaddr_in* sock_addr, sa_family_t sa_family, const char * ip_addr, in_port_t port);
-
 
 int createServerAndWait(void);
 int connectToServer(void);

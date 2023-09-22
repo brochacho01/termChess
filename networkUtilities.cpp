@@ -20,9 +20,13 @@ int receiveBishop(int fd, piece *newBishop);
 int receiveQueen(int fd, piece *newQueen);
 int receiveKing(int fd, piece *newKing);
 
+int create_server_socket(struct sockaddr_in* sock_addr, sa_family_t sa_family, const char * ip_addr, in_port_t port, int type);
+int connect_server(struct sockaddr_in* sock_addr, sa_family_t sa_family, const char * ip_addr, in_port_t port, int type);
+void init_sock_addr_in(struct sockaddr_in* sock_addr, sa_family_t sa_family, const char * ip_addr, in_port_t port);
+
+
 using namespace std;
 
-// TODO when a player receives king need to update king trackers?
 
 int create_server_socket(struct sockaddr_in* sock_addr, sa_family_t sa_family, const char * ip_addr, in_port_t port, int type)
 {
@@ -50,7 +54,7 @@ in_port_t port){
   sock_addr->sin_port = htons(port);
 }
 
-/* Handle creating a server and waiting for client to connect, or connect to preexisting server */
+/* Handle creating a server and waiting for client to connect, or connect to preexisting socket */
 int createServerAndWait(void){
   struct sockaddr_in server_endpoint;
   struct sockaddr_in client_endpoint;

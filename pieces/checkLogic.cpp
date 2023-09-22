@@ -5,7 +5,7 @@
 
 using namespace std;
 
-// Make a deep copy* of the array
+// Make a deep copy* of the array (not copying the pieces themselves)
 // Simulate the move the player is trying to make
 // Then go over the entire board and see if a piece can take the king
 
@@ -30,11 +30,6 @@ bool isChecking(int xSource, int ySource, int xDest, int yDest, king* theKing){
     boardCopy[xSource][ySource] = nullptr;
     boardCopy[xDest][yDest] = nullptr;
     boardCopy[xDest][yDest] = movePiece;
-
-    // cout << "Testing the move, printing temp board after moving piece" << endl;
-    // cout << "xSource: " << xSource << " ySource: " << ySource << " xDest: " << xDest << " yDest: " << yDest << endl;
-    // printTestBoard(boardCopy);
-
 
     // Now we check to see if any piece can put the king in check
     int kingX = theKing->position[0];

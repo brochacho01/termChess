@@ -4,11 +4,6 @@
 
 using namespace std;
 
-// RULES FOR CASTLING
-// King can't have moved
-// Rook can't have moved
-// Can't be any pieces between king or rook
-// King can't move through check when castling
 
 bool king::move(int xSource, int ySource, int xDest, int yDest, bool output, bool simulation, piece* (&board)[8][8]){
     cout << "Called king move!" << endl;
@@ -59,7 +54,6 @@ bool king::validateMove(int xSource, int ySource, int xDest, int yDest, bool out
     return true;
 }
 
-// TODO check for moving through check
 bool king::validateCastle(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
     king *myKing = (king*)board[xSource][ySource];
     rook *myRook = (rook*)board[xDest][yDest];
@@ -120,32 +114,31 @@ bool king::validateCastle(int xSource, int ySource, int xDest, int yDest, bool o
 }
 
 void king::placePiece(int xSource, int ySource, int xDest, int yDest, bool simulation, piece* (&board)[8][8]){
-    king *curPiece = (king*)board[xSource][ySource];
     board[xSource][ySource] = nullptr;
 
     // Check to see if we're placing for a castle, keep in mind we would have already validated this move
     if((board[xDest][yDest] != nullptr) && (board[xDest][yDest]->myType == ROOK) && (this->myColor == board[xDest][yDest]->myColor)){
-        rook *tmp = (rook*)board[xDest][yDest];
+        rook *myRook = (rook*)board[xDest][yDest];
         board[xDest][yDest] = nullptr;
         if(yDest - ySource > 0){
-            board[xDest][6] = curPiece;
-            board[xDest][5] = tmp;
+            board[xDest][6] = this;
+            board[xDest][5] = myRook;
         } else {
-            board[xDest][2] = curPiece;
-            board[xDest][3] = tmp;
+            board[xDest][2] = this;
+            board[xDest][3] = myRook;
         }
         
         // If we are merely simulating a move we don't want to update these statuses
         if(!simulation){
-            tmp->hasMoved = true;
-            curPiece->hasMoved = true;
+            myRook->hasMoved = true;
+            this->hasMoved = true;
         }
     } else {
         if(!simulation){
-            curPiece->hasMoved = true;
+            this->hasMoved = true;
         }
         delete board[xDest][yDest];
-        board[xDest][yDest] = curPiece;
+        board[xDest][yDest] = this;
     }
 }
 
@@ -153,5 +146,4 @@ void king::printMySelf(void){
     cout << "Position[0] is: " << this->position[0] << endl;
     cout << "Position[1] is: " << this->position[1] << endl;
     cout << "isCheck is: " << this->isCheck << endl;
-    cout << "isCheckMate is: " << this->isCheckmate << endl;
 }

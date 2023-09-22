@@ -213,6 +213,7 @@ class queen : public piece {
                         piece* (&board)[8][8]);
 };
 
+// One day consider writing alg to determine checkmate
 class king : public piece {
     public:
         int position [2];

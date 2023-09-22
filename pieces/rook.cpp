@@ -75,11 +75,10 @@ bool rook::validateMove(int xSource, int ySource, int xDest, int yDest, bool out
 }
 
 void rook::placePiece(int xSource, int ySource, int xDest, int yDest, bool simulation, piece* (&board)[8][8]){
-    rook *curPiece = (rook*)board[xSource][ySource];
     if(!simulation){
-        curPiece->hasMoved = true;
+        this->hasMoved = true;
     }
     delete board[xDest][yDest];
     board[xSource][ySource] = nullptr;
-    board[xDest][yDest] = curPiece;
+    board[xDest][yDest] = this;
 }

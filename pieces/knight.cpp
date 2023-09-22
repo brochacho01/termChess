@@ -5,7 +5,6 @@
 
 using namespace std;
 
-// TODO check logic
 bool knight::move(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
     cout << "Called knight move!" << endl;
     if(!this->validateMove(xSource, ySource, xDest, yDest, output, board)){
@@ -41,9 +40,7 @@ bool knight::validateMove(int xSource, int ySource, int xDest, int yDest, bool o
 }
 
 void knight::placePiece(int xSource, int ySource, int xDest, int yDest, piece* (&board)[8][8]){
-    knight *curPiece = (knight*)board[xSource][ySource];
-
     delete board[xDest][yDest];
     board[xSource][ySource] = nullptr;
-    board[xDest][yDest] = curPiece;
+    board[xDest][yDest] = this;
 }

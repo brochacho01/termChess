@@ -17,7 +17,6 @@ bool pawn::move(int xSource, int ySource, int xDest, int yDest, bool output, boo
     return true;
 }
 
-// TODO take logic for en-passant
 bool pawn::validateMove(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
     int lowPos;
     int highPos;
@@ -69,7 +68,9 @@ bool pawn::validateMove(int xSource, int ySource, int xDest, int yDest, bool out
             if(isPassant){
                 return true;
             }
-            else if(output){
+            else if(output && !isPassant){
+                cout << "Trying to perform an invalid en passant!" << endl;
+            } else if(output){
                 cout << "Trying to take nonexistent piece!" << endl;
             }
             return false;
@@ -110,14 +111,12 @@ bool pawn::validateMove(int xSource, int ySource, int xDest, int yDest, bool out
 
 // TODO refactor to use this instead of curPiece
 void pawn::placePiece(int xSource, int ySource, int xDest, int yDest, bool simulation, piece* (&board)[8][8]){
-    pawn *curPiece = (pawn*)board[xSource][ySource];
-
     if(!simulation){
-        curPiece->hasMoved = true;
+        this->hasMoved = true;
         if(abs(xSource - xDest) == 2){
-            curPiece->lastMoveTwo = true;
+            this->lastMoveTwo = true;
         } else {
-            curPiece->lastMoveTwo = false;
+            this->lastMoveTwo = false;
         }
     }
 
@@ -137,12 +136,12 @@ void pawn::placePiece(int xSource, int ySource, int xDest, int yDest, bool simul
     }
 
     board[xSource][ySource] = nullptr;
-    board[xDest][yDest] = curPiece;
+    board[xDest][yDest] = this;
     
     // Check to see if the pawn has made it to the far side of the board
-    if(((curPiece->myColor == 'r') && (xDest == 0)) || ((curPiece->myColor == 'w') && (xDest == 7))){
+    if(((this->myColor == 'r') && (xDest == 0)) || ((this->myColor == 'w') && (xDest == 7))){
         char upgradePiece;
-        char curColor = curPiece->myColor;
+        char curColor = this->myColor;
         bool validChoice = false;
         delete board[xDest][yDest];
         while(!validChoice){
@@ -187,11 +186,6 @@ void pawn::placePiece(int xSource, int ySource, int xDest, int yDest, bool simul
         while(getchar() != '\n');
     }
 }
-
-
-// The captured pawn must have moved two squares in one move, landing right next to the capturing pawn.
-// The en passant capture must be performed on the turn immediately after the pawn being captured moves. If the player does not capture en passant on that turn, they no longer can do it later.
-
 
 // red y goes from + to -
 // white y goes from - to +

@@ -12,8 +12,8 @@
 
 using namespace std;
 
-void gameLoop(int fd, char color, char connectType, bool output, bool preview, king *&myKing, king *&oppKing);
-void doTurn(int fd, char color, bool output, bool preview, king *&myKing, king *&oppKing, int (&passantCoords)[2]);
+void gameLoop(int fd, char myColor, char connectType, bool output, bool preview, king *&myKing, king *&oppKing);
+void doTurn(int fd, char myColor, bool output, bool preview, king *&myKing, king *&oppKing, int (&passantCoords)[2]);
 void waitForTurn(int fd, char myColor, king *&myKing, king *&oppKing);
 void welcome(void);
 void sigHandler(int sigNum);
@@ -21,7 +21,7 @@ void sigHandler(int sigNum);
 
 int main() {
     char connectType;
-    char color;
+    char myColor;
     bool output;
     bool preview;
     int fd;
@@ -33,22 +33,22 @@ int main() {
     signal(SIGINT, sigHandler);
 
     welcome();
-    setup(&connectType, &color, &output, &preview, &fd, myKing, oppKing);
-    printMyBoard(color, board);
-    gameLoop(fd, color, connectType, output, preview, myKing, oppKing);
+    setup(&connectType, &myColor, &output, &preview, &fd, myKing, oppKing);
+    printMyBoard(myColor, board);
+    gameLoop(fd, myColor, connectType, output, preview, myKing, oppKing);
 }
 
-void gameLoop(int fd, char color, char connectType, bool output, bool preview, king *&myKing, king *&oppKing){
+void gameLoop(int fd, char myColor, char connectType, bool output, bool preview, king *&myKing, king *&oppKing){
     // White goes first
     char curTurnColor = 'w';
     int passantCoords[2] = { -1, -1 };
     while(true){
-        if(color == curTurnColor){
-            doTurn(fd, color, output, preview, myKing, oppKing, passantCoords);
+        if(myColor == curTurnColor){
+            doTurn(fd, myColor, output, preview, myKing, oppKing, passantCoords);
         } else {
             cout << "Not my turn!" << endl;
-            waitForTurn(fd, color, myKing, oppKing);
-            printMyBoard(color, board);
+            waitForTurn(fd, myColor, myKing, oppKing);
+            printMyBoard(myColor, board);
         }
         if(curTurnColor == 'w'){
             curTurnColor = 'r';
@@ -58,7 +58,7 @@ void gameLoop(int fd, char color, char connectType, bool output, bool preview, k
     }
 }
 
-void doTurn(int fd, char color, bool output, bool preview, king *&myKing, king *&oppKing, int (&passantCoords)[2]){
+void doTurn(int fd, char myColor, bool output, bool preview, king *&myKing, king *&oppKing, int (&passantCoords)[2]){
     char userBuf[3];
     int xSource, xDest, ySource, yDest;
     bool validMove = false;
@@ -75,7 +75,7 @@ void doTurn(int fd, char color, bool output, bool preview, king *&myKing, king *
 
     while(!validMove){
         // Get user coords and perform basic validation
-        getTurnCoords(fd, userBuf, color, &xSource, &ySource, &xDest, &yDest, &output, &preview);
+        getTurnCoords(fd, userBuf, myColor, &xSource, &ySource, &xDest, &yDest, &output, &preview);
 
         // Get the specified piece and see if it puts own player in check
         piece *curPiece = board[xSource][ySource];
@@ -92,14 +92,14 @@ void doTurn(int fd, char color, bool output, bool preview, king *&myKing, king *
             isMoveIntoCheck = isChecking(xSource, ySource, xDest, yDest, myKing);
         }
 
-        if(isMoveIntoCheck && (curPiece->myColor == color)){
+        if(isMoveIntoCheck && (curPiece->myColor == myColor)){
             cout << "Can't move yourself into check!" << endl;
             cout << "Can't perform that move!" << endl;
         }
 
         // If user has requested to preview their moves
         else if(preview){
-            validMove = previewMove(color, xSource, ySource, xDest, yDest, output, myKing);
+            validMove = previewMove(myColor, xSource, ySource, xDest, yDest, output, myKing);
         }
 
         // If not, try to perform the move
@@ -108,7 +108,7 @@ void doTurn(int fd, char color, bool output, bool preview, king *&myKing, king *
         }
 
         // Check to see if we're putting the opposing king in check
-        // Technically this isn't needed
+        // This ends up being used in castling logic
         inCheck = isChecking(xSource, ySource, xDest, yDest, oppKing);
         if(validMove && inCheck){
             oppKing->isCheck = true;
@@ -122,7 +122,7 @@ void doTurn(int fd, char color, bool output, bool preview, king *&myKing, king *
             passantCoords[1] = yDest;
         }
         
-        printMyBoard(color, board);
+        printMyBoard(myColor, board);
     }
 
     char move = 'm';
@@ -138,7 +138,6 @@ void waitForTurn(int fd, char myColor, king *&myKing, king *&oppKing){
     receiveAction(fd, &action);
 
     switch(action){
-      // Move
       case 'm':
         receiveBoard(fd, myColor, myKing, oppKing);
         receivedMove = true;

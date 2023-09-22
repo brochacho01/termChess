@@ -4,7 +4,6 @@
 
 using namespace std;
 
-// TODO check for checks
 
 bool bishop::move(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
     cout << "Called bishop move!" << endl;
@@ -68,9 +67,7 @@ bool bishop::validateMove(int xSource, int ySource, int xDest, int yDest, bool o
 }
 
 void bishop::placePiece(int xSource, int ySource, int xDest, int yDest, piece* (&board)[8][8]){
-    bishop *curPiece = (bishop*)board[xSource][ySource];
-
     delete board[xDest][yDest];
     board[xSource][ySource] = nullptr;
-    board[xDest][yDest] = curPiece;
+    board[xDest][yDest] = this;
 }

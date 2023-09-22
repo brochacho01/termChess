@@ -4,7 +4,6 @@
 
 using namespace std;
 
-// TODO check for checks
 
 bool queen::move(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
     cout << "Called queen move!" << endl;
@@ -133,9 +132,7 @@ bool queen::validateDiagonal(int xSource, int ySource, int xDest, int yDest, int
 }
 
 void queen::placePiece(int xSource, int ySource, int xDest, int yDest, piece* (&board)[8][8]){
-    queen *curPiece = (queen*)board[xSource][ySource];
-
     delete board[xDest][yDest];
     board[xSource][ySource] = nullptr;
-    board[xDest][yDest] = curPiece;
+    board[xDest][yDest] = this;
 }
