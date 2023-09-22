@@ -6,8 +6,8 @@
 
 using namespace std;
 
-void printBoardForWhite(void);
-void printBoardForRed(void);
+void printBoardForWhite(piece* (&boardToPrint)[8][8]);
+void printBoardForRed(piece* (&boardToPrint)[8][8]);
 void printCell(piece* curPiece);
 void printBound(void);
 void printRowBound(void);
@@ -16,22 +16,22 @@ void colorWhite(void);
 
 piece* board[8][8];
 
-void printMyBoard(char myColor){
+void printMyBoard(char myColor, piece* (&boardToPrint)[8][8]){
     cout << endl;
     if(myColor == 'r'){
-        printBoardForRed();
+        printBoardForRed(boardToPrint);
     } else {
-        printBoardForWhite();
+        printBoardForWhite(boardToPrint);
     }
     cout << endl;
 }
 
-void printTestBoard(piece* (&boardCopy)[8][8]){
+void printBoardForRed(piece* (&boardToPrint)[8][8]){
     for(int i = 0; i < 8; i++){
         printBound();
         printRowBound();
         for(int j = 0; j < 8; j++){
-            printCell(boardCopy[i][j]);
+            printCell(boardToPrint[i][j]);
         }
         printf(" %d\n", i);
     }
@@ -39,25 +39,12 @@ void printTestBoard(piece* (&boardCopy)[8][8]){
     cout << "  0   1   2   3   4   5   6   7" << endl;
 }
 
-void printBoardForRed(void){
-    for(int i = 0; i < 8; i++){
-        printBound();
-        printRowBound();
-        for(int j = 0; j < 8; j++){
-            printCell(board[i][j]);
-        }
-        printf(" %d\n", i);
-    }
-    printBound();
-    cout << "  0   1   2   3   4   5   6   7" << endl;
-}
-
-void printBoardForWhite(void){
+void printBoardForWhite(piece* (&boardToPrint)[8][8]){
     for(int i = 7; i > -1; i--){
         printBound();
         printRowBound();
         for(int j = 7; j > -1; j--){
-            printCell(board[i][j]);
+            printCell(boardToPrint[i][j]);
         }
         printf(" %d\n", i);
     }

@@ -54,10 +54,9 @@ void setup(char *connectType, char *color, bool *output, bool *preview, int *fd,
 
 }
 
-// TODO MAKE THIS PRINT COLOR SPECIFIC
 // Copies the board, simulates the move, asks the user for confirmation, if so, performs the move on the real board
 // Need to make sure we're not updating statuses when previewing
-bool previewMove(int xSource, int ySource, int xDest, int yDest, bool output, king *&myKing){
+bool previewMove(char myColor, int xSource, int ySource, int xDest, int yDest, bool output, king *&myKing){
     piece *boardCopy[8][8];
     char confirmation;
     bool validMove = false;
@@ -73,10 +72,11 @@ bool previewMove(int xSource, int ySource, int xDest, int yDest, bool output, ki
         return false;
     }
 
-    cout << "-----PREVIEW OF MOVE-----" << endl;
+    cout << "---------PREVIEW OF MOVE---------" << endl;
 
     // Display the board to the user
-    printTestBoard(boardCopy);
+    // printTestBoard(boardCopy);
+    printMyBoard(myColor, boardCopy);
 
     cout << "Would you like to perform this move? (y/n) ";
     cin >> confirmation;
@@ -123,7 +123,7 @@ int getCoordInput(int fd, char *userBuf, int type, char color, bool *output, boo
 		cin >> userBuf[0];
 
         // If user input command need to check to skip this
-        if(((ctoi(tolower(userBuf[0]))) < 10) && (ctoi(tolower(userBuf[0])) > 0)){
+        if(((ctoi(tolower(userBuf[0]))) < 10) && (ctoi(tolower(userBuf[0])) > -1)){
             cin >> userBuf[1];
         }
 
@@ -139,7 +139,7 @@ int getCoordInput(int fd, char *userBuf, int type, char color, bool *output, boo
                 help(color);
                 break;
             case 'p':
-                printMyBoard(color);
+                printMyBoard(color, board);
                 break;
             case 'c':
                 concede(fd, color, true);

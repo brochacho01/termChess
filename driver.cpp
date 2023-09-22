@@ -25,7 +25,7 @@ int main() {
     king *myKing;
     king *oppKing;
     setup(&connectType, &color, &output, &preview, &fd, myKing, oppKing);
-    printMyBoard(color);
+    printMyBoard(color, board);
     gameLoop(fd, color, connectType, output, preview, myKing, oppKing);
 }
 
@@ -39,7 +39,7 @@ void gameLoop(int fd, char color, char connectType, bool output, bool preview, k
         } else {
             cout << "Not my turn!" << endl;
             waitForTurn(fd, color, myKing, oppKing);
-            printMyBoard(color);
+            printMyBoard(color, board);
         }
         if(curTurnColor == 'w'){
             curTurnColor = 'r';
@@ -83,8 +83,6 @@ void doTurn(int fd, char color, bool output, bool preview, king *&myKing, king *
             isMoveIntoCheck = isChecking(xSource, ySource, xDest, yDest, myKing);
         }
 
-        // curPiece->printSelf();
-
         if(isMoveIntoCheck && (curPiece->myColor == color)){
             cout << "Can't move yourself into check!" << endl;
             cout << "Can't perform that move!" << endl;
@@ -92,7 +90,7 @@ void doTurn(int fd, char color, bool output, bool preview, king *&myKing, king *
 
         // If user has requested to preview their moves
         else if(preview){
-            validMove = previewMove(xSource, ySource, xDest, yDest, output, myKing);
+            validMove = previewMove(color, xSource, ySource, xDest, yDest, output, myKing);
         }
 
         // If not, try to perform the move
@@ -115,15 +113,11 @@ void doTurn(int fd, char color, bool output, bool preview, king *&myKing, king *
             passantCoords[1] = yDest;
         }
         
-        printMyBoard(color);
-        // isMoveIntoCheck = false;
-        // inCheck = false;
+        printMyBoard(color, board);
     }
 
-    cout << "Sending action" << endl;
     char move = 'm';
     sendAction(fd, &move);
-    cout << "Sending board!" << endl;
     sendBoard(fd);
     return;
 }
