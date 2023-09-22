@@ -47,25 +47,6 @@ void setup(char *connectType, char *color, bool *output, bool *preview, int *fd,
         receiveBoard(*fd, *color, myKing, oppKing);
     }
 
-    // char outputDecision;
-    // cout << "Would you like detailed output of move validation? (y/n) ";
-    // cin >> outputDecision;
-    // // Erring on the side of caution to make sure users really don't want extra output
-    // if(outputDecision == 'n'){
-    //     *output = false;
-    // } else {
-    //     *output = true;
-    // }
-
-    // char previewDecision;
-    // cout << "Would you like to preview each of your moves and then confirm them? (y/n) ";
-    // cin >> previewDecision;
-    // // Because this is a lot of extra output going to err towards no
-    // if(previewDecision == 'y'){
-    //     *preview = true;
-    // } else {
-    //     *preview = false;
-    // }
     settings(output, preview);
 
     // Clear stdin for game loop
