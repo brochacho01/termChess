@@ -70,6 +70,13 @@ class pawn : public piece {
                         int yDest,
                         bool simulation,
                         piece* (&board)[8][8]);
+
+        bool checkPassant(int xSource,
+                    int ySource,
+                    int xDest,
+                    int yDest,
+                    bool output,
+                    piece* (&board)[8][8]);
 };
 
 class rook : public piece {

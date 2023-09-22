@@ -29,20 +29,34 @@ int main() {
     gameLoop(fd, color, connectType, output, preview, myKing, oppKing);
 }
 
-
+// Need to track if the last piece moved was a pawn
 void gameLoop(int fd, char color, char connectType, bool output, bool preview, king *&myKing, king *&oppKing){
+    int passantCoords[2] = { -1, -1 };
     if(color == 'r'){
         char userBuf[3];
         int xSource, xDest, ySource, yDest;
         bool validMove = false;
         bool inCheck = false;
         bool isMoveIntoCheck = false;
+
+        // At the beginning of a turn see if our passant coords exist, if they do update the piece and unset the coords
+        if((passantCoords[0]) != -1 && (board[passantCoords[0]][passantCoords[1]] != nullptr)){
+            pawn *thePawn = (pawn*)board[passantCoords[0]][passantCoords[1]];
+            thePawn->lastMoveTwo = false;
+            passantCoords[0] = -1;
+            passantCoords[1] = -1;
+        }
+
         while(true){
             // Get user coords and perform basic validation
-            getTurnCoords(userBuf, color, &xSource, &ySource, &xDest, &yDest, output);
+            getTurnCoords(userBuf, color, &xSource, &ySource, &xDest, &yDest, &output, &preview);
 
             // Get the specified piece and see if it puts own player in check
             piece *curPiece = board[xSource][ySource];
+
+            // Check to see if we have a pawn for tracking the double moves for en passants
+            if(curPiece->myType == PAWN){
+            }
 
             // Need to do some fiddly business for castling because the destination the user puts in to let us know they want to castle is not the actual destination of the king
             if((curPiece->myType == KING) && (board[xDest][yDest] != nullptr) && (board[xDest][yDest]->myType == ROOK) && (curPiece->myColor == board[xDest][yDest]->myColor)){
@@ -80,6 +94,12 @@ void gameLoop(int fd, char color, char connectType, bool output, bool preview, k
                 oppKing->isCheck = true;
             } else if(validMove && !inCheck){
                 oppKing->isCheck = false;
+            }
+
+            // Check to see if we moved a pawn two spaces thus making it possible to en passant
+            if((curPiece->myType == PAWN) && (validMove) && (((pawn*)curPiece)->lastMoveTwo == true)){
+                passantCoords[0] = xDest;
+                passantCoords[1] = yDest;
             }
             
             printMyBoard(color);

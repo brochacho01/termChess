@@ -63,8 +63,13 @@ bool pawn::validateMove(int xSource, int ySource, int xDest, int yDest, bool out
             }
             return false;
         }
+        // Here is where we check for en passant
         if(board[xDest][yDest] == nullptr){
-            if(output){
+            bool isPassant = checkPassant(xSource, ySource, xDest, yDest, output, board);
+            if(isPassant){
+                return true;
+            }
+            else if(output){
                 cout << "Trying to take nonexistent piece!" << endl;
             }
             return false;
@@ -103,6 +108,7 @@ bool pawn::validateMove(int xSource, int ySource, int xDest, int yDest, bool out
     return true;
 }
 
+// TODO refactor to use this instead of curPiece
 void pawn::placePiece(int xSource, int ySource, int xDest, int yDest, bool simulation, piece* (&board)[8][8]){
     pawn *curPiece = (pawn*)board[xSource][ySource];
 
@@ -115,7 +121,21 @@ void pawn::placePiece(int xSource, int ySource, int xDest, int yDest, bool simul
         }
     }
 
-    delete board[xDest][yDest];
+    // Need to do some fancy footwork if we're performing an en passant
+    bool isPassant = checkPassant(xSource, ySource, xDest, yDest, false, board);
+    if(isPassant){
+        int checkX;
+        if(this->myColor == 'r'){
+            checkX = 1;
+        } else {
+            checkX = -1;
+        }
+        delete board[xDest + checkX][yDest];
+        board[xDest + checkX][yDest]= nullptr;
+    } else {
+        delete board[xDest][yDest];
+    }
+
     board[xSource][ySource] = nullptr;
     board[xDest][yDest] = curPiece;
     
@@ -166,4 +186,35 @@ void pawn::placePiece(int xSource, int ySource, int xDest, int yDest, bool simul
 
         while(getchar() != '\n');
     }
+}
+
+
+// The captured pawn must have moved two squares in one move, landing right next to the capturing pawn.
+// The en passant capture must be performed on the turn immediately after the pawn being captured moves. If the player does not capture en passant on that turn, they no longer can do it later.
+
+
+// red y goes from + to -
+// white y goes from - to +
+bool pawn::checkPassant(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
+    // Check which direction we are going
+    int checkX;
+    if(this->myColor == 'r'){
+        checkX = 1;
+    } else {
+        checkX = -1;
+    }
+
+    // Check to see if we are moving past a pawn and if it's en passantable
+    pawn *passantablePawn = (pawn*)board[xDest + checkX][yDest];
+
+    
+    if(passantablePawn == nullptr){
+        return false;
+    }
+
+    if((passantablePawn->lastMoveTwo) && (this->myColor != passantablePawn->myColor)){
+        return true;
+    }
+
+    return false;
 }

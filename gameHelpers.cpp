@@ -47,25 +47,26 @@ void setup(char *connectType, char *color, bool *output, bool *preview, int *fd,
         receiveBoard(*fd, *color, myKing, oppKing);
     }
 
-    char outputDecision;
-    cout << "Would you like detailed output of move validation? (y/n) ";
-    cin >> outputDecision;
-    // Erring on the side of caution to make sure users really don't want extra output
-    if(outputDecision == 'n'){
-        *output = false;
-    } else {
-        *output = true;
-    }
+    // char outputDecision;
+    // cout << "Would you like detailed output of move validation? (y/n) ";
+    // cin >> outputDecision;
+    // // Erring on the side of caution to make sure users really don't want extra output
+    // if(outputDecision == 'n'){
+    //     *output = false;
+    // } else {
+    //     *output = true;
+    // }
 
-    char previewDecision;
-    cout << "Would you like to preview each of your moves and then confirm them? (y/n) ";
-    cin >> previewDecision;
-    // Because this is a lot of extra output going to err towards no
-    if(previewDecision == 'y'){
-        *preview = true;
-    } else {
-        *preview = false;
-    }
+    // char previewDecision;
+    // cout << "Would you like to preview each of your moves and then confirm them? (y/n) ";
+    // cin >> previewDecision;
+    // // Because this is a lot of extra output going to err towards no
+    // if(previewDecision == 'y'){
+    //     *preview = true;
+    // } else {
+    //     *preview = false;
+    // }
+    settings(output, preview);
 
     // Clear stdin for game loop
     while(getchar() != '\n');
@@ -111,29 +112,27 @@ bool previewMove(int xSource, int ySource, int xDest, int yDest, bool output, ki
 
 }
 
-void getTurnCoords(char *userBuf, char color, int *xSource, int *ySource, int *xDest, int *yDest, bool output){
+void getTurnCoords(char *userBuf, char color, int *xSource, int *ySource, int *xDest, int *yDest, bool *output, bool *preview){
     bool validCoords = false;
     while(!validCoords){
         userBuf[0] = 'h';
-        getCoordInput(userBuf, 1, color);
+        getCoordInput(userBuf, 1, color, output, preview);
         *xSource = ctoi(userBuf[0]);
         *ySource = ctoi(userBuf[1]);
         userBuf[0] = 'h';
-        getCoordInput(userBuf, 2, color);
+        getCoordInput(userBuf, 2, color, output, preview);
         *xDest = ctoi(userBuf[0]);
         *yDest = ctoi(userBuf[1]);
-        validCoords = validateCoords(*xSource, *ySource, *xDest, *yDest, output);
+        validCoords = validateCoords(*xSource, *ySource, *xDest, *yDest, *output);
     }
 }
 
-// TODO fill in these functions
-// TODO maybe try to convert this to using cin because stdin is funky
 // TODO add ability to change output/preview settings
 // TODO add ability to propose a draw
 
 // Type will either be 1 or 2, 1 represents entering source coord, 2 represents dest
-int getCoordInput(char *userBuf, int type, char color){
-	while((userBuf[0] == 'h') || (userBuf[0] == 'p')|| (userBuf[0] == 'c')){
+int getCoordInput(char *userBuf, int type, char color, bool *output, bool *preview){
+	while((userBuf[0] == 'h') || (userBuf[0] == 'p')|| (userBuf[0] == 'c') || (userBuf[0] == 's' || (userBuf[0] == 'd'))){
 		int inFD = fileno(stdin);
 		tcflush(inFD, TCIFLUSH);
 		if(type == 1){
@@ -143,7 +142,11 @@ int getCoordInput(char *userBuf, int type, char color){
 		}
 
 		cin >> userBuf[0];
-        cin >> userBuf[1];
+
+        // If user input command need to check to skip this
+        if(((ctoi(tolower(userBuf[0]))) < 10) && (ctoi(tolower(userBuf[0])) > 0)){
+            cin >> userBuf[1];
+        }
 
         // Check to see if a user tries to enter a Ctrl + D and recover properly
         if(cin.eof()){
@@ -151,20 +154,27 @@ int getCoordInput(char *userBuf, int type, char color){
             clearerr(stdin);
             cout << endl <<  "Press ENTER to continue" << endl;
         }
-		// cout << endl;
-		if(tolower(userBuf[0]) == 'h'){
-			// help();
-		} else if(tolower(userBuf[0]) == 'p'){
-			printMyBoard(color);
-			printf("Press ENTER to continue\n");
-		} else if(tolower(userBuf[0]) == 'c'){
-			// if(concede()){
-				// return 0;
-			// }
-		} else if(tolower(userBuf[0]) == 's'){
-            // 
-        } else if(tolower(userBuf[0]) == 'd'){
-            // 
+
+        switch(tolower(userBuf[0])){
+            case 'h':
+                help(color);
+                break;
+            case 'p':
+                printMyBoard(color);
+                break;
+            case 'c':
+                // if(concede){
+                    // return 0;
+                // }
+                break;
+            case 's':
+                settings(output, preview);
+                break;
+            case 'd':
+                // draw();
+                break;
+            default:
+                break;
         }
 		while(getchar() != '\n');
 	}
@@ -221,4 +231,47 @@ bool movePiece(int xSource, int ySource, int xDest, int yDest, bool output, bool
     }
 
     return validMove;
+}
+
+// Code is same from setup
+void settings(bool *output, bool *preview){
+    char outputDecision;
+    cout << "Would you like detailed output of move validation? (y/n) ";
+    cin >> outputDecision;
+    // Erring on the side of caution to make sure users really don't want extra output
+    if(outputDecision == 'n'){
+        *output = false;
+    } else {
+        *output = true;
+    }
+
+    char previewDecision;
+    cout << "Would you like to preview each of your moves and then confirm them? (y/n) ";
+    cin >> previewDecision;
+    // Because this is a lot of extra output going to err towards no
+    if(previewDecision == 'y'){
+        *preview = true;
+    } else {
+        *preview = false;
+    }
+}
+
+void help(char color){
+    cout << endl << "When you are asked to enter a coordinate, enter as row-column pairs without spaces" << endl;
+    cout << "For example, to move my king from its starting location forward one " << endl;
+    if(color == 'w'){
+        cout << "I would enter 04 as the source coordinates, and 14 as the destination coordinates" << endl << endl;
+    } else {
+        cout << "I would enter 74 as the source coordinates, and 64 as the destination coordinates" << endl << endl;
+    }
+    cout << "If you would like to change your output or preview settings:" << endl;
+    cout << "Enter s when prompted for coordinates" << endl << endl;;
+    cout << "If you would like to propose a draw to your opponent:" << endl;
+    cout << "Enter d when prompted for coordiates" << endl << endl;
+    cout << "If you would like to concede:" << endl; 
+    cout << "Enter c when prompted for coordinates" << endl << endl;;
+    cout << "If you would like to castle, enter the coordinates of your king as the source " << endl;
+    cout << "coordinates and the coordinates of your rook as the destination coordinates" << endl << endl;
+    cout << "Note that Ctrl + C is disbled. Upon mis-input, enter invalid second input to nullify move" << endl;
+    cout << "If you truly desire to close the program, either concede or enter Ctrl + \\" << endl << endl;
 }

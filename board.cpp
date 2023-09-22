@@ -103,10 +103,10 @@ void createPieces(king *&playerKing, char color){
         pawnRow = 6;
         otherRow = 7;
     }
-    // for(int i = 0; i < 8; i++){
-    //     pawn* newPawn = new pawn(color);
-    //     board[pawnRow][i] = newPawn;
-    // }
+    for(int i = 0; i < 8; i++){
+        pawn* newPawn = new pawn(color);
+        board[pawnRow][i] = newPawn;
+    }
     for(int i = 0; i < 8; i += 7){
         rook *newRook = new rook(color);
         board[otherRow][i] = newRook;
