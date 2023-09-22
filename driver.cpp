@@ -14,6 +14,7 @@ using namespace std;
 void gameLoop(int fd, char color, char connectType, bool output, bool preview, king *&myKing, king *&oppKing);
 void doTurn(int fd, char color, bool output, bool preview, king *&myKing, king *&oppKing, int (&passantCoords)[2]);
 void waitForTurn(int fd, char myColor, king *&myKing, king *&oppKing);
+void welcome(void);
 
 
 int main() {
@@ -24,6 +25,7 @@ int main() {
     int fd;
     king *myKing;
     king *oppKing;
+    welcome();
     setup(&connectType, &color, &output, &preview, &fd, myKing, oppKing);
     printMyBoard(color, board);
     gameLoop(fd, color, connectType, output, preview, myKing, oppKing);
@@ -144,4 +146,17 @@ void waitForTurn(int fd, char myColor, king *&myKing, king *&oppKing){
         break;
     }
   }
+}
+
+void welcome(void){
+
+
+cout <<" _                      _____  _   _" << endl;               
+cout << "| |                    /  __ \\| | | |" << endl;              
+cout << "| |_ ___ _ __ _ __ ___ | /  \\/| |_| | ___  ___ ___" << endl; 
+cout << "| __/ _ \\ '__| '_ ` _ \\| |    |  _  |/ _ \\/ __/ __|" << endl;
+cout << "| ||  __/ |  | | | | | | \\__/\\| | | |  __/\\__ \\__ \\" << endl;
+cout << " \\__\\___|_|  |_| |_| |_|\\____/\\_| |_/\\___||___/___/" << endl;
+
+cout << endl << endl;
 }
