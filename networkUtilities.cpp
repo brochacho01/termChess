@@ -102,7 +102,7 @@ int sendAck(int fd){
 
 int receiveAck(int fd){
   char myBuf[RECEIVE_BUFFER_SIZE];
-  read(fd, myBuf, RECEIVE_BUFFER_SIZE);
+  read(fd, myBuf, strlen(ACKNOWLEDGE_MESSAGE));
   return 0;
 }
 
@@ -122,6 +122,7 @@ int receiveColor(int fd, char *color){
 int sendBoard(int fd){
   for(int i = 0; i < 8; i++){
     for(int j = 0; j < 8; j++){
+      cout << "Iteration in sendBoard" << endl;
       piece *curPiece = board[i][j];
       char pieceType;
       if(curPiece == nullptr){
