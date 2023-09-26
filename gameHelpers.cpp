@@ -41,7 +41,6 @@ void setup(char *connectType, char *color, bool *output, bool *preview, int *fd,
     if(*connectType == 'h'){
         createBoard(color, myKing, oppKing);
         piece *tmp = board[0][0];
-        tmp->printSelf();
         sendBoard(*fd);
     } else {
         receiveBoard(*fd, *color, myKing, oppKing);
@@ -69,10 +68,11 @@ bool previewMove(char myColor, int xSource, int ySource, int xDest, int yDest, b
 
     // If the move they tried wasn't valid simply return
     if(!validMove){
+        cleanBoard(boardCopy);
         return false;
-    }
+    } 
 
-    cout << "---------PREVIEW OF MOVE---------" << endl;
+    cout << endl << "---------PREVIEW OF MOVE---------" << endl;
 
     // Display the board to the user
     printMyBoard(myColor, boardCopy);
@@ -85,9 +85,11 @@ bool previewMove(char myColor, int xSource, int ySource, int xDest, int yDest, b
     if(confirmation == 'y'){
         validMove = movePiece(xSource, ySource, xDest, yDest, false, false, board);
 
+        cleanBoard(boardCopy);
         return true;
     }
 
+    cleanBoard(boardCopy);
     return false;
 
 }
@@ -291,7 +293,7 @@ void draw(int fd, char myColor, bool offering){
         }
     }
     cout << "It is a draw, nobody wins!" << endl;
-    cleanBoard();
+    cleanBoard(board);
     exit(0);
 }
 
@@ -318,6 +320,6 @@ void concede(int fd, char myColor, bool offering){
             cout << "Red conceded, you win!" << endl;
         }
     }
-    cleanBoard();
+    cleanBoard(board);
     exit(0);
 }

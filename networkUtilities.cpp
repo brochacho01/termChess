@@ -102,7 +102,7 @@ int sendAck(int fd){
 
 int receiveAck(int fd){
   char myBuf[RECEIVE_BUFFER_SIZE];
-  read(fd, myBuf, RECEIVE_BUFFER_SIZE);
+  read(fd, myBuf, strlen(ACKNOWLEDGE_MESSAGE));
   return 0;
 }
 
