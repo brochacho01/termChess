@@ -144,15 +144,61 @@ void createBoard(char *myColor, king *&myKing, king *&oppKing){
 void copyBoard(piece* (&boardCopy)[8][8]){
     for(int i = 0; i < 8; i++){
         for(int j = 0; j < 8; j++){
-           boardCopy[i][j] = board[i][j]; 
+            if(board[i][j] != nullptr){
+                switch(board[i][j]->myType){
+                    case PAWN:
+                        {
+                            pawn *newPawn = new pawn(board[i][j]->myColor);
+                            boardCopy[i][j] = newPawn;
+                            break;
+                        }
+                    case ROOK:
+                        {
+                            rook *newRook = new rook(board[i][j]->myColor);
+                            boardCopy[i][j] = newRook;
+                            break;
+                        }
+                    case KNIGHT:
+                        {
+                            knight *newKnight = new knight(board[i][j]->myColor);
+                            boardCopy[i][j] = newKnight;
+                            break;
+                        }
+                    case BISHOP:
+                        {
+                            bishop *newBishop = new bishop(board[i][j]->myColor);
+                            boardCopy[i][j] = newBishop;
+                            break;
+                        }
+                    case QUEEN:
+                        {
+                            queen *newQueen = new queen(board[i][j]->myColor);
+                            boardCopy[i][j] = newQueen;
+                            break;
+                        }
+                    case KING:
+                        {
+                            king *newKing = new king(board[i][j]->myColor);
+                            boardCopy[i][j] = newKing;
+                            break;
+                        }
+                    default:
+                        {
+                            break;
+                        }
+                }
+        //    boardCopy[i][j] = board[i][j]; 
+            } else {
+                boardCopy[i][j] = nullptr;
+            }
         }
     }
 }
 
-void cleanBoard(void){
+void cleanBoard(piece* (&myBoard)[8][8]){
     for(int i = 0; i < 8; i++){
         for(int j = 0; j < 8; j++){
-            delete board[i][j];
+            delete myBoard[i][j];
         }
     }
 }

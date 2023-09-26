@@ -170,7 +170,7 @@ cout << endl << endl;
 // Make sure that users don't panic Ctrl + C.
 void sigHandler(int sigNum){
 	if(sigNum == SIGQUIT){
-		cleanBoard();
+		cleanBoard(board);
         exit(0);
 	} else {
         return;
