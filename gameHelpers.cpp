@@ -9,7 +9,8 @@
 
 using namespace std;
 
-inline int ctoi(char c) { return c - '0'; }
+// -1 because we're showing users a 1-indexed board
+inline int ctoi(char c) { return c - '0' - 1; }
 
 void setup(char *connectType, char *color, bool *output, bool *preview, int *fd, king *&myKing, king *&oppKing){
     cout << "Would you like to host or connect? (h/c) ";
@@ -165,13 +166,13 @@ int getCoordInput(int fd, char *userBuf, int type, char color, bool *output, boo
 bool validateCoords(int xSource, int ySource, int xDest, int yDest, bool output){
     if((xSource < 0) || (ySource < 0) || (xDest < 0) || yDest < 0){
         if(output){
-            cout << "Can't use negative coordinates!" << endl;
+            cout << "Can't use coordinates less than 1!" << endl;
         }
         return false;
     }
     else if((xSource > 7) || (ySource > 7) || (xDest > 7) || (yDest > 7)){
         if(output){
-            cout << "Can't use coordinates greater than 7!" << endl;
+            cout << "Can't use coordinates greater than 8!" << endl;
         }
         return false;
     }
