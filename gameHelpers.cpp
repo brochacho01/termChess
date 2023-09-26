@@ -66,11 +66,15 @@ bool previewMove(char myColor, int xSource, int ySource, int xDest, int yDest, b
     piece *curPiece = board[xSource][ySource];
 
     // Simulate the move
-    validMove = movePiece(xSource, ySource, xDest, yDest, output, true, boardCopy);
+    // validMove = movePiece(xSource, ySource, xDest, yDest, output, true, boardCopy);
+    validMove = validatePieceMove(xSource, ySource, xDest, yDest, output, boardCopy);
 
     // If the move they tried wasn't valid simply return
     if(!validMove){
         return false;
+    } else {
+        boardCopy[xDest][yDest] = boardCopy[xSource][ySource];
+        boardCopy[xDest][yDest] = nullptr;
     }
 
     cout << "---------PREVIEW OF MOVE---------" << endl;
@@ -202,6 +206,36 @@ bool movePiece(int xSource, int ySource, int xDest, int yDest, bool output, bool
             break;
         case KING:
             validMove = ((king*)curPiece)->move(xSource, ySource, xDest, yDest, output, simulation, board);
+            break;
+        default:
+            break;
+    }
+
+    return validMove;
+}
+
+bool validatePieceMove(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
+    bool validMove = false;
+    piece *curPiece = board[xSource][ySource];
+
+    switch(curPiece->myType){
+        case PAWN:
+            validMove = ((pawn*)curPiece)->validateMove(xSource, ySource, xDest, yDest, output, board);
+            break;
+        case ROOK:
+            validMove = ((rook*)curPiece)->validateMove(xSource, ySource, xDest, yDest, output, board);
+            break;
+        case KNIGHT:
+            validMove = ((knight*)curPiece)->validateMove(xSource, ySource, xDest, yDest, output, board);
+            break;
+        case BISHOP:
+            validMove = ((bishop*)curPiece)->validateMove(xSource, ySource, xDest, yDest, output, board);
+            break;
+        case QUEEN:
+            validMove = ((queen*)curPiece)->validateMove(xSource, ySource, xDest, yDest, output, board);
+            break;
+        case KING:
+            validMove = ((king*)curPiece)->validateMove(xSource, ySource, xDest, yDest, output, board);
             break;
         default:
             break;
