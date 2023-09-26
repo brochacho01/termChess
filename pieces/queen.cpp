@@ -5,7 +5,7 @@
 using namespace std;
 
 
-bool queen::move(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
+bool queen::move(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[BOARDSIZE][BOARDSIZE]){
     cout << "Called queen move!" << endl;
 
     if(!this->validateMove(xSource, ySource, xDest, yDest, output, board)){
@@ -17,7 +17,7 @@ bool queen::move(int xSource, int ySource, int xDest, int yDest, bool output, pi
     return true;
 }
 
-bool queen::validateMove(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
+bool queen::validateMove(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[BOARDSIZE][BOARDSIZE]){
     // Need to check if we're moving diagonally or horizontally/vertically
     float slope;
     int xChange = abs(xDest - xSource);
@@ -60,7 +60,7 @@ bool queen::validateMove(int xSource, int ySource, int xDest, int yDest, bool ou
     return true;
 }
 
-bool queen::validateStraight(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
+bool queen::validateStraight(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[BOARDSIZE][BOARDSIZE]){
     int xChange = 0;
     int lowPos;
     int highPos;
@@ -101,7 +101,7 @@ bool queen::validateStraight(int xSource, int ySource, int xDest, int yDest, boo
     return true;
 }
 
-bool queen::validateDiagonal(int xSource, int ySource, int xDest, int yDest, int xChange, int yChange, bool output, piece* (&board)[8][8]){
+bool queen::validateDiagonal(int xSource, int ySource, int xDest, int yDest, int xChange, int yChange, bool output, piece* (&board)[BOARDSIZE][BOARDSIZE]){
     int slope = yChange / xChange;
 
     if(slope != 1){
@@ -131,7 +131,7 @@ bool queen::validateDiagonal(int xSource, int ySource, int xDest, int yDest, int
     return true;
 }
 
-void queen::placePiece(int xSource, int ySource, int xDest, int yDest, piece* (&board)[8][8]){
+void queen::placePiece(int xSource, int ySource, int xDest, int yDest, piece* (&board)[BOARDSIZE][BOARDSIZE]){
     delete board[xDest][yDest];
     board[xSource][ySource] = nullptr;
     board[xDest][yDest] = this;

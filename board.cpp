@@ -6,17 +6,17 @@
 
 using namespace std;
 
-void printBoardForWhite(piece* (&boardToPrint)[8][8]);
-void printBoardForRed(piece* (&boardToPrint)[8][8]);
+void printBoardForWhite(piece* (&boardToPrint)[BOARDSIZE][BOARDSIZE]);
+void printBoardForRed(piece* (&boardToPrint)[BOARDSIZE][BOARDSIZE]);
 void printCell(piece* curPiece);
 void printBound(void);
 void printRowBound(void);
 void colorRed(void);
 void colorWhite(void);
 
-piece* board[8][8];
+piece* board[BOARDSIZE][BOARDSIZE];
 
-void printMyBoard(char myColor, piece* (&boardToPrint)[8][8]){
+void printMyBoard(char myColor, piece* (&boardToPrint)[BOARDSIZE][BOARDSIZE]){
     cout << endl;
     if(myColor == 'r'){
         printBoardForRed(boardToPrint);
@@ -26,11 +26,11 @@ void printMyBoard(char myColor, piece* (&boardToPrint)[8][8]){
     cout << endl;
 }
 
-void printBoardForRed(piece* (&boardToPrint)[8][8]){
-    for(int i = 0; i < 8; i++){
+void printBoardForRed(piece* (&boardToPrint)[BOARDSIZE][BOARDSIZE]){
+    for(int i = 0; i < BOARDSIZE; i++){
         printBound();
         printRowBound();
-        for(int j = 0; j < 8; j++){
+        for(int j = 0; j < BOARDSIZE; j++){
             printCell(boardToPrint[i][j]);
         }
         cout << " " << i << endl;
@@ -39,7 +39,7 @@ void printBoardForRed(piece* (&boardToPrint)[8][8]){
     cout << "  0   1   2   3   4   5   6   7" << endl;
 }
 
-void printBoardForWhite(piece* (&boardToPrint)[8][8]){
+void printBoardForWhite(piece* (&boardToPrint)[BOARDSIZE][BOARDSIZE]){
     for(int i = 7; i > -1; i--){
         printBound();
         printRowBound();
@@ -90,19 +90,19 @@ void createPieces(king *&playerKing, char color){
         pawnRow = 6;
         otherRow = 7;
     }
-    for(int i = 0; i < 8; i++){
+    for(int i = 0; i < BOARDSIZE; i++){
         pawn* newPawn = new pawn(color);
         board[pawnRow][i] = newPawn;
     }
-    for(int i = 0; i < 8; i += 7){
+    for(int i = 0; i < BOARDSIZE; i += 7){
         rook *newRook = new rook(color);
         board[otherRow][i] = newRook;
     }
-    for(int i = 1; i < 8; i += 5){
+    for(int i = 1; i < BOARDSIZE; i += 5){
         knight *newKnight = new knight(color);
         board[otherRow][i] = newKnight;
     }
-    for(int i = 2; i < 8; i += 3){
+    for(int i = 2; i < BOARDSIZE; i += 3){
         bishop *newBishop = new bishop(color);
         board[otherRow][i] = newBishop;
     }
@@ -123,7 +123,7 @@ void createPieces(king *&playerKing, char color){
 
 void createSpaces(void){
     for(int i = 2; i < 6; i++){
-        for(int j = 0; j < 8; j++){
+        for(int j = 0; j < BOARDSIZE; j++){
             board[i][j] = nullptr;
         }
     }
@@ -141,9 +141,9 @@ void createBoard(char *myColor, king *&myKing, king *&oppKing){
     createSpaces();
 }
 
-void copyBoard(piece* (&boardCopy)[8][8]){
-    for(int i = 0; i < 8; i++){
-        for(int j = 0; j < 8; j++){
+void copyBoard(piece* (&boardCopy)[BOARDSIZE][BOARDSIZE]){
+    for(int i = 0; i < BOARDSIZE; i++){
+        for(int j = 0; j < BOARDSIZE; j++){
             if(board[i][j] != nullptr){
                 switch(board[i][j]->myType){
                     case PAWN:
@@ -195,9 +195,9 @@ void copyBoard(piece* (&boardCopy)[8][8]){
     }
 }
 
-void cleanBoard(piece* (&myBoard)[8][8]){
-    for(int i = 0; i < 8; i++){
-        for(int j = 0; j < 8; j++){
+void cleanBoard(piece* (&myBoard)[BOARDSIZE][BOARDSIZE]){
+    for(int i = 0; i < BOARDSIZE; i++){
+        for(int j = 0; j < BOARDSIZE; j++){
             delete myBoard[i][j];
         }
     }

@@ -15,7 +15,7 @@ using namespace std;
 bool isChecking(int xSource, int ySource, int xDest, int yDest, king* theKing){
     int oldKingX;
     int oldKingY;
-    piece *boardCopy[8][8];
+    piece *boardCopy[BOARDSIZE][BOARDSIZE];
     bool isCheck = false;
     copyBoard(boardCopy);
 
@@ -35,8 +35,8 @@ bool isChecking(int xSource, int ySource, int xDest, int yDest, king* theKing){
     int kingX = theKing->position[0];
     int kingY = theKing->position[1];
 
-    for(int i = 0; i < 8; i++){
-        for(int j = 0; j < 8; j++){
+    for(int i = 0; i < BOARDSIZE; i++){
+        for(int j = 0; j < BOARDSIZE; j++){
             piece *curPiece = boardCopy[i][j];
 
             // Don't want to check type of nullptr

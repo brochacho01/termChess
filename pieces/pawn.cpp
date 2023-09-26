@@ -5,7 +5,7 @@
 using namespace std;
 
 
-bool pawn::move(int xSource, int ySource, int xDest, int yDest, bool output, bool simulation, piece* (&board)[8][8]){
+bool pawn::move(int xSource, int ySource, int xDest, int yDest, bool output, bool simulation, piece* (&board)[BOARDSIZE][BOARDSIZE]){
     cout << "Called pawn move!" << endl;
     
     if(!this->validateMove(xSource, ySource, xDest, yDest, output, board)){
@@ -17,7 +17,7 @@ bool pawn::move(int xSource, int ySource, int xDest, int yDest, bool output, boo
     return true;
 }
 
-bool pawn::validateMove(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
+bool pawn::validateMove(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[BOARDSIZE][BOARDSIZE]){
     int lowPos;
     int highPos;
 
@@ -110,7 +110,7 @@ bool pawn::validateMove(int xSource, int ySource, int xDest, int yDest, bool out
 }
 
 // TODO refactor to use this instead of curPiece
-void pawn::placePiece(int xSource, int ySource, int xDest, int yDest, bool simulation, piece* (&board)[8][8]){
+void pawn::placePiece(int xSource, int ySource, int xDest, int yDest, bool simulation, piece* (&board)[BOARDSIZE][BOARDSIZE]){
     if(!simulation){
         this->hasMoved = true;
         if(abs(xSource - xDest) == 2){
@@ -189,7 +189,7 @@ void pawn::placePiece(int xSource, int ySource, int xDest, int yDest, bool simul
 
 // red y goes from + to -
 // white y goes from - to +
-bool pawn::checkPassant(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
+bool pawn::checkPassant(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[BOARDSIZE][BOARDSIZE]){
     // Check which direction we are going
     int checkX;
     if(this->myColor == 'r'){
