@@ -111,6 +111,7 @@ bool pawn::validateMove(int xSource, int ySource, int xDest, int yDest, bool out
 
 // TODO refactor to use this instead of curPiece
 void pawn::placePiece(int xSource, int ySource, int xDest, int yDest, bool simulation, piece* (&board)[8][8]){
+    piece *destPiece = board[xDest][yDest];
     if(!simulation){
         this->hasMoved = true;
         if(abs(xSource - xDest) == 2){
@@ -132,7 +133,8 @@ void pawn::placePiece(int xSource, int ySource, int xDest, int yDest, bool simul
         delete board[xDest + checkX][yDest];
         board[xDest + checkX][yDest]= nullptr;
     } else {
-        delete board[xDest][yDest];
+        // delete board[xDest][yDest];
+        delete destPiece;
     }
 
     board[xSource][ySource] = nullptr;
