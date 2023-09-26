@@ -33,7 +33,7 @@ void printBoardForRed(piece* (&boardToPrint)[8][8]){
         for(int j = 0; j < 8; j++){
             printCell(boardToPrint[i][j]);
         }
-        printf(" %d\n", i);
+        cout << " " << i << endl;
     }
     printBound();
     cout << "  0   1   2   3   4   5   6   7" << endl;
@@ -46,7 +46,7 @@ void printBoardForWhite(piece* (&boardToPrint)[8][8]){
         for(int j = 7; j > -1; j--){
             printCell(boardToPrint[i][j]);
         }
-        printf(" %d\n", i);
+        cout << " " << i << endl;
     }
     printBound();
     cout << "  7   6   5   4   3   2   1   0 " << endl;
@@ -59,10 +59,10 @@ void printCell(piece* curPiece){
     }
     else if(curPiece->myColor == 'r') {
         colorRed();
-        printf("%c", curPiece->myType);
+        cout << curPiece->myType;
         colorWhite();
     } else {
-        printf("%c", curPiece->myType);
+        cout << curPiece->myType;
     }
     cout << " |";
 }
@@ -76,11 +76,11 @@ void printRowBound(void){
 }
 
 void colorRed(void){
-    printf("\033[0;31m");
+    cout << "\033[0;31m";
 }
 
 void colorWhite(void){
-    printf("\033[0;37m");
+    cout << "\033[0;37m";
 }
 
 void createPieces(king *&playerKing, char color){

@@ -38,7 +38,7 @@ int create_server_socket(struct sockaddr_in* sock_addr, sa_family_t sa_family, c
 
   int result = bind(fd, (struct sockaddr *)sock_addr, sizeof(struct sockaddr_in));
   if(result == -1){
-    printf("Error on bind, returning\n");
+    cout << "Error on bind, returning" << endl;
     return -1;
   }
   result = listen(fd, 10);
@@ -61,14 +61,14 @@ int createServerAndWait(void){
   int client_sock_desc = -1;
   int server_sock_desc = create_server_socket(&server_endpoint, AF_INET, HOST_IP_ADDRESS, 
   SERVER_PORT,SOCK_STREAM);
-  printf("Listening on Network Interface: %s Network Port: %d \n", HOST_IP_ADDRESS, SERVER_PORT);
+  cout << "Listening on Network Interface: " << HOST_IP_ADDRESS << " Network Port: " << SERVER_PORT << endl;
   int connected = 0;
   while(!connected){
-    printf("Waiting for client connection...\n");
+    cout << "Waiting for client connection..." << endl;
     socklen_t sock_len = sizeof(struct sockaddr_in);
     client_sock_desc = accept(server_sock_desc, (struct sockaddr *)&client_endpoint, &sock_len);
     char *client_ip = inet_ntoa(client_endpoint.sin_addr);
-    printf("Accepted connection: %sL%d\n", client_ip, ntohs(client_endpoint.sin_port));
+    cout << "Accepted connection: " << client_ip << "L" << ntohs(client_endpoint.sin_port) << endl;
     connected = 1;
   }
   return client_sock_desc;
@@ -86,7 +86,7 @@ int connect_server(struct sockaddr_in* sock_addr, sa_family_t sa_family, const c
   init_sock_addr_in(sock_addr, sa_family, ip_addr, port);
   int result = connect(fd, (struct sockaddr *)sock_addr, sizeof(struct sockaddr_in));
   if(result == -1){
-    printf("Error on connect, returning\n");
+    cout << "Error on connect, closing" << endl;
     return -1;
   }
   return fd;
