@@ -30,9 +30,7 @@ class pawn : public piece {
         bool hasMoved;
         bool lastMoveTwo;
 
-        pawn(char color){
-            myColor = color;
-            myType = PAWN;
+        pawn(char color) : piece(color, PAWN){
             hasMoved = false;
             lastMoveTwo = false;
         }
@@ -72,9 +70,7 @@ class rook : public piece {
 
         bool hasMoved;
 
-        rook(char color){
-            myColor = color;
-            myType = ROOK;
+        rook(char color) : piece(color, ROOK){
             hasMoved = false;
         }
 
@@ -103,10 +99,7 @@ class rook : public piece {
 
 class knight : public piece {
     public:
-        knight(char color){
-            myColor = color;
-            myType = KNIGHT;
-        }
+        knight(char color) : piece(color, KNIGHT){}
 
         bool move(int xSource,
                 int ySource,
@@ -131,10 +124,7 @@ class knight : public piece {
 
 class bishop : public piece {
     public:
-        bishop(char color){
-            myColor = color;
-            myType = BISHOP;
-        }
+        bishop(char color) : piece(color, BISHOP){}
 
         bool move(int xSource,
                 int ySource,
@@ -159,10 +149,7 @@ class bishop : public piece {
 
 class queen : public piece {
     public:
-        queen(char color){
-            myColor = color;
-            myType = QUEEN;
-        }
+        queen(char color) : piece(color, QUEEN){}
 
         bool move(int xSource,
                 int ySource,
@@ -209,10 +196,7 @@ class king : public piece {
         bool isCheck;
         bool isCheckmate;
 
-        king(char color){
-            myColor = color;
-            myType = KING;
-
+        king(char color) : piece(color, KING){
             position[1] = 4;
             
             if(myColor == 'r'){
