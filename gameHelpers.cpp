@@ -72,7 +72,7 @@ bool previewMove(char myColor, int xSource, int ySource, int xDest, int yDest, b
         return false;
     } 
 
-    cout << "---------PREVIEW OF MOVE---------" << endl;
+    cout << endl << "---------PREVIEW OF MOVE---------" << endl;
 
     // Display the board to the user
     printMyBoard(myColor, boardCopy);
