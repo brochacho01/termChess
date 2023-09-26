@@ -5,7 +5,7 @@
 using namespace std;
 
 
-bool king::move(int xSource, int ySource, int xDest, int yDest, bool output, bool simulation, piece* (&board)[8][8]){
+bool king::move(int xSource, int ySource, int xDest, int yDest, bool output, bool simulation, piece* (&board)[BOARDSIZE][BOARDSIZE]){
     cout << "Called king move!" << endl;
 
     if(!this->validateMove(xSource, ySource, xDest, yDest, output, board)){
@@ -17,7 +17,7 @@ bool king::move(int xSource, int ySource, int xDest, int yDest, bool output, boo
     return true;
 }
 
-bool king::validateMove(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
+bool king::validateMove(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[BOARDSIZE][BOARDSIZE]){
     // Check to see if we're trying to castle
     if((board[xDest][yDest] != nullptr) && (this->myColor == board[xDest][yDest]->myColor) && (board[xDest][yDest]->myType == ROOK)){
         // Validate the attempted castle
@@ -54,7 +54,7 @@ bool king::validateMove(int xSource, int ySource, int xDest, int yDest, bool out
     return true;
 }
 
-bool king::validateCastle(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
+bool king::validateCastle(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[BOARDSIZE][BOARDSIZE]){
     king *myKing = (king*)board[xSource][ySource];
     rook *myRook = (rook*)board[xDest][yDest];
     // Make sure neither king or rook have moved
@@ -113,7 +113,7 @@ bool king::validateCastle(int xSource, int ySource, int xDest, int yDest, bool o
     return true;
 }
 
-void king::placePiece(int xSource, int ySource, int xDest, int yDest, bool simulation, piece* (&board)[8][8]){
+void king::placePiece(int xSource, int ySource, int xDest, int yDest, bool simulation, piece* (&board)[BOARDSIZE][BOARDSIZE]){
     board[xSource][ySource] = nullptr;
 
     // Check to see if we're placing for a castle, keep in mind we would have already validated this move

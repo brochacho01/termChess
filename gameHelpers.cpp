@@ -59,7 +59,7 @@ void setup(char *connectType, char *color, bool *output, bool *preview, int *fd,
 // Copies the board, simulates the move, asks the user for confirmation, if so, performs the move on the real board
 // Need to make sure we're not updating statuses when previewing
 bool previewMove(char myColor, int xSource, int ySource, int xDest, int yDest, bool output, king *&myKing){
-    piece *boardCopy[8][8];
+    piece *boardCopy[BOARDSIZE][BOARDSIZE];
     char confirmation;
     bool validMove = false;
     copyBoard(boardCopy);
@@ -184,7 +184,7 @@ bool validateCoords(int xSource, int ySource, int xDest, int yDest, bool output)
     return true;
 }
 
-bool movePiece(int xSource, int ySource, int xDest, int yDest, bool output, bool simulation, piece* (&board)[8][8]){
+bool movePiece(int xSource, int ySource, int xDest, int yDest, bool output, bool simulation, piece* (&board)[BOARDSIZE][BOARDSIZE]){
     bool validMove = false;
     piece *curPiece = board[xSource][ySource];
 

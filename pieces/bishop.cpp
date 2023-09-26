@@ -5,7 +5,7 @@
 using namespace std;
 
 
-bool bishop::move(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
+bool bishop::move(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[BOARDSIZE][BOARDSIZE]){
     cout << "Called bishop move!" << endl;
     
     if(!this->validateMove(xSource, ySource, xDest, yDest, output, board)){
@@ -17,7 +17,7 @@ bool bishop::move(int xSource, int ySource, int xDest, int yDest, bool output, p
     return true;
 }
 
-bool bishop::validateMove(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
+bool bishop::validateMove(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[BOARDSIZE][BOARDSIZE]){
     // Check to see if we're moving diagonally
     int xChange = abs(xDest - xSource);
     int yChange = abs(yDest - ySource);
@@ -66,7 +66,7 @@ bool bishop::validateMove(int xSource, int ySource, int xDest, int yDest, bool o
     return true;
 }
 
-void bishop::placePiece(int xSource, int ySource, int xDest, int yDest, piece* (&board)[8][8]){
+void bishop::placePiece(int xSource, int ySource, int xDest, int yDest, piece* (&board)[BOARDSIZE][BOARDSIZE]){
     delete board[xDest][yDest];
     board[xSource][ySource] = nullptr;
     board[xDest][yDest] = this;

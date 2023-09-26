@@ -1,20 +1,8 @@
 #ifndef PIECE
 #define PIECE
 
-#define PAWN 'p'
-#define ROOK 'r'
-#define KNIGHT 'n'
-#define BISHOP 'b'
-#define QUEEN 'q'
-#define KING 'k'
-#define EMPTY '0'
+#include "../constants.h"
 
-#define PAWNSIZE sizeof(pawn)
-#define ROOKSIZE sizeof(rook)
-#define KNIGHTSIZE sizeof(knight)
-#define BISHOPSIZE sizeof(bishop)
-#define QUEENSIZE sizeof(queen)
-#define KINGSIZE sizeof(king)
 
 class piece {
     public:
@@ -55,28 +43,28 @@ class pawn : public piece {
                 int yDest,
                 bool output,
                 bool simulation,
-                piece* (&board)[8][8]);
+                piece* (&board)[BOARDSIZE][BOARDSIZE]);
 
         bool validateMove(int xSource,
                         int ySource,
                         int xDest,
                         int yDest,
                         bool output,
-                        piece* (&board)[8][8]);
+                        piece* (&board)[BOARDSIZE][BOARDSIZE]);
 
         void placePiece(int xSource,
                         int ySource,
                         int xDest,
                         int yDest,
                         bool simulation,
-                        piece* (&board)[8][8]);
+                        piece* (&board)[BOARDSIZE][BOARDSIZE]);
 
         bool checkPassant(int xSource,
                     int ySource,
                     int xDest,
                     int yDest,
                     bool output,
-                    piece* (&board)[8][8]);
+                    piece* (&board)[BOARDSIZE][BOARDSIZE]);
 };
 
 class rook : public piece {
@@ -96,21 +84,21 @@ class rook : public piece {
                     int yDest,
                     bool output,
                     bool simulation,
-                    piece* (&board)[8][8]);
+                    piece* (&board)[BOARDSIZE][BOARDSIZE]);
 
         bool validateMove(int xSource,
                         int ySource,
                         int xDest,
                         int yDest,
                         bool output,
-                        piece* (&board)[8][8]);
+                        piece* (&board)[BOARDSIZE][BOARDSIZE]);
 
         void placePiece(int xSource,
                         int ySource,
                         int xDest,
                         int yDest,
                         bool simulation,
-                        piece* (&board)[8][8]);
+                        piece* (&board)[BOARDSIZE][BOARDSIZE]);
 };
 
 class knight : public piece {
@@ -125,20 +113,20 @@ class knight : public piece {
                 int xDest,
                 int yDest,
                 bool output,
-                piece* (&board)[8][8]);
+                piece* (&board)[BOARDSIZE][BOARDSIZE]);
 
         bool validateMove(int xSource,
                         int ySource,
                         int xDest,
                         int yDest,
                         bool output,
-                        piece* (&board)[8][8]);
+                        piece* (&board)[BOARDSIZE][BOARDSIZE]);
         
         void placePiece(int xSource,
                         int ySource,
                         int xDest,
                         int yDest,
-                        piece* (&board)[8][8]);
+                        piece* (&board)[BOARDSIZE][BOARDSIZE]);
 };
 
 class bishop : public piece {
@@ -153,20 +141,20 @@ class bishop : public piece {
                 int xDest,
                 int yDest,
                 bool output,
-                piece* (&board)[8][8]);
+                piece* (&board)[BOARDSIZE][BOARDSIZE]);
 
         bool validateMove(int xSource,
                         int ySource,
                         int xDest,
                         int yDest,
                         bool output,
-                        piece* (&board)[8][8]);
+                        piece* (&board)[BOARDSIZE][BOARDSIZE]);
 
         void placePiece(int xSource,
                         int ySource,
                         int xDest,
                         int yDest,
-                        piece* (&board)[8][8]);
+                        piece* (&board)[BOARDSIZE][BOARDSIZE]);
 };
 
 class queen : public piece {
@@ -181,21 +169,21 @@ class queen : public piece {
                 int xDest,
                 int yDest,
                 bool output,
-                piece* (&board)[8][8]);
+                piece* (&board)[BOARDSIZE][BOARDSIZE]);
 
         bool validateMove(int xSource,
                         int ySource,
                         int xDest,
                         int yDest,
                         bool output, 
-                        piece* (&board)[8][8]);
+                        piece* (&board)[BOARDSIZE][BOARDSIZE]);
 
         bool validateStraight(int xSource,
                             int ySource,
                             int xDest,
                             int yDest,
                             bool output,
-                            piece* (&board)[8][8]);
+                            piece* (&board)[BOARDSIZE][BOARDSIZE]);
 
         bool validateDiagonal(int xSource,
                             int ySource,
@@ -204,13 +192,13 @@ class queen : public piece {
                             int xChange,
                             int yChange,
                             bool output,
-                            piece* (&board)[8][8]);
+                            piece* (&board)[BOARDSIZE][BOARDSIZE]);
         
         void placePiece(int xSource,
                         int ySource,
                         int xDest,
                         int yDest,
-                        piece* (&board)[8][8]);
+                        piece* (&board)[BOARDSIZE][BOARDSIZE]);
 };
 
 // One day consider writing alg to determine checkmate
@@ -240,31 +228,39 @@ class king : public piece {
                 int yDest,
                 bool output,
                 bool simulation,
-                piece* (&board)[8][8]);
+                piece* (&board)[BOARDSIZE][BOARDSIZE]);
 
         bool validateMove(int xSource,
                         int ySource,
                         int xDest,
                         int yDest,
                         bool output,
-                        piece* (&board)[8][8]);
+                        piece* (&board)[BOARDSIZE][BOARDSIZE]);
 
         bool validateCastle(int xSource,
                             int ySource,
                             int xDest,
                             int yDest,
                             bool output,
-                            piece* (&board)[8][8]);
+                            piece* (&board)[BOARDSIZE][BOARDSIZE]);
 
         void placePiece(int xSource,
                         int ySource,
                         int xDest,
                         int yDest,
                         bool simulation,
-                        piece* (&board)[8][8]);
+                        piece* (&board)[BOARDSIZE][BOARDSIZE]);
         
         void printMySelf(void);
 };
+
+// Because these require the knowledge of piece classes these constants are initialized here instead of constants.h
+constexpr int PAWNSIZE = sizeof(pawn);
+constexpr int ROOKSIZE = sizeof(rook);
+constexpr int KNIGHTSIZE = sizeof(knight);
+constexpr int BISHOPSIZE = sizeof(bishop);
+constexpr int QUEENSIZE = sizeof(queen);
+constexpr int KINGSIZE = sizeof(king);
 
 bool isChecking(int xSource, int ySource, int xDest, int yDest, king* theKing);
 

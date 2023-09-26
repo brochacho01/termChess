@@ -4,10 +4,10 @@
 // Included here because function declarations need to know about the piece types
 #include "pieces/piece.h"
 
-void printMyBoard(char myColor, piece*(&boardToPrint)[8][8]);
+void printMyBoard(char myColor, piece*(&boardToPrint)[BOARDSIZE][BOARDSIZE]);
 void createBoard(char *myColor, king *&myKing, king *&oppKing);
-void copyBoard(piece* (&boardCopy)[8][8]);
-void cleanBoard(piece* (&myBoard)[8][8]);
+void copyBoard(piece* (&boardCopy)[BOARDSIZE][BOARDSIZE]);
+void cleanBoard(piece* (&myBoard)[BOARDSIZE][BOARDSIZE]);
 
-extern piece* board[8][8];
+extern piece* board[BOARDSIZE][BOARDSIZE];
 #endif

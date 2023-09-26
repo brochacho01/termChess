@@ -14,4 +14,4 @@ clean:
 run: build
 	./termChess
 
-$(OBJS) : networkUtilities.h board.h gameHelpers.h ./pieces/piece.h
+$(OBJS) : networkUtilities.h board.h gameHelpers.h constants.h ./pieces/piece.h

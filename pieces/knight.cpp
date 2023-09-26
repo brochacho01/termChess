@@ -5,7 +5,7 @@
 
 using namespace std;
 
-bool knight::move(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
+bool knight::move(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[BOARDSIZE][BOARDSIZE]){
     cout << "Called knight move!" << endl;
     if(!this->validateMove(xSource, ySource, xDest, yDest, output, board)){
         cout << "Invalid Move!" << endl;
@@ -16,7 +16,7 @@ bool knight::move(int xSource, int ySource, int xDest, int yDest, bool output, p
     return true;
 }
 
-bool knight::validateMove(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[8][8]){
+bool knight::validateMove(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[BOARDSIZE][BOARDSIZE]){
     // First check that the coordinates are for a valid knight move
     int xChange = abs(xSource - xDest);
     int yChange = abs(ySource - yDest);
@@ -39,7 +39,7 @@ bool knight::validateMove(int xSource, int ySource, int xDest, int yDest, bool o
     return true;
 }
 
-void knight::placePiece(int xSource, int ySource, int xDest, int yDest, piece* (&board)[8][8]){
+void knight::placePiece(int xSource, int ySource, int xDest, int yDest, piece* (&board)[BOARDSIZE][BOARDSIZE]){
     delete board[xDest][yDest];
     board[xSource][ySource] = nullptr;
     board[xDest][yDest] = this;

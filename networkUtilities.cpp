@@ -120,8 +120,8 @@ int receiveColor(int fd, char *color){
 
 // Because pieces have a variable size, for each piece we will need to send two messages, first one telling us what the piece is, the second being the actual piece
 int sendBoard(int fd){
-  for(int i = 0; i < 8; i++){
-    for(int j = 0; j < 8; j++){
+  for(int i = 0; i < BOARDSIZE; i++){
+    for(int j = 0; j < BOARDSIZE; j++){
       piece *curPiece = board[i][j];
       char pieceType;
       if(curPiece == nullptr){
@@ -162,8 +162,8 @@ int sendBoard(int fd){
 }
 
 int receiveBoard(int fd, char myColor, king *&myKing, king *&oppKing){
-  for(int i = 0; i < 8; i++){
-    for(int j = 0; j < 8; j++){
+  for(int i = 0; i < BOARDSIZE; i++){
+    for(int j = 0; j < BOARDSIZE; j++){
       // Need to clean up piece on current spot
       delete board[i][j];
 
