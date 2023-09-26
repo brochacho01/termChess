@@ -41,6 +41,7 @@ void setup(char *connectType, char *color, bool *output, bool *preview, int *fd,
     if(*connectType == 'h'){
         createBoard(color, myKing, oppKing);
         piece *tmp = board[0][0];
+        // TODO what is this??
         tmp->printSelf();
         sendBoard(*fd);
     } else {

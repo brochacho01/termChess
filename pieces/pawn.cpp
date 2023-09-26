@@ -134,7 +134,9 @@ void pawn::placePiece(int xSource, int ySource, int xDest, int yDest, bool simul
         board[xDest + checkX][yDest]= nullptr;
     } else {
         // delete board[xDest][yDest];
-        delete destPiece;
+        if(!simulation){
+            delete destPiece;
+        }
     }
 
     board[xSource][ySource] = nullptr;
