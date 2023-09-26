@@ -20,6 +20,9 @@ void setup(char *connectType, char *color, bool *output, bool *preview, int *fd,
         *fd = createServerAndWait();
     } else {
         *fd = connectToServer();
+        if(*fd == -1){
+            exit(0);
+        }
     }
     cout << "Connection established!" << endl;
     
