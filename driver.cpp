@@ -12,8 +12,8 @@
 
 using namespace std;
 
-void gameLoop(int fd, char myColor, char connectType, bool output, bool preview, king *&myKing, king *&oppKing);
-void doTurn(int fd, char myColor, bool output, bool preview, king *&myKing, king *&oppKing, int (&passantCoords)[2]);
+void gameLoop(int fd, char myColor, char connectType, bool *output, bool *preview, king *&myKing, king *&oppKing);
+void doTurn(int fd, char myColor, bool output, bool *preview, king *&myKing, king *&oppKing, int (&passantCoords)[2]);
 void waitForTurn(int fd, char myColor, king *&myKing, king *&oppKing);
 void welcome(void);
 void sigHandler(int sigNum);
@@ -35,10 +35,10 @@ int main() {
     welcome();
     setup(&connectType, &myColor, &output, &preview, &fd, myKing, oppKing);
     printMyBoard(myColor, board);
-    gameLoop(fd, myColor, connectType, output, preview, myKing, oppKing);
+    gameLoop(fd, myColor, connectType, &output, &preview, myKing, oppKing);
 }
 
-void gameLoop(int fd, char myColor, char connectType, bool output, bool preview, king *&myKing, king *&oppKing){
+void gameLoop(int fd, char myColor, char connectType, bool *output, bool *preview, king *&myKing, king *&oppKing){
     // White goes first
     char curTurnColor = 'w';
     int passantCoords[2] = { -1, -1 };
@@ -58,7 +58,7 @@ void gameLoop(int fd, char myColor, char connectType, bool output, bool preview,
     }
 }
 
-void doTurn(int fd, char myColor, bool output, bool preview, king *&myKing, king *&oppKing, int (&passantCoords)[2]){
+void doTurn(int fd, char myColor, bool output, bool *preview, king *&myKing, king *&oppKing, int (&passantCoords)[2]){
     char userBuf[3];
     int xSource, xDest, ySource, yDest;
     bool validMove = false;
@@ -75,7 +75,7 @@ void doTurn(int fd, char myColor, bool output, bool preview, king *&myKing, king
 
     while(!validMove){
         // Get user coords and perform basic validation
-        getTurnCoords(fd, userBuf, myColor, &xSource, &ySource, &xDest, &yDest, &output, &preview);
+        getTurnCoords(fd, userBuf, myColor, &xSource, &ySource, &xDest, &yDest, &output, preview);
 
         // Get the specified piece and see if it puts own player in check
         piece *curPiece = board[xSource][ySource];
@@ -98,7 +98,7 @@ void doTurn(int fd, char myColor, bool output, bool preview, king *&myKing, king
         }
 
         // If user has requested to preview their moves
-        else if(preview){
+        else if(*preview){
             validMove = previewMove(myColor, xSource, ySource, xDest, yDest, output, myKing);
         }
 
