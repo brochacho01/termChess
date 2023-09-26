@@ -291,6 +291,7 @@ void draw(int fd, char myColor, bool offering){
         }
     }
     cout << "It is a draw, nobody wins!" << endl;
+    cleanBoard();
     exit(0);
 }
 
@@ -317,5 +318,6 @@ void concede(int fd, char myColor, bool offering){
             cout << "Red conceded, you win!" << endl;
         }
     }
+    cleanBoard();
     exit(0);
 }

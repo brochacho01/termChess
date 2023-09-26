@@ -149,3 +149,10 @@ void copyBoard(piece* (&boardCopy)[8][8]){
     }
 }
 
+void cleanBoard(void){
+    for(int i = 0; i < 8; i++){
+        for(int j = 0; j < 8; j++){
+            delete board[i][j];
+        }
+    }
+}

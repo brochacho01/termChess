@@ -7,6 +7,7 @@
 void printMyBoard(char myColor, piece*(&boardToPrint)[8][8]);
 void createBoard(char *myColor, king *&myKing, king *&oppKing);
 void copyBoard(piece* (&boardCopy)[8][8]);
+void cleanBoard(void);
 
 extern piece* board[8][8];
 #endif
