@@ -27,10 +27,10 @@ void printMyBoard(char myColor, piece* (&boardToPrint)[BOARDSIZE][BOARDSIZE]){
 }
 
 void printBoardForRed(piece* (&boardToPrint)[BOARDSIZE][BOARDSIZE]){
-    cout << "    8   7   6   5   4   3   2   1" << endl;
+    cout << "     8   7   6   5   4   3   2   1" << endl;
     for(int i = 0; i < BOARDSIZE; i++){
         printBound();
-        cout << i +1  << " ";
+        cout << " " << i +1  << " ";
         printRowBound();
         for(int j = 0; j < BOARDSIZE; j++){
             printCell(boardToPrint[i][j]);
@@ -38,14 +38,14 @@ void printBoardForRed(piece* (&boardToPrint)[BOARDSIZE][BOARDSIZE]){
         cout << " " << i+1 << endl;
     }
     printBound();
-    cout << "    8   7   6   5   4   3   2   1" << endl;
+    cout << "     8   7   6   5   4   3   2   1" << endl;
 }
 
 void printBoardForWhite(piece* (&boardToPrint)[BOARDSIZE][BOARDSIZE]){
-    cout << "    1   2   3   4   5   6   7   8 " << endl;
+    cout << "     1   2   3   4   5   6   7   8 " << endl;
     for(int i = 7; i > -1; i--){
         printBound();
-        cout << i + 1 << " ";
+        cout << " " << i + 1 << " ";
         printRowBound();
         for(int j = 7; j > -1; j--){
             printCell(boardToPrint[i][j]);
@@ -53,7 +53,7 @@ void printBoardForWhite(piece* (&boardToPrint)[BOARDSIZE][BOARDSIZE]){
         cout << " " << i+1 << endl;
     }
     printBound();
-    cout << "    1   2   3   4   5   6   7   8 " << endl;
+    cout << "     1   2   3   4   5   6   7   8 " << endl;
 }
 
 void printCell(piece* curPiece){
@@ -72,7 +72,7 @@ void printCell(piece* curPiece){
 }
 
 void printBound(void){
-    cout << "  |---|---|---|---|---|---|---|---|" << endl;
+    cout << "   |---|---|---|---|---|---|---|---|" << endl;
 }
 
 void printRowBound(void){
