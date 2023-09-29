@@ -102,7 +102,7 @@ bool queen::validateStraight(int xSource, int ySource, int xDest, int yDest, boo
 }
 
 bool queen::validateDiagonal(int xSource, int ySource, int xDest, int yDest, int xChange, int yChange, bool output, piece* (&board)[BOARDSIZE][BOARDSIZE]){
-    int slope = yChange / xChange;
+    float slope = (float)xChange / (float)yChange;
 
     if(slope != 1){
         if(output){

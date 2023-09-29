@@ -6,13 +6,10 @@ using namespace std;
 
 
 bool king::move(int xSource, int ySource, int xDest, int yDest, bool output, bool simulation, piece* (&board)[BOARDSIZE][BOARDSIZE]){
-    cout << "Called king move!" << endl;
-
     if(!this->validateMove(xSource, ySource, xDest, yDest, output, board)){
         cout << "Invalid Move!" << endl;
         return false;
     }
-
     this->placePiece(xSource, ySource, xDest, yDest, simulation, board);
     return true;
 }
@@ -97,9 +94,9 @@ bool king::validateCastle(int xSource, int ySource, int xDest, int yDest, bool o
     // Must also validate we're not castling through check
     int trueYDest;
     if(yIncrementMask > 0){
-        trueYDest = 6;
+        trueYDest = LONGCASTLEDEST;
     } else {
-        trueYDest = 2;
+        trueYDest = SHORTCASTLEDEST;
     }
     // Want to validate we're not in check from our starting position to our destination position
     for(int i = ySource; i != trueYDest + yIncrementMask; i += yIncrementMask){
@@ -108,11 +105,12 @@ bool king::validateCastle(int xSource, int ySource, int xDest, int yDest, bool o
             return false;
         }
     }
-
+    // TODO DUMMY
     cout << "Valid castle!" << endl;
     return true;
 }
 
+// Need to update kingCoords on move
 void king::placePiece(int xSource, int ySource, int xDest, int yDest, bool simulation, piece* (&board)[BOARDSIZE][BOARDSIZE]){
     board[xSource][ySource] = nullptr;
 
@@ -121,11 +119,13 @@ void king::placePiece(int xSource, int ySource, int xDest, int yDest, bool simul
         rook *myRook = (rook*)board[xDest][yDest];
         board[xDest][yDest] = nullptr;
         if(yDest - ySource > 0){
-            board[xDest][6] = this;
-            board[xDest][5] = myRook;
+            board[xDest][LONGCASTLEDEST] = this;
+            board[xDest][4] = myRook;
+            this->position[1] = LONGCASTLEDEST;
         } else {
-            board[xDest][2] = this;
-            board[xDest][3] = myRook;
+            board[xDest][SHORTCASTLEDEST] = this;
+            board[xDest][2] = myRook;
+            this->position[1] = SHORTCASTLEDEST;
         }
         
         // If we are merely simulating a move we don't want to update these statuses
@@ -139,7 +139,10 @@ void king::placePiece(int xSource, int ySource, int xDest, int yDest, bool simul
         }
         delete board[xDest][yDest];
         board[xDest][yDest] = this;
+        this->position[0] = xDest;
+        this->position[1] = yDest;
     }
+    cout << "0: " << this->position[0] << " 1: " << this->position[1] << endl;
 }
 
 void king::printMySelf(void){

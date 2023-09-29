@@ -64,6 +64,7 @@ void doTurn(int fd, char myColor, bool output, bool *preview, king *&myKing, kin
     bool validMove = false;
     bool inCheck = false;
     bool isMoveIntoCheck = false;
+    bool isCastle = false;
 
     // At the beginning of a turn see if our passant coords exist, if they do update the piece and unset the coords
     if((passantCoords[0]) != -1 && (board[passantCoords[0]][passantCoords[1]] != nullptr)){
@@ -82,12 +83,17 @@ void doTurn(int fd, char myColor, bool output, bool *preview, king *&myKing, kin
 
         // Need to do some fiddly business for castling because the destination the user puts in to let us know they want to castle is not the actual destination of the king
         if((curPiece->myType == KING) && (board[xDest][yDest] != nullptr) && (board[xDest][yDest]->myType == ROOK) && (curPiece->myColor == board[xDest][yDest]->myColor)){
-            int trueYDest;
             if(yDest - ySource > 0) {
-                isMoveIntoCheck = isChecking(xSource, ySource, xDest, 6, (king*)curPiece);
+                isMoveIntoCheck = isChecking(xSource, ySource, xDest, LONGCASTLEDEST, (king*)curPiece);
             } else {
-                isMoveIntoCheck = isChecking(xSource, ySource, xDest, 2, (king*)curPiece);
+                isMoveIntoCheck = isChecking(xSource, ySource, xDest, SHORTCASTLEDEST, (king*)curPiece);
             }
+
+            // Need to know if we're castling
+            if(!isMoveIntoCheck){
+                isCastle = true;
+            }
+
         } else {
             isMoveIntoCheck = isChecking(xSource, ySource, xDest, yDest, myKing);
         }
@@ -109,7 +115,14 @@ void doTurn(int fd, char myColor, bool output, bool *preview, king *&myKing, kin
 
         // Check to see if we're putting the opposing king in check
         // This ends up being used in castling logic
-        inCheck = isChecking(xSource, ySource, xDest, yDest, oppKing);
+        if(validMove){
+            if(isCastle){
+                inCheck = isChecking(myKing->position[0], myKing->position[1], myKing->position[0], myKing->position[1], oppKing);            
+            } else {
+                inCheck = isChecking(xDest, yDest, xDest, yDest, oppKing);
+            }
+        }
+
         if(validMove && inCheck){
             oppKing->isCheck = true;
         } else if(validMove && !inCheck){
@@ -123,6 +136,7 @@ void doTurn(int fd, char myColor, bool output, bool *preview, king *&myKing, kin
         }
         
         printMyBoard(myColor, board);
+        isCastle = false;
     }
 
     char move = 'm';

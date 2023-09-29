@@ -191,7 +191,6 @@ void copyBoard(piece* (&boardCopy)[BOARDSIZE][BOARDSIZE]){
                             break;
                         }
                 }
-        //    boardCopy[i][j] = board[i][j]; 
             } else {
                 boardCopy[i][j] = nullptr;
             }
