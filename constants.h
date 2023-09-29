@@ -14,12 +14,12 @@ constexpr char CONNCT_IP_ADDRESS[10] = "127.0.0.1";
 constexpr int SERVER_PORT = 1234;
 
 // Piece constants
-constexpr char PAWN = 'p';
-constexpr char ROOK = 'r';
-constexpr char KNIGHT = 'n';
-constexpr char BISHOP = 'b';
-constexpr char QUEEN = 'q';
-constexpr char KING = 'k';
+constexpr char PAWN = 'P';
+constexpr char ROOK = 'R';
+constexpr char KNIGHT = 'N';
+constexpr char BISHOP = 'B';
+constexpr char QUEEN = 'Q';
+constexpr char KING = 'K';
 constexpr char EMPTY = '0';
 
 // Board constants
