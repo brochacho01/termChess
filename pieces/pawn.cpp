@@ -109,7 +109,6 @@ bool pawn::validateMove(int xSource, int ySource, int xDest, int yDest, bool out
     return true;
 }
 
-// TODO refactor to use this instead of curPiece
 void pawn::placePiece(int xSource, int ySource, int xDest, int yDest, bool simulation, piece* (&board)[BOARDSIZE][BOARDSIZE]){
     if(!simulation){
         this->hasMoved = true;

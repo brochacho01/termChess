@@ -35,6 +35,7 @@ void setup(char *connectType, char *color, bool *output, bool *preview, int *fd,
         if(*color == 'r'){
             sendColor(*fd, 'w');
         } else {
+            *color = 'w';
             sendColor(*fd, 'r');
         }
         cout << "Sent color!" << endl;

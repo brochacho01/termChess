@@ -197,13 +197,17 @@ class king : public piece {
         bool isCheckmate;
 
         king(char color) : piece(color, KING){
-            position[1] = 4;
+            // This should be 3
+            position[1] = 3;
             
             if(myColor == 'r'){
                 position[0] = 7;
             } else {
                 position[0] = 0;
             }
+
+            this->isCheck = false;
+            this->isCheckmate = false;
         }
 
         bool move(int xSource,

@@ -5,7 +5,7 @@
 
 using namespace std;
 
-// Make a deep copy* of the array (not copying the pieces themselves)
+// Make a deep copy of the array
 // Simulate the move the player is trying to make
 // Then go over the entire board and see if a piece can take the king
 
@@ -20,15 +20,16 @@ bool isChecking(int xSource, int ySource, int xDest, int yDest, king* theKing){
     copyBoard(boardCopy);
 
     piece *movePiece = boardCopy[xSource][ySource];
-    if(movePiece == theKing){
+
+    if((movePiece->myType == 'k') && (movePiece->myColor == theKing->myColor)){
         oldKingX = theKing->position[0];
         oldKingY = theKing->position[1];
         theKing->position[0] = xDest;
         theKing->position[1] = yDest;
     }
 
+    // Move the piece
     boardCopy[xSource][ySource] = nullptr;
-    boardCopy[xDest][yDest] = nullptr;
     boardCopy[xDest][yDest] = movePiece;
 
     // Now we check to see if any piece can put the king in check
@@ -93,7 +94,7 @@ bool isChecking(int xSource, int ySource, int xDest, int yDest, king* theKing){
 
             if(isCheck){
                 // If we changed king coords we need to reset them
-                if(movePiece == theKing){
+                if((movePiece->myType == 'k') && (movePiece->myColor == theKing->myColor)){
                     theKing->position[0] = oldKingX;
                     theKing->position[1] = oldKingY;
                 }
@@ -103,7 +104,7 @@ bool isChecking(int xSource, int ySource, int xDest, int yDest, king* theKing){
     }
 
     // IF we changed king coords we need to reset them
-    if(movePiece == theKing){
+    if((movePiece->myType == 'k') && (movePiece->myColor == theKing->myColor)){
                     theKing->position[0] = oldKingX;
                     theKing->position[1] = oldKingY;
     }

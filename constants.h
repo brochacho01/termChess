@@ -25,4 +25,8 @@ constexpr char EMPTY = '0';
 // Board constants
 constexpr int BOARDSIZE = 8;
 
+// Constatns for kings
+constexpr int LONGCASTLEDEST = 5;
+constexpr int SHORTCASTLEDEST = 1;
+
 #endif
