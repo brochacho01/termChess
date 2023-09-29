@@ -105,8 +105,10 @@ bool king::validateCastle(int xSource, int ySource, int xDest, int yDest, bool o
             return false;
         }
     }
-    // TODO DUMMY
-    cout << "Valid castle!" << endl;
+    if(output){
+        cout << "Valid castle!" << endl;
+    }
+
     return true;
 }
 
@@ -142,7 +144,6 @@ void king::placePiece(int xSource, int ySource, int xDest, int yDest, bool simul
         this->position[0] = xDest;
         this->position[1] = yDest;
     }
-    cout << "0: " << this->position[0] << " 1: " << this->position[1] << endl;
 }
 
 void king::printMySelf(void){
