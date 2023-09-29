@@ -6,6 +6,8 @@ using namespace std;
 
 
 bool king::move(int xSource, int ySource, int xDest, int yDest, bool output, bool simulation, piece* (&board)[BOARDSIZE][BOARDSIZE]){
+    cout << "Called king move!" << endl;
+    
     if(!this->validateMove(xSource, ySource, xDest, yDest, output, board)){
         cout << "Invalid Move!" << endl;
         return false;
