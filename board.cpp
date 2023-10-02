@@ -153,12 +153,15 @@ void copyBoard(piece* (&boardCopy)[BOARDSIZE][BOARDSIZE]){
                     case PAWN:
                         {
                             pawn *newPawn = new pawn(board[i][j]->myColor);
+                            newPawn->hasMoved = ((pawn*)board[i][j])->hasMoved;
+                            newPawn->lastMoveTwo = ((pawn*)board[i][j])->lastMoveTwo;
                             boardCopy[i][j] = newPawn;
                             break;
                         }
                     case ROOK:
                         {
                             rook *newRook = new rook(board[i][j]->myColor);
+                            newRook->hasMoved = ((rook*)board[i][j])->hasMoved;
                             boardCopy[i][j] = newRook;
                             break;
                         }
@@ -183,6 +186,12 @@ void copyBoard(piece* (&boardCopy)[BOARDSIZE][BOARDSIZE]){
                     case KING:
                         {
                             king *newKing = new king(board[i][j]->myColor);
+                            newKing->position[0] = ((king*)board[i][j])->position[0];
+                            newKing->position[1] = ((king*)board[i][j])->position[1];
+                            newKing->hasMoved = ((king*)board[i][j])->hasMoved;
+                            newKing->isCheck = ((king*)board[i][j])->isCheck;
+                            newKing->isCheckmate = ((king*)board[i][j])->isCheckmate;
+
                             boardCopy[i][j] = newKing;
                             break;
                         }
