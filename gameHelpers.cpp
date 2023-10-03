@@ -12,6 +12,9 @@ using namespace std;
 // -1 because we're showing users a 1-indexed board
 inline int ctoi(char c) { return c - '0' - 1; }
 
+// Convert letters to coordinate
+inline int ltoi(char c) { return c - 'a'; }
+
 
 void setup(char *connectType, char *color, bool *output, bool *preview, int *fd, king *&myKing, king *&oppKing){
     cout << "Would you like to host or connect? (h/c) ";
@@ -100,20 +103,21 @@ bool previewMove(char myColor, int xSource, int ySource, int xDest, int yDest, b
 
 }
 
+
 void getTurnCoords(int fd, char *userBuf, char color, int *xSource, int *ySource, int *xDest, int *yDest, bool *output, bool *preview){
     bool validCoords = false;
     while(!validCoords){
-        userBuf[0] = 'h';
+        userBuf[0] = '-';
         getCoordInput(fd, userBuf, 1, color, output, preview);
         // In chess, bottom left is expected to be 0,0
         // However, this is reversed along our columns for how the board is laid out in memory
         // So we do the 7 - to account for this 
         *xSource = ctoi(userBuf[1]);
-        *ySource = 7 - ctoi(userBuf[0]);
-        userBuf[0] = 'h';
+        *ySource = 7 - ltoi(tolower(userBuf[0]));
+        userBuf[0] = '-';
         getCoordInput(fd, userBuf, 2, color, output, preview);
         *xDest = ctoi(userBuf[1]);
-        *yDest = 7 - ctoi(userBuf[0]);
+        *yDest = 7 - ltoi(tolower(userBuf[0]));
         validCoords = validateCoords(*xSource, *ySource, *xDest, *yDest, *output);
     }
 }
@@ -121,21 +125,17 @@ void getTurnCoords(int fd, char *userBuf, char color, int *xSource, int *ySource
 
 // Type will either be 1 or 2, 1 represents entering source coord, 2 represents dest
 int getCoordInput(int fd, char *userBuf, int type, char color, bool *output, bool *preview){
-	while((userBuf[0] == 'h') || (userBuf[0] == 'p')|| (userBuf[0] == 'c') || (userBuf[0] == 's' || (userBuf[0] == 'd'))){
+	while(userBuf[0] == '-'){
 		int inFD = fileno(stdin);
 		tcflush(inFD, TCIFLUSH);
 		if(type == 1){
-			cout << "Enter coordinate of piece to move, type h for help, type p to print the board: ";
+			cout << "Enter coordinate of piece to move, type -h for help, type -p to print the board: ";
 		} else {
-			cout << "Enter the destination coordinate of piece to move, type h for help, type p to print the board: ";
+			cout << "Enter the destination coordinate of piece to move, type -h for help, type -p to print the board: ";
 		}
 
 		cin >> userBuf[0];
-
-        // If user input command need to check to skip this
-        if(((ctoi(tolower(userBuf[0]))) < 10) && (ctoi(tolower(userBuf[0])) > -1)){
-            cin >> userBuf[1];
-        }
+        cin >> userBuf[1];
 
         // Check to see if a user tries to enter a Ctrl + D and recover properly
         if(cin.eof()){
@@ -144,24 +144,26 @@ int getCoordInput(int fd, char *userBuf, int type, char color, bool *output, boo
             cout << endl <<  "Press ENTER to continue" << endl;
         }
 
-        switch(tolower(userBuf[0])){
-            case 'h':
-                help(color);
-                break;
-            case 'p':
-                printMyBoard(color, board);
-                break;
-            case 'c':
-                concede(fd, color, true);
-                break;
-            case 's':
-                settings(output, preview);
-                break;
-            case 'd':
-                draw(fd, color, true);
-                break;
-            default:
-                break;
+        if(tolower(userBuf[0]) == '-'){
+            switch(tolower(userBuf[1])){
+                case 'h':
+                    help(color);
+                    break;
+                case 'p':
+                    printMyBoard(color, board);
+                    break;
+                case 'c':
+                    concede(fd, color, true);
+                    break;
+                case 's':
+                    settings(output, preview);
+                    break;
+                case 'd':
+                    draw(fd, color, true);
+                    break;
+                default:
+                    break;
+            }
         }
 		while(getchar() != '\n');
 	}
@@ -246,20 +248,21 @@ void help(char color){
     cout << endl << "When you are asked to enter a coordinate, enter as column-row pairs without spaces like to real chess" << endl;
     cout << "For example, to move my king from its starting location forward one " << endl;
     if(color == 'w'){
-        cout << "I would enter 51 as the source coordinates, and 52 as the destination coordinates" << endl << endl;
+        cout << "I would enter E1 as the source coordinate, and E2 as the destination coordinate" << endl;
     } else {
-        cout << "I would enter 58 as the source coordinates, and 57 as the destination coordinates" << endl << endl;
+        cout << "I would enter E8 as the source coordinate, and E7 as the destination coordinate" << endl;
     }
+    cout << "Note that it is not required to enter the letter as uppercase" << endl << endl;
     cout << "If you would like to change your output or preview settings:" << endl;
-    cout << "Enter s when prompted for coordinates" << endl << endl;
+    cout << "Enter -s when prompted for coordinates" << endl << endl;
     cout << "If you would like to propose a draw to your opponent:" << endl;
-    cout << "Enter d when prompted for coordiates" << endl << endl;
+    cout << "Enter -d when prompted for coordinates" << endl << endl;
     cout << "If you would like to concede:" << endl; 
-    cout << "Enter c when prompted for coordinates" << endl << endl;
+    cout << "Enter -c when prompted for coordinates" << endl << endl;
     cout << "If you would like to castle, enter the coordinates of your king as the source " << endl;
     cout << "coordinates and the coordinates of your rook as the destination coordinates" << endl << endl;
     cout << "If you are in checkmate you must concede and if you are in a stalemate you must draw" << endl << endl;
-    cout << "Note that Ctrl + C is disbled. If you mis-input, just enter invalid second input to nullify move" << endl;
+    cout << "Note that Ctrl + C is disbled. If you mis-input, just enter an invalid second input to nullify move" << endl;
     cout << "If you truly desire to close the program, either concede or enter Ctrl + \\" << endl << endl;
 }
 
