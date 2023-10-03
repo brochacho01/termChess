@@ -248,7 +248,7 @@ void help(char color){
     if(color == 'w'){
         cout << "I would enter 51 as the source coordinates, and 52 as the destination coordinates" << endl << endl;
     } else {
-        cout << "I would enter 58 as the source coordinates, and 48 as the destination coordinates" << endl << endl;
+        cout << "I would enter 58 as the source coordinates, and 57 as the destination coordinates" << endl << endl;
     }
     cout << "If you would like to change your output or preview settings:" << endl;
     cout << "Enter s when prompted for coordinates" << endl << endl;

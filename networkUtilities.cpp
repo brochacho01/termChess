@@ -133,22 +133,22 @@ int sendBoard(int fd){
       receiveAck(fd);
       switch(pieceType) {
         case PAWN:
-          sendPawn(fd, curPiece);
+          sendPawn(fd, (pawn*)curPiece);
           break;
         case ROOK:
-          sendRook(fd, curPiece);
+          sendRook(fd, (rook*)curPiece);
           break;
         case KNIGHT:
-          sendKnight(fd, curPiece);
+          sendKnight(fd, (knight*)curPiece);
           break;
         case BISHOP:
-          sendBishop(fd, curPiece);
+          sendBishop(fd, (bishop*)curPiece);
           break;
         case QUEEN:
-          sendQueen(fd, curPiece);
+          sendQueen(fd, (queen*)curPiece);
           break;
         case KING:
-          sendKing(fd, curPiece);
+          sendKing(fd, (king*)curPiece);
           break;
         case EMPTY:
           break;
