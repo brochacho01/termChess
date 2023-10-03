@@ -102,7 +102,7 @@ bool king::validateCastle(int xSource, int ySource, int xDest, int yDest, bool o
     }
     // Want to validate we're not in check from our starting position to our destination position
     for(int i = ySource; i != trueYDest + yIncrementMask; i += yIncrementMask){
-        if(isChecking(xSource, ySource, xSource, i, this)){
+        if(isMoveChecking(xSource, ySource, xSource, i, this)){
             cout << "Cannot castle through check!" << endl;
             return false;
         }

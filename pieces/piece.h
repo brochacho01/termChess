@@ -197,7 +197,6 @@ class king : public piece {
         bool isCheckmate;
 
         king(char color) : piece(color, KING){
-            // This should be 3
             position[1] = 3;
             
             if(myColor == 'r'){
@@ -250,6 +249,7 @@ constexpr int BISHOPSIZE = sizeof(bishop);
 constexpr int QUEENSIZE = sizeof(queen);
 constexpr int KINGSIZE = sizeof(king);
 
-bool isChecking(int xSource, int ySource, int xDest, int yDest, king* theKing);
+bool isMoveChecking(int xSource, int ySource, int xDest, int yDest, king* theKing);
+bool isCheck(king* theKing, piece* (&board)[BOARDSIZE][BOARDSIZE]);
 
 #endif

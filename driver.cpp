@@ -74,6 +74,12 @@ void doTurn(int fd, char myColor, bool output, bool *preview, king *&myKing, kin
         passantCoords[1] = -1;
     }
 
+    // Check to see if we're in check
+    bool prevTurnCheck = isCheck(myKing, board);
+    if(prevTurnCheck){
+        cout << endl;
+    }
+
     while(!validMove){
         // Get user coords and perform basic validation
         getTurnCoords(fd, userBuf, myColor, &xSource, &ySource, &xDest, &yDest, &output, preview);
@@ -84,9 +90,9 @@ void doTurn(int fd, char myColor, bool output, bool *preview, king *&myKing, kin
         // Need to do some fiddly business for castling because the destination the user puts in to let us know they want to castle is not the actual destination of the king
         if((curPiece->myType == KING) && (board[xDest][yDest] != nullptr) && (board[xDest][yDest]->myType == ROOK) && (curPiece->myColor == board[xDest][yDest]->myColor)){
             if(yDest - ySource > 0) {
-                isMoveIntoCheck = isChecking(xSource, ySource, xDest, LONGCASTLEDEST, (king*)curPiece);
+                isMoveIntoCheck = isMoveChecking(xSource, ySource, xDest, LONGCASTLEDEST, (king*)curPiece);
             } else {
-                isMoveIntoCheck = isChecking(xSource, ySource, xDest, SHORTCASTLEDEST, (king*)curPiece);
+                isMoveIntoCheck = isMoveChecking(xSource, ySource, xDest, SHORTCASTLEDEST, (king*)curPiece);
             }
 
             // Need to know if we're castling
@@ -95,7 +101,7 @@ void doTurn(int fd, char myColor, bool output, bool *preview, king *&myKing, kin
             }
 
         } else {
-            isMoveIntoCheck = isChecking(xSource, ySource, xDest, yDest, myKing);
+            isMoveIntoCheck = isMoveChecking(xSource, ySource, xDest, yDest, myKing);
         }
 
         if(isMoveIntoCheck && (curPiece->myColor == myColor)){
@@ -117,9 +123,9 @@ void doTurn(int fd, char myColor, bool output, bool *preview, king *&myKing, kin
         // This ends up being used in castling logic
         if(validMove){
             if(isCastle){
-                inCheck = isChecking(myKing->position[0], myKing->position[1], myKing->position[0], myKing->position[1], oppKing);            
+                inCheck = isMoveChecking(myKing->position[0], myKing->position[1], myKing->position[0], myKing->position[1], oppKing);            
             } else {
-                inCheck = isChecking(xDest, yDest, xDest, yDest, oppKing);
+                inCheck = isMoveChecking(xDest, yDest, xDest, yDest, oppKing);
             }
         }
 
