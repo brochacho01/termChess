@@ -7,18 +7,18 @@
 #include "pieces/piece.h"
 #include "board.h"
 
-int sendPawn(int fd, piece* curPiece);
-int sendRook(int fd, piece* curPiece);
-int sendKnight(int fd, piece* curPiece);
-int sendBishop(int fd, piece* curPiece);
-int sendQueen(int fd, piece* curPiece);
-int sendKing(int fd, piece* curPiece);
-int receivePawn(int fd, piece *newPawn);
-int receiveRook(int fd, piece *newRook);
-int receiveKnight(int fd, piece *newKnight);
-int receiveBishop(int fd, piece *newBishop);
-int receiveQueen(int fd, piece *newQueen);
-int receiveKing(int fd, piece *newKing);
+int sendPawn(int fd, pawn* curPiece);
+int sendRook(int fd, rook* curPiece);
+int sendKnight(int fd, knight* curPiece);
+int sendBishop(int fd, bishop* curPiece);
+int sendQueen(int fd, queen* curPiece);
+int sendKing(int fd, king* curPiece);
+int receivePawn(int fd, pawn *newPawn);
+int receiveRook(int fd, rook *newRook);
+int receiveKnight(int fd, knight *newKnight);
+int receiveBishop(int fd, bishop *newBishop);
+int receiveQueen(int fd, queen *newQueen);
+int receiveKing(int fd, king *newKing);
 
 int create_server_socket(struct sockaddr_in* sock_addr, sa_family_t sa_family, const char * ip_addr, in_port_t port, int type);
 int connect_server(struct sockaddr_in* sock_addr, sa_family_t sa_family, const char * ip_addr, in_port_t port, int type);
@@ -233,73 +233,73 @@ int receiveBoard(int fd, char myColor, king *&myKing, king *&oppKing){
 }
 
 /* Heplers for sending and receiving individual pieces */
-int sendPawn(int fd, piece *myPawn){
+int sendPawn(int fd, pawn *myPawn){
   int written = write(fd, myPawn, PAWNSIZE);
   receiveAck(fd);
   return 0;
 }
 
-int sendRook(int fd, piece *myRook){
+int sendRook(int fd, rook *myRook){
   write(fd, (myRook), ROOKSIZE);
   receiveAck(fd);
   return 0;
 }
 
-int sendKnight(int fd, piece *myKnight){
+int sendKnight(int fd, knight *myKnight){
   write(fd, (myKnight), KNIGHTSIZE);
   receiveAck(fd);
   return 0;
 }
 
-int sendBishop(int fd, piece *myBishop){
+int sendBishop(int fd, bishop *myBishop){
   write(fd, (myBishop), BISHOPSIZE);
   receiveAck(fd);
   return 0;
 }
 
-int sendQueen(int fd, piece *myQueen){
+int sendQueen(int fd, queen *myQueen){
   write(fd, (myQueen), QUEENSIZE);
   receiveAck(fd);
   return 0;
 }
 
-int sendKing(int fd, piece *myKing){
+int sendKing(int fd, king *myKing){
   int written = write(fd, (myKing), KINGSIZE);
   receiveAck(fd);
   return 0;
 }
 
-int receivePawn(int fd, piece *newPawn){
+int receivePawn(int fd, pawn *newPawn){
   read(fd, (newPawn), sizeof(PAWNSIZE));
   sendAck(fd);
   return 0;
 }
 
-int receiveRook(int fd, piece *newRook){
+int receiveRook(int fd, rook *newRook){
   read(fd, (newRook), sizeof(ROOKSIZE));
   sendAck(fd);
   return 0;
 }
 
-int receiveKnight(int fd, piece *newKnight){
+int receiveKnight(int fd, knight *newKnight){
   read(fd, (newKnight), KNIGHTSIZE);
   sendAck(fd);
   return 0;
 }
 
-int receiveBishop(int fd, piece *newBishop){
+int receiveBishop(int fd, bishop *newBishop){
   read(fd, (newBishop), BISHOPSIZE);
   sendAck(fd);
   return 0;
 }
 
-int receiveQueen(int fd, piece *newQueen){
+int receiveQueen(int fd, queen *newQueen){
   read(fd, (newQueen), QUEENSIZE);
   sendAck(fd);
   return 0;
 }
 
-int receiveKing(int fd, piece *newKing){
+int receiveKing(int fd, king *newKing){
   read(fd, (newKing), KINGSIZE);
   sendAck(fd);
   return 0;
