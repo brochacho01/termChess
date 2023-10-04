@@ -18,7 +18,7 @@ piece* board[BOARDSIZE][BOARDSIZE];
 
 void printMyBoard(char myColor, piece* (&boardToPrint)[BOARDSIZE][BOARDSIZE]){
     cout << endl;
-    if(myColor == 'r'){
+    if(myColor == RED){
         printBoardForRed(boardToPrint);
     } else {
         printBoardForWhite(boardToPrint);
@@ -27,7 +27,7 @@ void printMyBoard(char myColor, piece* (&boardToPrint)[BOARDSIZE][BOARDSIZE]){
 }
 
 void printBoardForRed(piece* (&boardToPrint)[BOARDSIZE][BOARDSIZE]){
-    cout << "     8   7   6   5   4   3   2   1" << endl;
+    cout << "     H   G   F   E   D   C   B   A" << endl;
     for(int i = 0; i < BOARDSIZE; i++){
         printBound();
         cout << " " << i +1  << " ";
@@ -38,11 +38,11 @@ void printBoardForRed(piece* (&boardToPrint)[BOARDSIZE][BOARDSIZE]){
         cout << " " << i+1 << endl;
     }
     printBound();
-    cout << "     8   7   6   5   4   3   2   1" << endl;
+    cout << "     H   G   F   E   D   C   B   A" << endl;
 }
 
 void printBoardForWhite(piece* (&boardToPrint)[BOARDSIZE][BOARDSIZE]){
-    cout << "     1   2   3   4   5   6   7   8 " << endl;
+    cout << "     A   B   C   D   E   F   G   H " << endl;
     for(int i = 7; i > -1; i--){
         printBound();
         cout << " " << i + 1 << " ";
@@ -53,7 +53,7 @@ void printBoardForWhite(piece* (&boardToPrint)[BOARDSIZE][BOARDSIZE]){
         cout << " " << i+1 << endl;
     }
     printBound();
-    cout << "     1   2   3   4   5   6   7   8 " << endl;
+    cout << "     A   B   C   D   E   F   G   H " << endl;
 }
 
 void printCell(piece* curPiece){
@@ -61,7 +61,7 @@ void printCell(piece* curPiece){
     if(curPiece == nullptr){
         cout << " ";
     }
-    else if(curPiece->myColor == 'r') {
+    else if(curPiece->myColor == RED) {
         colorRed();
         cout << curPiece->myType;
         colorWhite();
@@ -90,7 +90,7 @@ void colorWhite(void){
 void createPieces(king *&playerKing, char color){
     int pawnRow = 1;
     int otherRow = 0;
-    if(color == 'r'){
+    if(color == RED){
         pawnRow = 6;
         otherRow = 7;
     }
@@ -135,12 +135,12 @@ void createSpaces(void){
 
 void createBoard(char *myColor, king *&myKing, king *&oppKing){
     // Initialize our board
-    if(*myColor == 'r'){
-        createPieces(myKing, 'r');
-        createPieces(oppKing, 'w');
+    if(*myColor == RED){
+        createPieces(myKing, RED);
+        createPieces(oppKing, WHITE);
     } else {
-        createPieces(myKing, 'w');
-        createPieces(oppKing, 'r');
+        createPieces(myKing, WHITE);
+        createPieces(oppKing, RED);
     }
     createSpaces();
 }
