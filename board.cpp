@@ -18,7 +18,7 @@ piece* board[BOARDSIZE][BOARDSIZE];
 
 void printMyBoard(char myColor, piece* (&boardToPrint)[BOARDSIZE][BOARDSIZE]){
     cout << endl;
-    if(myColor == 'r'){
+    if(myColor == RED){
         printBoardForRed(boardToPrint);
     } else {
         printBoardForWhite(boardToPrint);
@@ -61,7 +61,7 @@ void printCell(piece* curPiece){
     if(curPiece == nullptr){
         cout << " ";
     }
-    else if(curPiece->myColor == 'r') {
+    else if(curPiece->myColor == RED) {
         colorRed();
         cout << curPiece->myType;
         colorWhite();
@@ -90,7 +90,7 @@ void colorWhite(void){
 void createPieces(king *&playerKing, char color){
     int pawnRow = 1;
     int otherRow = 0;
-    if(color == 'r'){
+    if(color == RED){
         pawnRow = 6;
         otherRow = 7;
     }
@@ -135,12 +135,12 @@ void createSpaces(void){
 
 void createBoard(char *myColor, king *&myKing, king *&oppKing){
     // Initialize our board
-    if(*myColor == 'r'){
-        createPieces(myKing, 'r');
-        createPieces(oppKing, 'w');
+    if(*myColor == RED){
+        createPieces(myKing, RED);
+        createPieces(oppKing, WHITE);
     } else {
-        createPieces(myKing, 'w');
-        createPieces(oppKing, 'r');
+        createPieces(myKing, WHITE);
+        createPieces(oppKing, RED);
     }
     createSpaces();
 }

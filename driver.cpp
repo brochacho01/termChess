@@ -40,7 +40,7 @@ int main() {
 
 void gameLoop(int fd, char myColor, char connectType, bool *output, bool *preview, king *&myKing, king *&oppKing){
     // White goes first
-    char curTurnColor = 'w';
+    char curTurnColor = WHITE;
     int passantCoords[2] = { -1, -1 };
     while(true){
         if(myColor == curTurnColor){
@@ -50,10 +50,10 @@ void gameLoop(int fd, char myColor, char connectType, bool *output, bool *previe
             waitForTurn(fd, myColor, myKing, oppKing);
             printMyBoard(myColor, board);
         }
-        if(curTurnColor == 'w'){
-            curTurnColor = 'r';
+        if(curTurnColor == WHITE){
+            curTurnColor = RED;
         } else {
-            curTurnColor = 'w';
+            curTurnColor = WHITE;
         }
     }
 }

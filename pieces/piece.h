@@ -199,7 +199,7 @@ class king : public piece {
         king(char color) : piece(color, KING){
             position[1] = 3;
             
-            if(myColor == 'r'){
+            if(myColor == RED){
                 position[0] = 7;
             } else {
                 position[0] = 0;

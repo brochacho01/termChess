@@ -40,12 +40,12 @@ bool pawn::validateMove(int xSource, int ySource, int xDest, int yDest, bool out
     }
 
     // Make sure we're not moving backwards
-    if((this->myColor == 'r') && (xDest > xSource)){
+    if((this->myColor == RED) && (xDest > xSource)){
         if(output){
             cout << "Trying to move pawn backwards!" << endl;
         }
         return false;
-    } else if((this->myColor == 'w') && (xSource > xDest)){
+    } else if((this->myColor == WHITE) && (xSource > xDest)){
         if(output){
             cout << "Trying to move pawn backwards!" << endl;
         }
@@ -123,7 +123,7 @@ void pawn::placePiece(int xSource, int ySource, int xDest, int yDest, bool simul
     bool isPassant = checkPassant(xSource, ySource, xDest, yDest, false, board);
     if(isPassant){
         int checkX;
-        if(this->myColor == 'r'){
+        if(this->myColor == RED){
             checkX = 1;
         } else {
             checkX = -1;
@@ -138,7 +138,7 @@ void pawn::placePiece(int xSource, int ySource, int xDest, int yDest, bool simul
     board[xDest][yDest] = this;
     
     // Check to see if the pawn has made it to the far side of the board
-    if(((this->myColor == 'r') && (xDest == 0)) || ((this->myColor == 'w') && (xDest == 7))){
+    if(((this->myColor == RED) && (xDest == 0)) || ((this->myColor == WHITE) && (xDest == 7))){
         char upgradePiece;
         char curColor = this->myColor;
         bool validChoice = false;
@@ -191,7 +191,7 @@ void pawn::placePiece(int xSource, int ySource, int xDest, int yDest, bool simul
 bool pawn::checkPassant(int xSource, int ySource, int xDest, int yDest, bool output, piece* (&board)[BOARDSIZE][BOARDSIZE]){
     // Check which direction we are going
     int checkX;
-    if(this->myColor == 'r'){
+    if(this->myColor == RED){
         checkX = 1;
     } else {
         checkX = -1;

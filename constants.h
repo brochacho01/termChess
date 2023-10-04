@@ -22,6 +22,9 @@ constexpr char QUEEN = 'Q';
 constexpr char KING = 'K';
 constexpr char EMPTY = '0';
 
+constexpr char RED = 'r';
+constexpr char WHITE = 'w';
+
 // Board constants
 constexpr int BOARDSIZE = 8;
 

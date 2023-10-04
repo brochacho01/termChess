@@ -35,11 +35,11 @@ void setup(char *connectType, char *color, bool *output, bool *preview, int *fd,
         cout << "Woud you like to be red or white? (r/w) ";
         cin >> *color;
         tolower(*color);
-        if(*color == 'r'){
-            sendColor(*fd, 'w');
+        if(*color == RED){
+            sendColor(*fd, WHITE);
         } else {
-            *color = 'w';
-            sendColor(*fd, 'r');
+            *color = WHITE;
+            sendColor(*fd, RED);
         }
         cout << "Sent color!" << endl;
     } else {
@@ -247,7 +247,7 @@ void settings(bool *output, bool *preview){
 void help(char color){
     cout << endl << "When you are asked to enter a coordinate, enter as column-row pairs without spaces like to real chess" << endl;
     cout << "For example, to move my king from its starting location forward one " << endl;
-    if(color == 'w'){
+    if(color == WHITE){
         cout << "I would enter E1 as the source coordinate, and E2 as the destination coordinate" << endl;
     } else {
         cout << "I would enter E8 as the source coordinate, and E7 as the destination coordinate" << endl;
@@ -278,7 +278,7 @@ void draw(int fd, char myColor, bool offering){
             receiveAction(fd, &decision);
             // Check what receiving player responded with
             if(decision == 'n'){
-                if(myColor == 'r'){
+                if(myColor == RED){
                     cout << "White declined the offer to draw!" << endl;
                 } else {
                     cout << "Red declined the offer to draw!" << endl;
@@ -290,7 +290,7 @@ void draw(int fd, char myColor, bool offering){
             return;
         }
     } else {
-        if(myColor == 'r'){
+        if(myColor == RED){
             cout << "White is offering a draw, would you like to accept? (y/n) ";
         } else {
             cout << "Red is offering a draw, would you like to accept? (y/n) ";
@@ -320,13 +320,13 @@ void concede(int fd, char myColor, bool offering){
         } else {
             return;
         }
-        if(myColor == 'r'){
+        if(myColor == RED){
             cout << "You conceded, White wins!" << endl;
         } else {
             cout << "You conceded, Red wins!" << endl;
         }
     } else {
-        if(myColor == 'r'){
+        if(myColor == RED){
             cout << "White conceded, you win!" << endl;
         } else {
             cout << "Red conceded, you win!" << endl;
