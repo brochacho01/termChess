@@ -46,7 +46,6 @@ void gameLoop(int fd, char myColor, char connectType, bool *output, bool *previe
     // White goes first
     char curTurnColor = WHITE;
     int passantCoords[2] = { -1, -1 };
-    cout << "In gameLoop, output is: " << *output << endl;
     while(true){
         if(myColor == curTurnColor){
             doTurn(fd, myColor, output, preview, myKing, oppKing, passantCoords, myCaptured, oppCaptured);
