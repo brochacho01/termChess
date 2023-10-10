@@ -14,7 +14,7 @@
 using namespace std;
 
 void gameLoop(int fd, char myColor, char connectType, bool *output, bool *preview, king *&myKing, king *&oppKing, vector<int> &myCaptured, vector<int> &oppCaptured);
-void doTurn(int fd, char myColor, bool output, bool *preview, king *&myKing, king *&oppKing, int (&passantCoords)[2], vector<int> &myCaptured, vector<int> &oppCaptured);
+void doTurn(int fd, char myColor, bool *output, bool *preview, king *&myKing, king *&oppKing, int (&passantCoords)[2], vector<int> &myCaptured, vector<int> &oppCaptured);
 void waitForTurn(int fd, char myColor, king *&myKing, king *&oppKing, vector<int> &myCaptured, vector<int> &oppCaptured);
 void welcome(void);
 void sigHandler(int sigNum);
@@ -46,6 +46,7 @@ void gameLoop(int fd, char myColor, char connectType, bool *output, bool *previe
     // White goes first
     char curTurnColor = WHITE;
     int passantCoords[2] = { -1, -1 };
+    cout << "In gameLoop, output is: " << *output << endl;
     while(true){
         if(myColor == curTurnColor){
             doTurn(fd, myColor, output, preview, myKing, oppKing, passantCoords, myCaptured, oppCaptured);
@@ -62,7 +63,7 @@ void gameLoop(int fd, char myColor, char connectType, bool *output, bool *previe
     }
 }
 
-void doTurn(int fd, char myColor, bool output, bool *preview, king *&myKing, king *&oppKing, int (&passantCoords)[2], vector<int> &myCaptured, vector<int> &oppCaptured){
+void doTurn(int fd, char myColor, bool *output, bool *preview, king *&myKing, king *&oppKing, int (&passantCoords)[2], vector<int> &myCaptured, vector<int> &oppCaptured){
     char userBuf[3];
     int xSource, xDest, ySource, yDest;
     bool validMove = false;
@@ -88,7 +89,7 @@ void doTurn(int fd, char myColor, bool output, bool *preview, king *&myKing, kin
 
     while(!validMove){
         // Get user coords and perform basic validation
-        getTurnCoords(fd, userBuf, myColor, &xSource, &ySource, &xDest, &yDest, &output, preview, myCaptured, oppCaptured);
+        getTurnCoords(fd, userBuf, myColor, &xSource, &ySource, &xDest, &yDest, output, preview, myCaptured, oppCaptured);
 
         // Get the specified piece and see if it puts own player in check
         piece *curPiece = board[xSource][ySource];

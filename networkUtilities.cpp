@@ -316,7 +316,7 @@ void receiveAction(int fd, char *action){
   sendAck(fd);
 }
 
-// TODO This is essentially a wrapper
+// This is essentially a wrapper however I don't want to directly be calling sendInt
 void sendCaptured(int fd, int capturedVal){
   // Catch edge case of empty list
   sendInt(fd, capturedVal);

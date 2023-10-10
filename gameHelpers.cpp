@@ -170,7 +170,6 @@ int getCoordInput(int fd, char *userBuf, int type, char color, bool *output, boo
 	return 1;
 }
 
-// TODO this is outputting even if I enter n
 bool validateCoords(int xSource, int ySource, int xDest, int yDest, bool output, char color){
     if((xSource < 0) || (ySource < 0) || (xDest < 0) || yDest < 0){
         if(output){
