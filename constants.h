@@ -25,10 +25,17 @@ constexpr char EMPTY = '0';
 constexpr char RED = 'r';
 constexpr char WHITE = 'w';
 
+constexpr int PAWNVALUE = 1;
+constexpr int KNIGHTVALUE = 3;
+// Need bishops and knights to have different value for sorting order, gets adjusted when calculating points
+constexpr int BISHOPVALUE = 4;
+constexpr int ROOKVALUE = 5;
+constexpr int QUEENVALUE = 9;
+
 // Board constants
 constexpr int BOARDSIZE = 8;
 
-// Constatns for kings
+// Constants for kings
 constexpr int LONGCASTLEDEST = 5;
 constexpr int SHORTCASTLEDEST = 1;
 

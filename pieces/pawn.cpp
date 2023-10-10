@@ -197,17 +197,17 @@ bool pawn::checkPassant(int xSource, int ySource, int xDest, int yDest, bool out
         checkX = -1;
     }
 
-    // Check to see if we are moving past a pawn and if it's en passantable
-    pawn *passantablePawn = (pawn*)board[xDest + checkX][yDest];
+    piece *destPiece = board[xDest + checkX][yDest];
 
-    
-    if(passantablePawn == nullptr){
+    // Check to see if we are moving past a pawn and if it's en passantable
+    if((destPiece == nullptr) || (destPiece->myType != PAWN)){
         return false;
     }
+
+    pawn *passantablePawn = (pawn*)destPiece;
 
     if((passantablePawn->lastMoveTwo) && (this->myColor != passantablePawn->myColor)){
         return true;
     }
-
     return false;
 }

@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <iostream>
+#include <bits/stdc++.h>
 
 #include "networkUtilities.h"
 #include "pieces/piece.h"
@@ -312,5 +313,33 @@ void sendAction(int fd, char *action){
 
 void receiveAction(int fd, char *action){
   read(fd, action, sizeof(char));
+  sendAck(fd);
+}
+
+// This is essentially a wrapper however I don't want to directly be calling sendInt
+void sendCaptured(int fd, int capturedVal){
+  // Catch edge case of empty list
+  sendInt(fd, capturedVal);
+}
+
+// Receive every piece opponent is sending, and if item differs from my list, update it
+void receiveCaptured(int fd, vector<int> &capturedList){
+  int receivedVal;
+  receiveInt(fd, &receivedVal);
+
+  if(receivedVal != 0){
+    capturedList.push_back(receivedVal);
+  }
+  
+  sort(capturedList.begin(), capturedList.end(), greater<int>());
+}
+
+void sendInt(int fd, int value){
+  write(fd, &value, sizeof(int));
+  receiveAck(fd);
+}
+
+void receiveInt(int fd, int *value){
+  read(fd, value, sizeof(int));
   sendAck(fd);
 }

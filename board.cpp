@@ -13,6 +13,8 @@ void printBound(void);
 void printRowBound(void);
 void colorRed(void);
 void colorWhite(void);
+void printList(char color, vector<int> theList, bool amILeading, int pointDiff);
+bool calcLead(vector<int> myCaptured, vector<int> oppCaptured, int &myPoints, int &oppPoints);
 
 piece* board[BOARDSIZE][BOARDSIZE];
 
@@ -22,6 +24,39 @@ void printMyBoard(char myColor, piece* (&boardToPrint)[BOARDSIZE][BOARDSIZE]){
         printBoardForRed(boardToPrint);
     } else {
         printBoardForWhite(boardToPrint);
+    }
+    cout << endl;
+}
+
+void printMyBoardWithCaptures(char myColor, piece*(&boardToPrint)[BOARDSIZE][BOARDSIZE], vector<int> myCaptured, vector<int> oppCaptured){
+    char oppColor;
+    int myPoints = 0;
+    int oppPoints = 0;
+    bool amILeading = calcLead(myCaptured, oppCaptured, myPoints, oppPoints);
+    int pointDiff = abs(myPoints - oppPoints);
+    if(myColor == RED){
+        oppColor = WHITE;
+    } else {
+        oppColor = RED;
+    }
+    cout << endl;
+
+    if(oppCaptured.size() > 0){
+        cout << "Pieces opponent has captured: ";
+        printList(oppColor, oppCaptured, !amILeading, pointDiff);
+        cout << endl << endl;
+    }
+
+    if(myColor == RED){
+        printBoardForRed(boardToPrint);
+    } else {
+        printBoardForWhite(boardToPrint);
+    }
+
+    if(myCaptured.size() > 0){
+        cout << endl << "Pieces I have captured: ";
+        printList(myColor, myCaptured, amILeading, pointDiff);
+        cout << endl;
     }
     cout << endl;
 }
@@ -110,6 +145,7 @@ void createPieces(king *&playerKing, char color){
         bishop *newBishop = new bishop(color);
         board[otherRow][i] = newBishop;
     }
+    
     queen *newQueen = new queen(color);
     board[otherRow][4] = newQueen;
 
@@ -213,4 +249,60 @@ void cleanBoard(piece* (&myBoard)[BOARDSIZE][BOARDSIZE]){
             delete myBoard[i][j];
         }
     }
+}
+
+void printList(char color, vector<int> theList, bool amILeading, int pointDiff){
+    if(color == WHITE){
+        colorRed();
+    }
+    
+    for(int curPiece : theList){
+        switch(curPiece){
+            case PAWNVALUE:
+                cout << "P ";
+                break;
+            case KNIGHTVALUE:
+                cout << "N ";
+                break;
+            case BISHOPVALUE:
+                cout << "B ";
+                break;
+            case ROOKVALUE:
+                cout << "R ";
+                break;
+            case QUEENVALUE:
+                cout << "Q ";
+                break;
+            default:
+                cout << "Unknown piece in captured list" << endl;
+                break;
+        }
+    }
+
+    if(color == WHITE){
+        colorWhite();
+    }
+
+    if(amILeading && (pointDiff != 0)){
+        cout << "+" << pointDiff << endl;
+    }
+}
+
+// Returns true if I have more pieces captured in points than opponent
+bool calcLead(vector<int> myCaptured, vector<int> oppCaptured, int &myPoints, int &oppPoints){
+    for(int curPiece : myCaptured){
+        if(curPiece == 4){
+            curPiece = 3;
+        }
+        myPoints += curPiece;
+    }
+
+    for(int curPiece : oppCaptured){
+        if(curPiece == 4){
+            curPiece = 3;
+        }
+        oppPoints += curPiece;
+    }
+
+    return myPoints > oppPoints;
 }

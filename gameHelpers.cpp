@@ -1,11 +1,12 @@
 #include <iostream>
+#include <vector>
+#include <bits/stdc++.h>
 
 #include <termios.h>
 
 #include "networkUtilities.h"
 #include "board.h"
 #include "gameHelpers.h"
-#include "pieces/piece.h"
 
 using namespace std;
 
@@ -49,7 +50,6 @@ void setup(char *connectType, char *color, bool *output, bool *preview, int *fd,
 
     if(*connectType == 'h'){
         createBoard(color, myKing, oppKing);
-        piece *tmp = board[0][0];
         sendBoard(*fd);
     } else {
         receiveBoard(*fd, *color, myKing, oppKing);
@@ -104,27 +104,27 @@ bool previewMove(char myColor, int xSource, int ySource, int xDest, int yDest, b
 }
 
 
-void getTurnCoords(int fd, char *userBuf, char color, int *xSource, int *ySource, int *xDest, int *yDest, bool *output, bool *preview){
+void getTurnCoords(int fd, char *userBuf, char color, int *xSource, int *ySource, int *xDest, int *yDest, bool *output, bool *preview, vector<int> &myCaptured, vector<int> &oppCaptured){
     bool validCoords = false;
     while(!validCoords){
         userBuf[0] = '-';
-        getCoordInput(fd, userBuf, 1, color, output, preview);
+        getCoordInput(fd, userBuf, 1, color, output, preview, myCaptured, oppCaptured);
         // In chess, bottom left is expected to be 0,0
         // However, this is reversed along our columns for how the board is laid out in memory
         // So we do the 7 - to account for this 
         *xSource = ctoi(userBuf[1]);
         *ySource = 7 - ltoi(tolower(userBuf[0]));
         userBuf[0] = '-';
-        getCoordInput(fd, userBuf, 2, color, output, preview);
+        getCoordInput(fd, userBuf, 2, color, output, preview, myCaptured, oppCaptured);
         *xDest = ctoi(userBuf[1]);
         *yDest = 7 - ltoi(tolower(userBuf[0]));
-        validCoords = validateCoords(*xSource, *ySource, *xDest, *yDest, *output);
+        validCoords = validateCoords(*xSource, *ySource, *xDest, *yDest, *output, color);
     }
 }
 
 
 // Type will either be 1 or 2, 1 represents entering source coord, 2 represents dest
-int getCoordInput(int fd, char *userBuf, int type, char color, bool *output, bool *preview){
+int getCoordInput(int fd, char *userBuf, int type, char color, bool *output, bool *preview, vector<int> &myCaptured, vector<int> &oppCaptured){
 	while(userBuf[0] == '-'){
 		int inFD = fileno(stdin);
 		tcflush(inFD, TCIFLUSH);
@@ -150,7 +150,7 @@ int getCoordInput(int fd, char *userBuf, int type, char color, bool *output, boo
                     help(color);
                     break;
                 case 'p':
-                    printMyBoard(color, board);
+                    printMyBoardWithCaptures(color, board, myCaptured, oppCaptured);
                     break;
                 case 'c':
                     concede(fd, color, true);
@@ -170,7 +170,7 @@ int getCoordInput(int fd, char *userBuf, int type, char color, bool *output, boo
 	return 1;
 }
 
-bool validateCoords(int xSource, int ySource, int xDest, int yDest, bool output){
+bool validateCoords(int xSource, int ySource, int xDest, int yDest, bool output, char color){
     if((xSource < 0) || (ySource < 0) || (xDest < 0) || yDest < 0){
         if(output){
             cout << "Can't use coordinates less than 1!" << endl;
@@ -186,6 +186,12 @@ bool validateCoords(int xSource, int ySource, int xDest, int yDest, bool output)
     else if(board[xSource][ySource] == nullptr){
         if(output){
             cout << "Can't move a non-existent piece!" << endl;
+        }
+        return false;
+    }
+    else if(board[xSource][ySource]->myColor != color){
+        if(output){
+            cout << "Can't move a piece you don't control!" << endl;
         }
         return false;
     }
@@ -334,4 +340,38 @@ void concede(int fd, char myColor, bool offering){
     }
     cleanBoard(board);
     exit(0);
+}
+
+void addToCaptured(vector<int> &capturedList, piece* destPiece, int *capturedVal){
+    switch(destPiece->myType){
+        case PAWN:
+            cout << "Added pawn" << endl;
+            capturedList.push_back(PAWNVALUE);
+            *capturedVal = PAWNVALUE;
+            break;
+        case ROOK:
+            cout << "Added rook" << endl;
+            capturedList.push_back(ROOKVALUE);
+            *capturedVal = ROOKVALUE;
+            break;
+        case KNIGHT:
+            cout << "Added knight" << endl;
+            capturedList.push_back(KNIGHTVALUE);
+            *capturedVal = KNIGHTVALUE;
+            break;
+        case BISHOP:
+            cout << "Added bishop" << endl;
+            capturedList.push_back(BISHOPVALUE);
+            *capturedVal = BISHOPVALUE;
+            break;
+        case QUEEN:
+            cout << "Added queen" << endl;
+            capturedList.push_back(QUEENVALUE);
+            *capturedVal = QUEENVALUE;
+            break;
+        default:
+            cout << "Unknown piece captured" << endl;
+            break;
+    }
+    sort(capturedList.begin(), capturedList.end(), greater<int>());
 }
