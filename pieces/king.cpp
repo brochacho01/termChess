@@ -35,7 +35,8 @@ bool king::validateMove(int xSource, int ySource, int xDest, int yDest, bool out
     int yChange = abs(yDest - ySource);
 
     // Just make sure we're staying within the king square
-    if((xChange + yChange > 2) || (xChange + yChange == 0)){
+    // TODO THIS IS THE BUG
+    if((xChange > 1) || (yChange > 1)){
         if(output){
             cout << "Can't move a king that way!" << endl;
         }
